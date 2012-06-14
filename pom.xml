@@ -38,7 +38,7 @@
 	<repositories>
     		<repository>
         		<id>libs-mvn-repo</id>
-        		<url>https://github.com/Steveice10/libs-mvn-repo/raw/master/snapshots</url>
+        		<url>https://github.com/Steveice10/libs-mvn-repo/raw/master/releases</url>
     		</repository>
 	</repositories>
 

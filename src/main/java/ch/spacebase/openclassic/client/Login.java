@@ -1,5 +1,6 @@
 package ch.spacebase.openclassic.client;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -7,8 +8,12 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
+
+import com.mojang.minecraft.render.TextureManager;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 
 public class Login extends JFrame {
 
@@ -22,6 +27,11 @@ public class Login extends JFrame {
 	 * Create the frame.
 	 */
 	public Login() {
+		try {
+			setIconImage(ImageIO.read(TextureManager.class.getResourceAsStream("/icon.png")));
+		} catch (IOException e) {
+		}
+		
 		setResizable(false);
 		setTitle("Login");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
