@@ -1,6 +1,6 @@
 package ch.spacebase.openclassic.client.player;
 
-import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 
 import com.mojang.minecraft.net.PacketType;
@@ -51,13 +51,7 @@ public class ClientSession implements Session {
 	@Override
 	public SocketAddress getAddress() {
 		if(GeneralUtils.getMinecraft().netManager == null || !GeneralUtils.getMinecraft().netManager.isConnected()) return null;
-		
-		try {
-			return GeneralUtils.getMinecraft().netManager.netHandler.channel.getRemoteAddress();
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
+		return InetSocketAddress.createUnresolved(GeneralUtils.getMinecraft().server, GeneralUtils.getMinecraft().port);
 	}
 
 }
