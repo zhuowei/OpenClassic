@@ -53,7 +53,7 @@ public class ClientSession implements Session {
 		if(GeneralUtils.getMinecraft().netManager == null || !GeneralUtils.getMinecraft().netManager.isConnected()) return null;
 		
 		try {
-			return GeneralUtils.getMinecraft().netManager.netHandler.channel.getLocalAddress();
+			return GeneralUtils.getMinecraft().netManager.netHandler.channel.getRemoteAddress();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
