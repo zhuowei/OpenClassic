@@ -1,0 +1,9 @@
+bin
+lib
+.settings
+.classpath
+.project
+.git
+target
+
+

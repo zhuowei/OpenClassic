@@ -1,0 +1,163 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>ch.spacebase</groupId>
+	<artifactId>openclassicclient</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>OpenClassic Client</name>
+	<description>The Minecraft Classic client modded to support the OpenClassicAPI and more.</description>
+	<url>N/A</url>
+
+	<!-- <licenses>
+		<license>
+			<name>MIT</name>
+			<url>http://www.opensource.org/licenses/mit-license.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+    		<connection>scm:git:git@github.com:Steveice10/OpenClassic.git</connection>
+		<developerConnection>scm:git:git@github.com:Steveice10/OpenClassic.git</developerConnection>
+		<url>git@github.com:Steveice10/OpenClassic/</url>
+	</scm> -->
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+  	<developers>
+    		<developer>
+      			<id>steveice10</id>
+      			<name>Steveice10</name>
+      			<email>Steveice10@gmail.com</email>
+    		</developer>
+  	</developers>
+
+	<repositories>
+    		<repository>
+        		<id>libs-mvn-repo</id>
+        		<url>https://github.com/Steveice10/libs-mvn-repo/raw/master/snapshots</url>
+    		</repository>
+	</repositories>
+
+	<!--  Dependencies -->
+	<dependencies>
+  		<dependency>
+    			<groupId>ch.spacebase</groupId>
+    			<artifactId>openclassicapi</artifactId>
+    			<version>1.0-SNAPSHOT</version>
+  		</dependency>
+		<dependency>
+ 		   	<groupId>org.lwjgl.lwjgl</groupId>
+ 		   	<artifactId>lwjgl</artifactId>
+ 		   	<version>2.8.4</version>
+		</dependency>
+		<dependency>
+ 		   	<groupId>org.lwjgl.lwjgl</groupId>
+   		 	<artifactId>lwjgl_util</artifactId>
+   		 	<version>2.8.4</version>
+		</dependency>
+		<dependency>
+			<groupId>net.java.jinput</groupId>
+			<artifactId>jinput</artifactId>
+			<version>2.0.4</version>
+		</dependency>
+            	<dependency>
+    			<groupId>org.lwjgl.lwjgl</groupId>
+    			<artifactId>lwjgl_util_applet</artifactId>
+    			<version>2.8.4</version>
+		</dependency>
+		<dependency>
+    			<groupId>org.lwjgl.lwjgl</groupId>
+   		 	<artifactId>lwjgl-platform</artifactId>
+   			<version>2.8.4</version>
+    			<type>pom</type>
+		</dependency>
+  		<dependency>
+    			<groupId>com.paulscode.soundsystem</groupId>
+    			<artifactId>codecjorbis</artifactId>
+    			<version>0.0.1</version>
+  		</dependency>
+  		<dependency>
+    			<groupId>com.paulscode.soundsystem</groupId>
+    			<artifactId>codecwav</artifactId>
+    			<version>0.0.1</version>
+  		</dependency>
+  		<dependency>
+    			<groupId>com.paulscode.soundsystem</groupId>
+    			<artifactId>libraryjavasound</artifactId>
+    			<version>0.0.1</version>
+  		</dependency>
+  		<dependency>
+    			<groupId>com.paulscode.soundsystem</groupId>
+    			<artifactId>librarylwjglopenal</artifactId>
+    			<version>0.0.1</version>
+  		</dependency>
+  		<dependency>
+    			<groupId>com.paulscode.soundsystem</groupId>
+    			<artifactId>soundsystem</artifactId>
+    			<version>0.0.1</version>
+  		</dependency>
+	</dependencies>
+
+	<build>
+		<defaultGoal>clean install</defaultGoal>
+		<sourceDirectory>${basedir}/src/main/java</sourceDirectory>
+		<!-- Resources -->
+		<resources>
+			<resource>
+				<targetPath>.</targetPath>
+				<filtering>true</filtering>
+				<directory>${basedir}/src/main/resources</directory>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+			</plugin>
+			<!-- JAR creation plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<archive>
+						<manifestEntries>
+							<Main-Class>ch.spacebase.openclassic.client.MinecraftStandalone</Main-Class>
+							<Implementation-Title>${project.name}</Implementation-Title>
+							<Implementation-Version>${describe}</Implementation-Version>
+							<Implementation-Vendor>Steveice10</Implementation-Vendor>
+							<Sealed>true</Sealed>
+						</manifestEntries>
+						<manifestSections>
+							<manifestSection>
+								<name>ch/spacebase/openclassic/client</name>
+								<manifestEntries>
+									<Sealed>true</Sealed>
+								</manifestEntries>
+							</manifestSection>
+						</manifestSections>
+					</archive>
+				</configuration>
+			</plugin>
+			<!-- JAR dependency addition plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>1.5</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
