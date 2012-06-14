@@ -161,7 +161,7 @@ public final class HUDScreen implements MainScreen {
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			
-			GL11.glBegin(7);
+			GL11.glBegin(GL11.GL_QUADS);
 			GL11.glColor4f(0, 0, 0, 0.7F);
 			GL11.glVertex2f((this.width / 2 + 128), (this.height / 2 - 68 - 12));
 			GL11.glVertex2f((this.width / 2 - 128), (this.height / 2 - 68 - 12));

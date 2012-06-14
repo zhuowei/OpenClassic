@@ -88,16 +88,16 @@ public class Item extends Entity {
 		
 		models[this.resource].a();
 		var5 = (var5 = (var5 = var5 * 0.5F + 0.5F) * var5) * var5;
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, var5 * 0.4F);
+		GL11.glColor4f(1, 1, 1, var5 * 0.4F);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glEnable(3042);
-		GL11.glBlendFunc(770, 1);
-		GL11.glDisable(3008);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		models[this.resource].a();
-		GL11.glEnable(3008);
-		GL11.glDisable(3042);
-		GL11.glBlendFunc(770, 771);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glEnable(GL11.GL_ALPHA_TEST);
+		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GL11.glColor4f(1, 1, 1, 1);
 		GL11.glPopMatrix();
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 	}

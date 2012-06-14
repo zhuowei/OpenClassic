@@ -728,11 +728,11 @@ public final class Minecraft implements Runnable {
 										}
 
 										GL11.glClearColor(var82.i, var82.j, var82.k, 0.0F);
-										GL11.glClear(16640);
+										GL11.glClear(16640); // TODO: Find GL constant
 										var82.b = 1.0F;
-										GL11.glEnable(2884);
+										GL11.glEnable(GL11.GL_CULL_FACE);
 										var82.d = (512 >> (var82.mc.settings.viewDistance << 1));
-										GL11.glMatrixMode(5889);
+										GL11.glMatrixMode(GL11.GL_PROJECTION);
 										GL11.glLoadIdentity();
 										var29 = 0.07F;
 										if (var82.mc.settings.anaglyph) {
@@ -747,7 +747,7 @@ public final class Minecraft implements Runnable {
 										}
 
 										GLU.gluPerspective(var69, (float) var82.mc.width / (float) var82.mc.height, 0.05F, var82.d);
-										GL11.glMatrixMode(5888);
+										GL11.glMatrixMode(GL11.GL_MODELVIEW);
 										GL11.glLoadIdentity();
 										if (var82.mc.settings.anaglyph) {
 											GL11.glTranslatef(((var77 << 1) - 1) * 0.1F, 0.0F, 0.0F);
@@ -793,7 +793,7 @@ public final class Minecraft implements Runnable {
 										}
 
 										var82.renderFog();
-										GL11.glEnable(2912);
+										GL11.glEnable(GL11.GL_FOG);
 										this.levelRenderer.sortChunks(this.player, 0);
 										int var83;
 										int var110;
@@ -815,21 +815,21 @@ public final class Minecraft implements Runnable {
 														int var99 = this.levelRenderer.level.getTile(var122, var125, var38);
 														if (var99 != 0 && Blocks.fromId(var99).isSolid()) {
 															GL11.glColor4f(0.2F, 0.2F, 0.2F, 1.0F);
-															GL11.glDepthFunc(513);
+															GL11.glDepthFunc(GL11.GL_LESS);
 															var115 = ShapeRenderer.instance;
 															ShapeRenderer.instance.reset();
 
 															Blocks.fromId(var99).getModel().renderAll(var122, var98, var105, 0.2F);
 
 															var115.draw();
-															GL11.glCullFace(1028);
+															GL11.glCullFace(GL11.GL_FRONT);
 															var115.reset();
 
 															Blocks.fromId(var99).getModel().renderAll(var122, var98, var105, 0.2F);
 
 															var115.draw();
-															GL11.glCullFace(1029);
-															GL11.glDepthFunc(515);
+															GL11.glCullFace(GL11.GL_BACK);
+															GL11.glDepthFunc(GL11.GL_LEQUAL);
 														}
 													}
 												}
@@ -942,17 +942,17 @@ public final class Minecraft implements Runnable {
 										var82.renderFog();
 										int var108;
 										if (var82.mc.selected != null) {
-											GL11.glDisable(3008);
+											GL11.glDisable(GL11.GL_ALPHA_TEST);
 											MovingObjectPosition var10001 = var82.mc.selected;
 											var105 = this.player.inventory.getSelected();
 											MovingObjectPosition var102 = var10001;
 											com.mojang.minecraft.render.ShapeRenderer var113 = com.mojang.minecraft.render.ShapeRenderer.instance;
-											GL11.glEnable(3042);
-											GL11.glEnable(3008);
-											GL11.glBlendFunc(770, 1);
+											GL11.glEnable(GL11.GL_BLEND);
+											GL11.glEnable(GL11.GL_ALPHA_TEST);
+											GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 											GL11.glColor4f(1.0F, 1.0F, 1.0F, (MathHelper.a(System.currentTimeMillis() / 100.0F) * 0.2F + 0.4F) * 0.5F);
 											if (this.levelRenderer.cracks > 0) {
-												GL11.glBlendFunc(774, 768);
+												GL11.glBlendFunc(GL11.GL_DST_COLOR, GL11.GL_SRC_COLOR);
 												var108 = this.levelRenderer.textureManager.bindTexture("/terrain.png");
 												GL11.glBindTexture(GL11.GL_TEXTURE_2D, var108);
 												GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.5F);
@@ -982,13 +982,13 @@ public final class Minecraft implements Runnable {
 												GL11.glPopMatrix();
 											}
 
-											GL11.glDisable(3042);
-											GL11.glDisable(3008);
+											GL11.glDisable(GL11.GL_BLEND);
+											GL11.glDisable(GL11.GL_ALPHA_TEST);
 											var10001 = var82.mc.selected;
 											this.player.inventory.getSelected();
 											var102 = var10001;
-											GL11.glEnable(3042);
-											GL11.glBlendFunc(770, 771);
+											GL11.glEnable(GL11.GL_BLEND);
+											GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 											GL11.glColor4f(0.0F, 0.0F, 0.0F, 0.4F);
 											GL11.glLineWidth(2.0F);
 											GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -997,21 +997,21 @@ public final class Minecraft implements Runnable {
 											var104 = this.levelRenderer.level.getTile(var102.x, var102.y, var102.z);
 											if ((var104) > 0) {
 												AABB aabb = BlockUtils.getSelectionBox(var104, var102.x, var102.y, var102.z).grow(var29, var29, var29);
-												GL11.glBegin(3);
+												GL11.glBegin(GL11.GL_LINE_STRIP);
 												GL11.glVertex3f(aabb.x0, aabb.y0, aabb.z0);
 												GL11.glVertex3f(aabb.x1, aabb.y0, aabb.z0);
 												GL11.glVertex3f(aabb.x1, aabb.y0, aabb.z1);
 												GL11.glVertex3f(aabb.x0, aabb.y0, aabb.z1);
 												GL11.glVertex3f(aabb.x0, aabb.y0, aabb.z0);
 												GL11.glEnd();
-												GL11.glBegin(3);
+												GL11.glBegin(GL11.GL_LINE_STRIP);
 												GL11.glVertex3f(aabb.x0, aabb.y1, aabb.z0);
 												GL11.glVertex3f(aabb.x1, aabb.y1, aabb.z0);
 												GL11.glVertex3f(aabb.x1, aabb.y1, aabb.z1);
 												GL11.glVertex3f(aabb.x0, aabb.y1, aabb.z1);
 												GL11.glVertex3f(aabb.x0, aabb.y1, aabb.z0);
 												GL11.glEnd();
-												GL11.glBegin(1);
+												GL11.glBegin(GL11.GL_LINES);
 												GL11.glVertex3f(aabb.x0, aabb.y0, aabb.z0);
 												GL11.glVertex3f(aabb.x0, aabb.y1, aabb.z0);
 												GL11.glVertex3f(aabb.x1, aabb.y0, aabb.z0);
@@ -1025,18 +1025,18 @@ public final class Minecraft implements Runnable {
 
 											GL11.glDepthMask(true);
 											GL11.glEnable(GL11.GL_TEXTURE_2D);
-											GL11.glDisable(3042);
-											GL11.glEnable(3008);
+											GL11.glDisable(GL11.GL_BLEND);
+											GL11.glEnable(GL11.GL_ALPHA_TEST);
 										}
 
-										GL11.glBlendFunc(770, 771);
+										GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 										var82.renderFog();
 										GL11.glEnable(GL11.GL_TEXTURE_2D);
-										GL11.glEnable(3042);
+										GL11.glEnable(GL11.GL_BLEND);
 										GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.levelRenderer.textureManager.bindTexture("/water.png"));
 										GL11.glCallList(this.levelRenderer.listId + 1);
-										GL11.glDisable(3042);
-										GL11.glEnable(3042);
+										GL11.glDisable(GL11.GL_BLEND);
+										GL11.glEnable(GL11.GL_BLEND);
 										GL11.glColorMask(false, false, false, false);
 										var120 = this.levelRenderer.sortChunks(this.player, 1);
 										GL11.glColorMask(true, true, true, true);
@@ -1054,8 +1054,8 @@ public final class Minecraft implements Runnable {
 										}
 
 										GL11.glDepthMask(true);
-										GL11.glDisable(3042);
-										GL11.glDisable(2912);
+										GL11.glDisable(GL11.GL_BLEND);
+										GL11.glDisable(GL11.GL_FOG);
 										if (var82.mc.raining) {
 											float var97 = var80;
 											var27 = var82;
@@ -1065,10 +1065,10 @@ public final class Minecraft implements Runnable {
 											var108 = (int) this.player.y;
 											var114 = (int) this.player.z;
 											com.mojang.minecraft.render.ShapeRenderer var84 = com.mojang.minecraft.render.ShapeRenderer.instance;
-											GL11.glDisable(2884);
+											GL11.glDisable(GL11.GL_CULL_FACE);
 											GL11.glNormal3f(0.0F, 1.0F, 0.0F);
-											GL11.glEnable(3042);
-											GL11.glBlendFunc(770, 771);
+											GL11.glEnable(GL11.GL_BLEND);
+											GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 											GL11.glBindTexture(GL11.GL_TEXTURE_2D, var82.mc.textureManager.bindTexture("/rain.png"));
 
 											for (var110 = var104 - 5; var110 <= var104 + 5; ++var110) {
@@ -1104,15 +1104,15 @@ public final class Minecraft implements Runnable {
 												}
 											}
 
-											GL11.glEnable(2884);
-											GL11.glDisable(3042);
+											GL11.glEnable(GL11.GL_CULL_FACE);
+											GL11.glDisable(GL11.GL_BLEND);
 										}
 
 										if (var82.g != null) {
 											var82.g.renderHover(var82.mc.textureManager, var80);
 										}
 
-										GL11.glClear(256);
+										GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
 										GL11.glLoadIdentity();
 										if (var82.mc.settings.anaglyph) {
 											GL11.glTranslatef(((var77 << 1) - 1) * 0.1F, 0.0F, 0.0F);
@@ -1139,7 +1139,7 @@ public final class Minecraft implements Runnable {
 
 										GL11.glTranslatef(0.7F * var69, -0.65F * var69 - (1.0F - var117) * 0.6F, -0.9F * var69);
 										GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
-										GL11.glEnable(2977);
+										GL11.glEnable(GL11.GL_NORMALIZE);
 										if (var82.heldBlock.moving) {
 											var33 = MathHelper.a((var74 = (var82.heldBlock.heldOffset + var80) / 7.0F) * var74 * 3.1415927F);
 											GL11.glRotatef(MathHelper.a(MathHelper.sqrt(var74) * 3.1415927F) * 80.0F, 0.0F, 1.0F, 0.0F);
@@ -1169,7 +1169,7 @@ public final class Minecraft implements Runnable {
 											GL11.glCallList(var127.list);
 										}
 
-										GL11.glDisable(2977);
+										GL11.glDisable(GL11.GL_NORMALIZE);
 										GL11.glPopMatrix();
 										var82.heldBlock.mc.renderer.a(false);
 										if (!var82.mc.settings.anaglyph) {
@@ -1183,10 +1183,10 @@ public final class Minecraft implements Runnable {
 								} else {
 									GL11.glViewport(0, 0, this.width, this.height);
 									GL11.glClearColor(0.0F, 0.0F, 0.0F, 0.0F);
-									GL11.glClear(16640);
-									GL11.glMatrixMode(5889);
+									GL11.glClear(16640); // TODO: gl constant
+									GL11.glMatrixMode(GL11.GL_PROJECTION);
 									GL11.glLoadIdentity();
-									GL11.glMatrixMode(5888);
+									GL11.glMatrixMode(GL11.GL_MODELVIEW);
 									GL11.glLoadIdentity();
 									var66.a();
 								}
@@ -1610,7 +1610,7 @@ public final class Minecraft implements Runnable {
 													byte id = (Byte) params[0];
 													String message = (String) params[1];
 													if (id < 0) {
-														this.hud.addChat("&e" + message);
+														this.hud.addChat(Color.YELLOW + message);
 													} else {
 														this.netManager.players.get(Byte.valueOf(id));
 														this.hud.addChat(message);

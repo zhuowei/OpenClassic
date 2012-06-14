@@ -91,7 +91,7 @@ public class Sheep extends QuadrupedMob {
 		super.renderModel(textures, var2, var3, var4, var5, var6, var7);
 		if (this.hasFur) {
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, textures.bindTexture("/mob/sheep_fur.png"));
-			GL11.glDisable(2884);
+			GL11.glDisable(GL11.GL_CULL_FACE);
 			AnimalModel fur = (AnimalModel) modelCache.getModel("sheep.fur");
 			fur.b.g = model.b.g;
 			fur.b.f = model.b.f;

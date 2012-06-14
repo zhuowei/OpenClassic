@@ -20,7 +20,7 @@ public final class FontRenderer {
 		try {
 			font = ImageIO.read(TextureManager.class.getResourceAsStream(fontImage));
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeException("Failed to load font image!", e);
 		}
 
 		int width = font.getWidth();
@@ -28,13 +28,13 @@ public final class FontRenderer {
 		int[] fontData = new int[width * height];
 		font.getRGB(0, 0, width, height, fontData, 0, width);
 
-		for (int pixel = 0; pixel < 128; ++pixel) {
-			int var6 = pixel % 16;
-			int var7 = pixel / 16;
-			int var8 = 0;
+		for (int character = 0; character < 128; ++character) {
+			int var6 = character % 16;
+			int var7 = character / 16;
+			int chWidth = 0;
 
-			for (boolean var9 = false; var8 < 8 && !var9; ++var8) {
-				int var10 = (var6 << 3) + var8;
+			for (boolean var9 = false; chWidth < 8 && !var9; chWidth++) {
+				int var10 = (var6 << 3) + chWidth;
 				var9 = true;
 
 				for (int var11 = 0; var11 < 8 && var9; ++var11) {
@@ -45,11 +45,11 @@ public final class FontRenderer {
 				}
 			}
 
-			if (pixel == 32) {
-				var8 = 4;
+			if (character == 32) {
+				chWidth = 4;
 			}
 
-			this.font[pixel] = var8;
+			this.font[character] = chWidth;
 		}
 
 		this.fontId = textures.bindTexture(fontImage);
@@ -125,7 +125,7 @@ public final class FontRenderer {
 			int width = 0;
 
 			for (int index = 0; index < chars.length; ++index) {
-				if (chars[index] == 38) {
+				if (chars[index] == '&') {
 					index++;
 				} else {
 					width += this.font[chars[index]];
@@ -141,7 +141,7 @@ public final class FontRenderer {
 		String result = "";
 
 		for (int index = 0; index < chars.length; ++index) {
-			if (chars[index] == 38) {
+			if (chars[index] == '&') {
 				index++;
 			} else {
 				result = result + chars[index];

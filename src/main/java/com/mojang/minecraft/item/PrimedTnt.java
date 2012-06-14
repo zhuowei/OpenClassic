@@ -104,9 +104,8 @@ public class PrimedTnt extends Entity {
 		}
 	}
 
-	public void render(TextureManager var1, float var2) {
-		int var3 = var1.bindTexture("/terrain.png");
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, var3);
+	public void render(TextureManager textures, float var2) {
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textures.bindTexture("/terrain.png"));
 		float var4 = this.level.getBrightness((int) this.x, (int) this.y, (int) this.z);
 		GL11.glPushMatrix();
 		GL11.glColor4f(var4, var4, var4, 1.0F);
@@ -114,7 +113,7 @@ public class PrimedTnt extends Entity {
 		GL11.glPushMatrix();
 		VanillaBlock.TNT.getModel().renderPreview();
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glDisable(2896);
+		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, ((this.life / 4 + 1) % 2) * 0.4F);
 		if (this.life <= 16) {
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, ((this.life + 1) % 2) * 0.6F);
@@ -124,12 +123,12 @@ public class PrimedTnt extends Entity {
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.9F);
 		}
 
-		GL11.glEnable(3042);
-		GL11.glBlendFunc(770, 1);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 		VanillaBlock.TNT.getModel().renderPreview();
-		GL11.glDisable(3042);
+		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		GL11.glEnable(2896);
+		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glPopMatrix();
 		GL11.glPopMatrix();
 	}

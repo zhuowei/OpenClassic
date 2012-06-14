@@ -275,9 +275,9 @@ public class Mob extends Entity {
 			GL11.glScalef(1.0F, -1.0F, 1.0F);
 			GL11.glRotatef(180.0F - var4 + this.rotOffs, 0.0F, 1.0F, 0.0F);
 			if (!this.allowAlpha) {
-				GL11.glDisable(3008);
+				GL11.glDisable(GL11.GL_ALPHA_TEST);
 			} else {
-				GL11.glDisable(2884);
+				GL11.glDisable(GL11.GL_CULL_FACE);
 			}
 
 			GL11.glScalef(-1.0F, 1.0F, 1.0F);
@@ -286,17 +286,17 @@ public class Mob extends Entity {
 			this.renderModel(textures, var8, var2, var5, var6, var7, var9);
 			if (this.invulnerableTime > this.invulnerableDuration - 10) {
 				GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.75F);
-				GL11.glEnable(3042);
-				GL11.glBlendFunc(770, 1);
+				GL11.glEnable(GL11.GL_BLEND);
+				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 				this.bindTexture(textures);
 				this.renderModel(textures, var8, var2, var5, var6, var7, var9);
-				GL11.glDisable(3042);
-				GL11.glBlendFunc(770, 771);
+				GL11.glDisable(GL11.GL_BLEND);
+				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			}
 
-			GL11.glEnable(3008);
+			GL11.glEnable(GL11.GL_ALPHA_TEST);
 			if (this.allowAlpha) {
-				GL11.glEnable(2884);
+				GL11.glEnable(GL11.GL_CULL_FACE);
 			}
 
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

@@ -126,7 +126,7 @@ public final class ModelRenderer {
 	public void b(float var1) {
 		this.list = GL11.glGenLists(1);
 		GL11.glNewList(this.list, 4864);
-		GL11.glBegin(7);
+		GL11.glBegin(GL11.GL_QUADS);
 
 		for (int var2 = 0; var2 < this.quads.length; ++var2) {
 			Quad var10000 = this.quads[var2];

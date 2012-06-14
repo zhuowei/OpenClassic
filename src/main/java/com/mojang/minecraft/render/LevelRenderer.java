@@ -163,7 +163,7 @@ public final class LevelRenderer {
 		}
 
 		ShapeRenderer.instance.draw();
-		GL11.glDisable(3042);
+		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glEndList();
 		this.addChunks(0, 0, 0, this.level.width, this.level.depth, this.level.height);
 	}

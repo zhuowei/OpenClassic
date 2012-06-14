@@ -101,27 +101,27 @@ public class NetworkPlayer extends HumanoidMob {
 		GL11.glScalef(0.05F, -var2, var2);
 		GL11.glTranslatef((-fontRenderer.getWidth(this.displayName)) / 2.0F, 0.0F, 0.0F);
 		GL11.glNormal3f(1.0F, -1.0F, 1.0F);
-		GL11.glDisable(2896);
-		GL11.glDisable(16384);
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glDisable(GL11.GL_COLOR_BUFFER_BIT);
 		if (this.name.equalsIgnoreCase("Notch")) {
 			fontRenderer.renderNoShadow(this.displayName, 0, 0, 16776960);
 		} else {
 			fontRenderer.renderNoShadow(this.displayName, 0, 0, 16777215);
 		}
 
-		GL11.glDepthFunc(516);
+		GL11.glDepthFunc(GL11.GL_GREATER);
 		GL11.glDepthMask(false);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.8F);
-		GL11.glEnable(3042);
-		GL11.glBlendFunc(770, 771);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		fontRenderer.renderNoShadow(this.displayName, 0, 0, 16777215);
-		GL11.glDisable(3042);
+		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glDepthMask(true);
-		GL11.glDepthFunc(515);
+		GL11.glDepthFunc(GL11.GL_LEQUAL);
 		GL11.glTranslatef(1.0F, 1.0F, -0.05F);
 		fontRenderer.renderNoShadow(this.name, 0, 0, 5263440);
-		GL11.glEnable(16384);
-		GL11.glEnable(2896);
+		GL11.glEnable(GL11.GL_COLOR_BUFFER_BIT);
+		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glPopMatrix();
 	}
 

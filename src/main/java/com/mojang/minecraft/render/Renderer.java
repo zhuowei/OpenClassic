@@ -75,31 +75,31 @@ public final class Renderer {
 
 	public final void a(boolean var1) {
 		if (!var1) {
-			GL11.glDisable(2896);
-			GL11.glDisable(16384);
+			GL11.glDisable(GL11.GL_LIGHTING);
+			GL11.glDisable(GL11.GL_COLOR_BUFFER_BIT);
 		} else {
-			GL11.glEnable(2896);
-			GL11.glEnable(16384);
-			GL11.glEnable(2903);
-			GL11.glColorMaterial(1032, 5634);
+			GL11.glEnable(GL11.GL_LIGHTING);
+			GL11.glEnable(GL11.GL_COLOR_BUFFER_BIT);
+			GL11.glEnable(GL11.GL_COLOR_MATERIAL);
+			GL11.glColorMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_AMBIENT_AND_DIFFUSE);
 			float var4 = 0.7F;
 			float var2 = 0.3F;
 			ModelPoint var3 = (new ModelPoint(0.0F, -1.0F, 0.5F)).a();
-			GL11.glLight(16384, 4611, this.a(var3.x, var3.y, var3.z, 0.0F));
-			GL11.glLight(16384, 4609, this.a(var2, var2, var2, 1.0F));
-			GL11.glLight(16384, 4608, this.a(0.0F, 0.0F, 0.0F, 1.0F));
-			GL11.glLightModel(2899, this.a(var4, var4, var4, 1.0F));
+			GL11.glLight(GL11.GL_COLOR_BUFFER_BIT, GL11.GL_POSITION, this.a(var3.x, var3.y, var3.z, 0.0F));
+			GL11.glLight(GL11.GL_COLOR_BUFFER_BIT, GL11.GL_DIFFUSE, this.a(var2, var2, var2, 1.0F));
+			GL11.glLight(GL11.GL_COLOR_BUFFER_BIT, GL11.GL_AMBIENT, this.a(0.0F, 0.0F, 0.0F, 1.0F));
+			GL11.glLightModel(GL11.GL_LIGHT_MODEL_AMBIENT, this.a(var4, var4, var4, 1.0F));
 		}
 	}
 
 	public final void a() {
 		int width = this.mc.width * 240 / this.mc.height;
 		int height = this.mc.height * 240 / this.mc.height;
-		GL11.glClear(256);
-		GL11.glMatrixMode(5889);
+		GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
+		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
 		GL11.glOrtho(0.0D, width, height, 0.0D, 100.0D, 300.0D);
-		GL11.glMatrixMode(5888);
+		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();
 		GL11.glTranslatef(0.0F, 0.0F, -200.0F);
 	}
@@ -107,18 +107,18 @@ public final class Renderer {
 	public void renderFog() {
 		Level var1 = this.mc.level;
 		Player var2 = this.mc.player;
-		GL11.glFog(2918, this.a(this.i, this.j, this.k, 1.0F));
+		GL11.glFog(GL11.GL_FOG_COLOR, this.a(this.i, this.j, this.k, 1.0F));
 		GL11.glNormal3f(0.0F, -1.0F, 0.0F);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		BlockType var5;
 		if ((var5 = Blocks.fromId(var1.getTile((int) var2.x, (int) (var2.y + 0.12F), (int) var2.z))) != null && var5.isLiquid()) {
-			GL11.glFogi(2917, 2048);
+			GL11.glFogi(GL11.GL_FOG_MODE, GL11.GL_EXP);
 			float var3;
 			float var4;
 			float var7;
 			float var8;
 			if (var5 == VanillaBlock.WATER || var5 == VanillaBlock.STATIONARY_WATER) {
-				GL11.glFogf(2914, 0.1F);
+				GL11.glFogf(GL11.GL_FOG_DENSITY, 0.1F);
 				var7 = 0.4F;
 				var8 = 0.4F;
 				var3 = 0.9F;
@@ -129,9 +129,9 @@ public final class Renderer {
 					var7 = var4;
 				}
 
-				GL11.glLightModel(2899, this.a(var7, var8, var3, 1.0F));
+				GL11.glLightModel(GL11.GL_LIGHT_MODEL_AMBIENT, this.a(var7, var8, var3, 1.0F));
 			} else if (var5 == VanillaBlock.LAVA || var5 == VanillaBlock.STATIONARY_LAVA) {
-				GL11.glFogf(2914, 2.0F);
+				GL11.glFogf(GL11.GL_FOG_DENSITY, 2.0F);
 				var7 = 0.4F;
 				var8 = 0.3F;
 				var3 = 0.3F;
@@ -142,17 +142,17 @@ public final class Renderer {
 					var7 = var4;
 				}
 
-				GL11.glLightModel(2899, this.a(var7, var8, var3, 1.0F));
+				GL11.glLightModel(GL11.GL_LIGHT_MODEL_AMBIENT, this.a(var7, var8, var3, 1.0F));
 			}
 		} else {
-			GL11.glFogi(2917, 9729);
-			GL11.glFogf(2915, 0.0F);
-			GL11.glFogf(2916, this.d);
-			GL11.glLightModel(2899, this.a(1.0F, 1.0F, 1.0F, 1.0F));
+			GL11.glFogi(GL11.GL_FOG_MODE, GL11.GL_LINEAR);
+			GL11.glFogf(GL11.GL_FOG_START, 0.0F);
+			GL11.glFogf(GL11.GL_FOG_END, this.d);
+			GL11.glLightModel(GL11.GL_LIGHT_MODEL_AMBIENT, this.a(1.0F, 1.0F, 1.0F, 1.0F));
 		}
 
-		GL11.glEnable(2903);
-		GL11.glColorMaterial(1028, 4608);
+		GL11.glEnable(GL11.GL_COLOR_MATERIAL);
+		GL11.glColorMaterial(GL11.GL_FRONT, GL11.GL_AMBIENT);
 	}
 
 	private FloatBuffer a(float var1, float var2, float var3, float var4) {

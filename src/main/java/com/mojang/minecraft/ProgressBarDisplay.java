@@ -29,11 +29,11 @@ public final class ProgressBarDisplay implements ProgressBar {
 			int x = this.mc.width * 240 / this.mc.height;
 			int y = this.mc.height * 240 / this.mc.height;
 			
-			GL11.glClear(256);
-			GL11.glMatrixMode(5889);
+			GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
+			GL11.glMatrixMode(GL11.GL_PROJECTION);
 			GL11.glLoadIdentity();
 			GL11.glOrtho(0.0D, x, y, 0.0D, 100.0D, 300.0D);
-			GL11.glMatrixMode(5888);
+			GL11.glMatrixMode(GL11.GL_MODELVIEW);
 			GL11.glLoadIdentity();
 			GL11.glTranslatef(0.0F, 0.0F, -200.0F);
 		}
@@ -60,7 +60,6 @@ public final class ProgressBarDisplay implements ProgressBar {
 				this.start = System.currentTimeMillis();
 				int x = this.mc.width * 240 / this.mc.height;
 				int y = this.mc.height * 240 / this.mc.height;
-				//GL11.glClear(16640);
 				ShapeRenderer render = com.mojang.minecraft.render.ShapeRenderer.instance;
 				ClientRenderHelper.getHelper().drawDirtBG();
 				if (progress >= 0) {
