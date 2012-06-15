@@ -1,8 +1,10 @@
 package com.mojang.minecraft.gui;
 
+import ch.spacebase.openclassic.api.OpenClassic;
 import ch.spacebase.openclassic.api.gui.GuiScreen;
 import ch.spacebase.openclassic.api.gui.widget.Button;
 import ch.spacebase.openclassic.api.gui.widget.TextBox;
+import ch.spacebase.openclassic.api.gui.widget.ToggleButton;
 import ch.spacebase.openclassic.api.render.RenderHelper;
 import ch.spacebase.openclassic.client.util.GeneralUtils;
 
@@ -14,6 +16,7 @@ public final class LevelNameScreen extends GuiScreen {
 
 	private GuiScreen parent;
 	private TextBox widget;
+	private int type = 0;
 
 	public LevelNameScreen(GuiScreen parent) {
 		this.parent = parent;
@@ -22,18 +25,19 @@ public final class LevelNameScreen extends GuiScreen {
 	public final void onOpen() {
 		Keyboard.enableRepeatEvents(true);
 		
-		this.widget = new TextBox(0, this.getWidth() / 2 - 100, this.getHeight() / 2 - 30, this, true, true, 30);
+		this.widget = new TextBox(0, this.getWidth() / 2 - 100, this.getHeight() / 2 - 45, this, true, true, 30);
 		
 		this.clearWidgets();
-		this.attachWidget(new Button(0, this.getWidth() / 2 - 100, this.getHeight() / 4 + 72, this, true, "Small"));
-		this.attachWidget(new Button(1, this.getWidth() / 2 - 100, this.getHeight() / 4 + 96, this, true, "Normal"));
-		this.attachWidget(new Button(2, this.getWidth() / 2 - 100, this.getHeight() / 4 + 120, this, true, "Huge"));
-		this.attachWidget(new Button(3, this.getWidth() / 2 - 100, this.getHeight() / 4 + 144, this, true, "Cancel"));
+		this.attachWidget(new ToggleButton(0, this.getWidth() / 2 - 100, this.getHeight() / 4 + 48, this, true, "Type: normal"));
+		this.attachWidget(new Button(1, this.getWidth() / 2 - 100, this.getHeight() / 4 + 72, this, true, "Small"));
+		this.attachWidget(new Button(2, this.getWidth() / 2 - 100, this.getHeight() / 4 + 96, this, true, "Normal"));
+		this.attachWidget(new Button(3, this.getWidth() / 2 - 100, this.getHeight() / 4 + 120, this, true, "Huge"));
+		this.attachWidget(new Button(4, this.getWidth() / 2 - 100, this.getHeight() / 4 + 144, this, true, "Cancel"));
 		this.attachWidget(this.widget);
 		
-		this.getWidget(0, Button.class).setActive(false);
 		this.getWidget(1, Button.class).setActive(false);
 		this.getWidget(2, Button.class).setActive(false);
+		this.getWidget(3, Button.class).setActive(false);
 	}
 
 	public final void onClose() {
@@ -44,16 +48,25 @@ public final class LevelNameScreen extends GuiScreen {
 		if (button.isActive()) {
 			Minecraft mc = GeneralUtils.getMinecraft();
 			
-			if ((button.getId() == 0 || button.getId() == 1 || button.getId() == 2) && this.widget.getText().trim().length() > 0) {
+			if(button.getId() == 0) {
+				this.type++;
+				if(this.type >= OpenClassic.getGame().getGenerators().size()) {
+					this.type = 0;
+				}
+				
+				button.setText("Type: " + OpenClassic.getGame().getGenerators().keySet().toArray(new String[OpenClassic.getGame().getGenerators().keySet().size()])[this.type]);
+			}
+			
+			if ((button.getId() == 1 || button.getId() == 2 || button.getId() == 3) && this.widget.getText().trim().length() > 0) {
 				mc.levelName = this.widget.getText();
-				mc.levelSize = button.getId();
-				mc.initGame();
+				mc.levelSize = button.getId() - 1;
+				mc.initGame(OpenClassic.getGame().getGenerator(this.getWidget(0, Button.class).getText().replace("Type: ", "")));
 				mc.levelIo.save(mc.level);
 				mc.setCurrentScreen(null);
 				mc.grabMouse();
 			}
 
-			if (button.getId() == 3) {
+			if (button.getId() == 4) {
 				mc.setCurrentScreen(this.parent);
 			}
 		}
@@ -61,9 +74,9 @@ public final class LevelNameScreen extends GuiScreen {
 
 	public final void onKeyPress(char c, int key) {
 		super.onKeyPress(c, key);
-		this.getWidget(0, Button.class).setActive(this.widget.getText().trim().length() > 0);
 		this.getWidget(1, Button.class).setActive(this.widget.getText().trim().length() > 0);
 		this.getWidget(2, Button.class).setActive(this.widget.getText().trim().length() > 0);
+		this.getWidget(3, Button.class).setActive(this.widget.getText().trim().length() > 0);
 	}
 
 	public final void render() {

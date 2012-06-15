@@ -13,10 +13,11 @@ import ch.spacebase.openclassic.api.block.model.Model;
 import ch.spacebase.openclassic.api.block.model.Quad;
 import ch.spacebase.openclassic.api.block.model.Texture;
 import ch.spacebase.openclassic.api.block.model.Vertex;
-import ch.spacebase.openclassic.api.data.NBTData;
 import ch.spacebase.openclassic.api.Color;
 import ch.spacebase.openclassic.api.OpenClassic;
 import ch.spacebase.openclassic.api.gui.GuiScreen;
+import ch.spacebase.openclassic.api.level.LevelInfo;
+import ch.spacebase.openclassic.api.level.generator.Generator;
 import ch.spacebase.openclassic.api.plugin.Plugin;
 import ch.spacebase.openclassic.api.util.Constants;
 import ch.spacebase.openclassic.client.ClassicClient;
@@ -40,7 +41,6 @@ import com.mojang.minecraft.item.Arrow;
 import com.mojang.minecraft.item.Item;
 import com.mojang.minecraft.level.Level;
 import com.mojang.minecraft.level.LevelIO;
-import com.mojang.minecraft.level.generator.LevelGenerator;
 import com.mojang.minecraft.mob.Mob;
 import com.mojang.minecraft.model.ModelManager;
 import com.mojang.minecraft.model.ModelRenderer;
@@ -304,6 +304,10 @@ public final class Minecraft implements Runnable {
 	}
 
 	public void initGame() {
+		this.initGame(OpenClassic.getGame().getGenerator("normal"));
+	}
+	
+	public void initGame(Generator gen) {
 		this.audio.stopMusic();
 		this.audio.lastBGM = System.currentTimeMillis();
 
@@ -324,7 +328,10 @@ public final class Minecraft implements Runnable {
 			}
 
 			if (this.level == null) {
-				this.generateLevel(!this.levelName.equals("") ? this.levelName : "A Nice World", this.levelSize);
+				this.progressBar.setTitle("Generating...");
+				this.progressBar.setText("");
+				this.progressBar.setProgress(0);
+				OpenClassic.getClient().createLevel(new LevelInfo(!this.levelName.equals("") ? this.levelName : "A Nice World", null, (short) (128 << this.levelSize), (short) 128, (short) (128 << this.levelSize)), gen);
 				this.levelName = "";
 			}
 		}
@@ -2019,25 +2026,6 @@ public final class Minecraft implements Runnable {
 
 	public final boolean isConnected() {
 		return this.netManager != null;
-	}
-
-	public final void generateLevel(String name, int sizeShift) {
-		this.generateLevel(name, 128 << sizeShift, 128 << sizeShift);
-	}
-
-	public final Level generateLevel(String name, int width, int depth) {
-		String user = this.data != null ? this.data.username : "anonymous";
-		Level level = new Level();
-		LevelGenerator generator = new LevelGenerator();
-		generator.setInfo(name, user, width, depth);
-
-		generator.generate(level.openclassic);
-		level.openclassic.data = new NBTData(level.name);
-		level.openclassic.data.load(OpenClassic.getGame().getDirectory().getPath() + "/levels/" + level.name + ".nbt");
-		this.mode.prepareLevel(level);
-		this.setLevel(level);
-
-		return level;
 	}
 
 	public final void setLevel(Level level) {

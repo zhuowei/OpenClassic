@@ -1,5 +1,7 @@
 package com.mojang.minecraft;
 
+import ch.spacebase.openclassic.api.Color;
+
 import com.mojang.minecraft.Minecraft;
 import com.mojang.minecraft.player.Player;
 import java.net.HttpURLConnection;
@@ -24,7 +26,7 @@ public final class SkinDownloadThread extends Thread {
 					name = this.mc.data.username.substring(0, this.mc.data.username.indexOf('@'));
 				}
 
-				conn = (HttpURLConnection) new URL("http://www.minecraft.net/skin/" + name + ".png").openConnection();
+				conn = (HttpURLConnection) new URL("http://www.minecraft.net/skin/" + Color.stripColor(name) + ".png").openConnection();
 				conn.setDoInput(true);
 				conn.setDoOutput(false);
 				conn.connect();

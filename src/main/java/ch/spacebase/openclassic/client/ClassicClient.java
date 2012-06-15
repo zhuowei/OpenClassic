@@ -38,6 +38,7 @@ import ch.spacebase.openclassic.api.command.Command;
 import ch.spacebase.openclassic.api.command.CommandExecutor;
 import ch.spacebase.openclassic.api.command.Sender;
 import ch.spacebase.openclassic.api.config.Configuration;
+import ch.spacebase.openclassic.api.data.NBTData;
 import ch.spacebase.openclassic.api.gui.GuiScreen;
 import ch.spacebase.openclassic.api.gui.MainScreen;
 import ch.spacebase.openclassic.api.input.InputHelper;
@@ -283,19 +284,27 @@ public class ClassicClient implements Client {
 	@Override
 	public Level createLevel(LevelInfo info, Generator generator) {
 		if(generator instanceof LevelGenerator) {
-			Level level = this.mc.generateLevel(info.getName(), info.getWidth(), info.getDepth()).openclassic;
-			if(info.getSpawn() != null) level.setSpawn(info.getSpawn());
-			return level;
-		} else {
-			com.mojang.minecraft.level.Level level = new com.mojang.minecraft.level.Level();
-			generator.generate(level.openclassic);
-			
-			if(level.openclassic.getSpawn() == null) {
-				level.openclassic.setSpawn(generator.findSpawn(level.openclassic));
-			}
-			
-			return level.openclassic;
+			((LevelGenerator) generator).setInfo(info.getName(), this.mc.data != null ? this.mc.data.username : "unknown", info.getWidth(), info.getHeight(), info.getDepth());
 		}
+		
+		com.mojang.minecraft.level.Level level = new com.mojang.minecraft.level.Level();
+		level.name = info.getName();
+		level.creator = this.mc.data != null ? this.mc.data.username : "unknown";
+		level.createTime = System.currentTimeMillis();
+		level.setData(info.getWidth(), info.getHeight(), info.getDepth(), new byte[info.getWidth() * info.getHeight() * info.getDepth()]);
+		generator.generate(level.openclassic);
+
+		if(level.openclassic.getSpawn() == null) {
+			level.openclassic.setSpawn(generator.findSpawn(level.openclassic));
+		}
+
+		if(info.getSpawn() != null) level.openclassic.setSpawn(info.getSpawn());
+		level.openclassic.data = new NBTData(level.name);
+		level.openclassic.data.load(OpenClassic.getGame().getDirectory().getPath() + "/levels/" + level.name + ".nbt");
+
+		this.mc.mode.prepareLevel(level);
+		this.mc.setLevel(level);
+		return level.openclassic;
 	}
 
 	@Override
@@ -321,6 +330,11 @@ public class ClassicClient implements Client {
 	@Override
 	public Generator getGenerator(String name) {
 		return this.generators.get(name);
+	}
+	
+	@Override
+	public Map<String, Generator> getGenerators() {
+		return new HashMap<String, Generator>(this.generators);
 	}
 
 	@Override

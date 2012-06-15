@@ -27,15 +27,17 @@ public final class LevelGenerator extends Generator {
 	
 	private String name;
 	private String author;
+	private int height;
 
 	public LevelGenerator() {
 		this.progress = GeneralUtils.getMinecraft().progressBar;
 	}
 	
-	public void setInfo(String name, String author, int width, int depth) {
+	public void setInfo(String name, String author, int width, int height, int depth) {
 		this.name = name;
 		this.author = author;
 		this.width = width;
+		this.height = height;
 		this.depth = depth;
 	}
 	
@@ -52,7 +54,7 @@ public final class LevelGenerator extends Generator {
 		this.progress.setTitle("Generating level");
 		this.d = 64;
 		this.g = 32;
-		this.data = new byte[width * depth << 6];
+		this.data = new byte[this.width * this.height * this.depth];
 		this.progress.setText("Raising..");
 		CombinedAlgorithm alg1 = new CombinedAlgorithm(new b(this.rand, 8), new b(this.rand, 8));
 		CombinedAlgorithm alg2 = new CombinedAlgorithm(new b(this.rand, 8), new b(this.rand, 8));
@@ -354,7 +356,7 @@ public final class LevelGenerator extends Generator {
 
 		Level handle = ((ClientLevel) level).getHandle();
 		handle.waterLevel = this.g;
-		handle.setData(width, 64, depth, this.data);
+		handle.setData(width, height, depth, this.data);
 		handle.createTime = System.currentTimeMillis();
 		handle.creator = author;
 		handle.name = name;
