@@ -8,7 +8,7 @@ import ch.spacebase.openclassic.api.block.custom.CustomBlock;
 import ch.spacebase.openclassic.api.block.model.BoundingBox;
 import ch.spacebase.openclassic.api.block.model.CubeModel;
 import ch.spacebase.openclassic.api.block.model.CuboidModel;
-import ch.spacebase.openclassic.api.block.model.LiquidModel;
+import ch.spacebase.openclassic.api.block.model.TransparentModel;
 import ch.spacebase.openclassic.api.block.model.Model;
 import ch.spacebase.openclassic.api.block.model.Quad;
 import ch.spacebase.openclassic.api.block.model.Texture;
@@ -1648,7 +1648,7 @@ public final class Minecraft implements Runnable {
 												} else if (type == PacketType.BLOCK_MODEL) {
 													byte block = (Byte) params[0];
 													String modelType = (String) params[1];
-													Model model = modelType.equals("LiquidModel") ? new LiquidModel("/terrain.png", 16) : (modelType.equals("CuboidModel") ? new CuboidModel("/terrain.png", 16, 0, 0, 0, 1, 1, 1) : (modelType.equals("CubeModel") ? new CubeModel("/terrain.png", 16) : new Model()));
+													Model model = modelType.equals("TransparentModel") ? new TransparentModel("/terrain.png", 16) : (modelType.equals("CuboidModel") ? new CuboidModel("/terrain.png", 16, 0, 0, 0, 1, 1, 1) : (modelType.equals("CubeModel") ? new CubeModel("/terrain.png", 16) : new Model()));
 													model.clearQuads();
 
 													float x1 = (Float) params[2];
