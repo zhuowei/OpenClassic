@@ -1,3 +1,4 @@
+<center><img src="http://i.imgur.com/OPmKV.png" /></center>
 <b><center><h1>OpenClassic Client</h></center></b>
 ==========
 
@@ -7,7 +8,7 @@ The Minecraft Classic client with many improvements and an implementation of the
 <b>Features</b>
 --------
 
- * The OpenClassicAPI and it's features, including custom blocks, custom GUIs, and registering/playing custom sounds.
+ * The OpenClassicAPI and its features, including custom blocks, custom GUIs, and registering/playing custom sounds.
  * Both the OpenClassic client and server can tell when a player has a custom client/is connected to an OpenClassic server. This can be used for various features in a server.
  * The ability to use the client without the browser.
  * A main menu.
