@@ -33,7 +33,6 @@ import ch.spacebase.openclassic.api.block.physics.LiquidPhysics;
 import ch.spacebase.openclassic.api.block.physics.MushroomPhysics;
 import ch.spacebase.openclassic.api.block.physics.SaplingPhysics;
 import ch.spacebase.openclassic.api.block.physics.SpongePhysics;
-import ch.spacebase.openclassic.api.block.physics.StillLiquidPhysics;
 import ch.spacebase.openclassic.api.command.Command;
 import ch.spacebase.openclassic.api.command.CommandExecutor;
 import ch.spacebase.openclassic.api.command.Sender;
@@ -127,8 +126,6 @@ public class ClassicClient implements Client {
 		VanillaBlock.BROWN_MUSHROOM.setPhysics(new MushroomPhysics());
 		VanillaBlock.SAPLING.setPhysics(new SaplingPhysics());
 		VanillaBlock.SPONGE.setPhysics(new SpongePhysics());
-		VanillaBlock.STATIONARY_WATER.setPhysics(new StillLiquidPhysics((byte) 9));
-		VanillaBlock.STATIONARY_LAVA.setPhysics(new StillLiquidPhysics((byte) 11));
 		VanillaBlock.SLAB.setPhysics(new HalfStepPhysics());
 		VanillaBlock.TNT.setPhysics(new TNTPhysics());
 		

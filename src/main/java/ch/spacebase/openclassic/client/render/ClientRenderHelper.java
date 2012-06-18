@@ -1,11 +1,6 @@
 package ch.spacebase.openclassic.client.render;
 
-import java.awt.Image;
-import java.io.File;
-import java.io.IOException;
 import java.util.Random;
-
-import javax.imageio.ImageIO;
 
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
@@ -134,24 +129,6 @@ public class ClientRenderHelper extends RenderHelper {
 		GL11.glEnd();
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
-	}
-	
-	public void drawImage(String file, int x, int y) {
-		try {
-			Image img = ImageIO.read(new File(file));
-			drawImage(x, y, 0, 0, 0, img.getWidth(null), img.getHeight(null));
-		} catch(IOException e) {
-			System.out.println("Failed to load img width/height for image " + file + ".");
-			e.printStackTrace();
-		}
-	}
-	
-	public void drawImage(int x, int y, int width, int height) {
-		drawImage(x, y, 0, 0, width, height);
-	}
-	
-	public void drawImage(int x, int y, int imgX, int imgY, int imgWidth, int imgHeight) {
-		drawImage(x, y, 0, imgX, imgY, imgWidth, imgHeight);
 	}
 	
 	public void drawImage(int x, int y, int z, int imgX, int imgY, int imgWidth, int imgHeight) {
