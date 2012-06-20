@@ -1,5 +1,6 @@
 package com.mojang.minecraft.player;
 
+import ch.spacebase.openclassic.api.Position;
 import ch.spacebase.openclassic.client.player.ClientPlayer;
 import ch.spacebase.openclassic.client.util.GeneralUtils;
 
@@ -54,9 +55,13 @@ public class Player extends Mob {
 	}
 
 	public void resetPos() {
+		this.resetPos(null);
+	}
+	
+	public void resetPos(Position pos) {
 		this.heightOffset = 1.62F;
 		this.setSize(0.6F, 1.8F);
-		super.resetPos();
+		super.resetPos(pos);
 		if (this.level != null) {
 			this.level.player = this;
 		}

@@ -1,8 +1,12 @@
 package com.mojang.minecraft.level;
 
+import ch.spacebase.openclassic.api.Position;
 import ch.spacebase.openclassic.api.block.BlockType;
 import ch.spacebase.openclassic.api.block.Blocks;
 import ch.spacebase.openclassic.api.block.VanillaBlock;
+import ch.spacebase.openclassic.api.event.EventFactory;
+import ch.spacebase.openclassic.api.event.block.BlockPhysicsEvent;
+import ch.spacebase.openclassic.api.event.level.SpawnChangeEvent;
 import ch.spacebase.openclassic.client.level.ClientLevel;
 import ch.spacebase.openclassic.client.util.BlockUtils;
 
@@ -388,13 +392,13 @@ public class Level implements Serializable {
 
 		for (var7 = 0; var7 < var6; ++var7) {
 			this.c = this.c * 3 + 1013904223;
-			int var12;
-			int var13 = (var12 = this.c >> 2) & var4;
-			int var10 = var12 >> var1 & var3;
-			var12 = var12 >> var1 + var2 & var5;
-			byte var11 = this.blocks[(var12 * this.height + var10) * this.width + var13];
-			if(Blocks.fromId(var11).getPhysics() != null && this.openclassic.getPhysicsEnabled()) {
-				Blocks.fromId(var11).getPhysics().update(this.openclassic.getBlockAt(var13, var12, var10));
+			int y = this.c >> 2;
+			int x = (y) & var4;
+			int z = y >> var1 & var3;
+			y = y >> var1 + var2 & var5;
+			byte var11 = this.blocks[(y * this.height + z) * this.width + x];
+			if(Blocks.fromId(var11).getPhysics() != null && this.openclassic.getPhysicsEnabled() && !EventFactory.callEvent(new BlockPhysicsEvent(this.openclassic.getBlockAt(x, y, z))).isCancelled()) {
+				Blocks.fromId(var11).getPhysics().update(this.openclassic.getBlockAt(x, y, z));
 			}
 		}
 		
@@ -585,10 +589,13 @@ public class Level implements Serializable {
 	}
 
 	public void setSpawnPos(int var1, int var2, int var3, float var4) {
+		Position old = new Position(this.openclassic, this.xSpawn, this.ySpawn, this.zSpawn, (byte) this.rotSpawn, (byte) 0);
 		this.xSpawn = var1;
 		this.ySpawn = var2;
 		this.zSpawn = var3;
 		this.rotSpawn = var4;
+		
+		EventFactory.callEvent(new SpawnChangeEvent(this.openclassic, old));
 	}
 
 	public float getBrightness(int var1, int var2, int var3) {

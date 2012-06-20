@@ -84,10 +84,7 @@ public class ClientLevel implements Level {
 
 	@Override
 	public void setSpawn(Position pos) {
-		this.handle.xSpawn = pos.getBlockX();
-		this.handle.ySpawn = pos.getBlockY();
-		this.handle.zSpawn = pos.getBlockZ();
-		this.handle.rotSpawn = pos.getYaw();
+		this.handle.setSpawnPos(pos.getBlockX(), pos.getBlockY(), pos.getBlockZ(), pos.getYaw());
 	}
 
 	@Override

@@ -1,6 +1,8 @@
 package com.mojang.minecraft.gui;
 
 import ch.spacebase.openclassic.api.OpenClassic;
+import ch.spacebase.openclassic.api.event.EventFactory;
+import ch.spacebase.openclassic.api.event.player.PlayerChatEvent;
 import ch.spacebase.openclassic.api.gui.GuiScreen;
 import ch.spacebase.openclassic.api.gui.widget.TextBox;
 import ch.spacebase.openclassic.client.util.GeneralUtils;
@@ -26,7 +28,10 @@ public final class ChatInputScreen extends GuiScreen {
 			String message = this.getWidget(0, TextBox.class).getText().trim();
 			if (message.length() > 0) {
 				if(GeneralUtils.getMinecraft().netManager != null && GeneralUtils.getMinecraft().netManager.isConnected()) {
-					GeneralUtils.getMinecraft().netManager.netHandler.send(PacketType.CHAT_MESSAGE, new Object[] { (byte) -1, message });
+					PlayerChatEvent event = EventFactory.callEvent(new PlayerChatEvent(OpenClassic.getClient().getPlayer(), message));
+					if(event.isCancelled()) return;
+					
+					GeneralUtils.getMinecraft().netManager.netHandler.send(PacketType.CHAT_MESSAGE, new Object[] { (byte) -1, event.getMessage() });
 				} else if(message.startsWith("/")) {
 					OpenClassic.getClient().processCommand(OpenClassic.getClient().getPlayer(), message.substring(1));
 				}

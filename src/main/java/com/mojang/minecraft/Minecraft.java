@@ -15,6 +15,14 @@ import ch.spacebase.openclassic.api.block.model.Texture;
 import ch.spacebase.openclassic.api.block.model.Vertex;
 import ch.spacebase.openclassic.api.Color;
 import ch.spacebase.openclassic.api.OpenClassic;
+import ch.spacebase.openclassic.api.Position;
+import ch.spacebase.openclassic.api.event.EventFactory;
+import ch.spacebase.openclassic.api.event.block.BlockPlaceEvent;
+import ch.spacebase.openclassic.api.event.player.PlayerKickEvent;
+import ch.spacebase.openclassic.api.event.player.PlayerLoginEvent;
+import ch.spacebase.openclassic.api.event.player.PlayerLoginEvent.Result;
+import ch.spacebase.openclassic.api.event.player.PlayerQuitEvent;
+import ch.spacebase.openclassic.api.event.player.PlayerRespawnEvent;
 import ch.spacebase.openclassic.api.gui.GuiScreen;
 import ch.spacebase.openclassic.api.level.LevelInfo;
 import ch.spacebase.openclassic.api.level.generator.Generator;
@@ -73,6 +81,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -154,6 +163,7 @@ public final class Minecraft implements Runnable {
 	private List<CustomBlock> clientCache = new ArrayList<CustomBlock>();
 	private int shader;
 	private boolean useShaders;
+	private boolean ctf;
 
 	static {
 		// Apparently the enum needs a kickstart...
@@ -286,6 +296,7 @@ public final class Minecraft implements Runnable {
 		if(this.player != null && this.player.openclassic.getData() != null && this.netManager == null) this.player.openclassic.getData().save(OpenClassic.getClient().getDirectory().getPath() + "/player.nbt");
 
 		if(this.netManager != null) {
+			if(this.player != null) EventFactory.callEvent(new PlayerQuitEvent(OpenClassic.getClient().getPlayer(), "Quit"));
 			if(this.netManager.isConnected()) {
 				this.netManager.netHandler.close();
 			}
@@ -300,6 +311,7 @@ public final class Minecraft implements Runnable {
 		this.online = false;
 		this.ingame = false;
 		this.hacks = true;
+		this.player = null;
 		this.settings.speed = false;
 	}
 
@@ -1345,6 +1357,10 @@ public final class Minecraft implements Runnable {
 								this.netManager.sendBlockChange(x, y, z, button, id);
 							}
 
+							if(this.netManager == null && EventFactory.callEvent(new BlockPlaceEvent(this.level.openclassic.getBlockAt(x, y, z), OpenClassic.getClient().getPlayer(), this.renderer.heldBlock.block)).isCancelled()) {
+								return;
+							}
+							
 							this.level.netSetTile(x, y, z, id);
 							this.renderer.heldBlock.heldPosition = 0;
 							if(Blocks.fromId(id).getPhysics() != null) {
@@ -1426,7 +1442,7 @@ public final class Minecraft implements Runnable {
 		int var45;
 		if (this.netManager != null && !(this.currentScreen instanceof ErrorScreen)) {
 			if (!this.netManager.isConnected()) {
-				this.progressBar.setTitle("Connecting..");
+				this.progressBar.setTitle("Connecting...");
 				this.progressBar.setProgress(0);
 			} else {
 				if (this.netManager.successful) {
@@ -1459,21 +1475,31 @@ public final class Minecraft implements Runnable {
 
 								if (this.netManager.successful) {
 									if (type == PacketType.IDENTIFICATION) {
+										PlayerLoginEvent event = EventFactory.callEvent(new PlayerLoginEvent(OpenClassic.getClient().getPlayer(), InetSocketAddress.createUnresolved(this.server, this.port)));
+										if(event.getResult() != Result.ALLOWED) {
+											this.stopGame(false);
+											this.setCurrentScreen(new ErrorScreen("Login disallowed by plugin!", event.getKickMessage()));
+										}
+										
 										this.progressBar.setTitle(params[1].toString());
 										this.progressBar.setText(params[2].toString());
 										this.player.userType = (Byte) params[3];
 
-										if(params[1].toString().indexOf("+hax") > -1 || params[2].toString().indexOf("+hax") > -1) {
-											this.hacks = true;
-										} else {
-											this.hacks = false;
-										}
-
-										if(this.player.userType == Constants.OP && (params[1].toString().indexOf("+ophax") > -1 || params[2].toString().indexOf("+ophax") > -1)) {
-											this.hacks  = true;
-										}
-
 										if(!this.netManager.identified) {
+											if(params[1].toString().indexOf("+hax") > -1 || params[2].toString().indexOf("+hax") > -1) {
+												this.hacks = true;
+											} else {
+												this.hacks = false;
+											}
+
+											if(this.player.userType == Constants.OP && (params[1].toString().indexOf("+ophax") > -1 || params[2].toString().indexOf("+ophax") > -1)) {
+												this.hacks = true;
+											}
+											
+											if(params[1].toString().indexOf("+ctf") > -1 || params[2].toString().indexOf("+ctf") > -1) {
+												this.ctf = true;
+											}
+											
 											for(BlockType block : Blocks.getBlocks()) {
 												if(block instanceof CustomBlock) {
 													this.clientCache.add((CustomBlock) block);
@@ -1623,8 +1649,9 @@ public final class Minecraft implements Runnable {
 														this.hud.addChat(message);
 													}
 												} else if (type == PacketType.DISCONNECT) {
+													EventFactory.callEvent(new PlayerKickEvent(OpenClassic.getClient().getPlayer(), (String) params[0], " disconnected"));
 													this.netManager.netHandler.close();
-													this.setCurrentScreen((new ErrorScreen("Connection lost", (String) params[0])));
+													this.setCurrentScreen((new ErrorScreen("Disconnected by server!", (String) params[0])));
 												} else if (type == PacketType.UPDATE_PLAYER_TYPE) {
 													this.player.userType = (Byte) params[0];
 													// Custom begins
@@ -1897,11 +1924,14 @@ public final class Minecraft implements Runnable {
 							}
 
 							if (this.mode instanceof CreativeGameMode) {
-								if (Keyboard.getEventKey() == this.settings.loadLocKey.key) {
-									this.player.resetPos();
+								if (Keyboard.getEventKey() == this.settings.loadLocKey.key && !this.ctf) {
+									PlayerRespawnEvent event = new PlayerRespawnEvent(OpenClassic.getClient().getPlayer(), new Position(OpenClassic.getClient().getLevel(), this.level.xSpawn, this.level.ySpawn, this.level.zSpawn, (byte) this.level.rotSpawn, (byte) 0));
+									if(event.isCancelled()) return;
+									
+									this.player.resetPos(event.getPosition());
 								}
 
-								if (Keyboard.getEventKey() == this.settings.saveLocKey.key) {
+								if (Keyboard.getEventKey() == this.settings.saveLocKey.key && !this.ctf) {
 									this.level.setSpawnPos((int) this.player.x, (int) this.player.y, (int) this.player.z, this.player.yRot);
 									this.player.resetPos();
 								}

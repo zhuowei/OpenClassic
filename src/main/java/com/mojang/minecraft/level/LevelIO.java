@@ -2,6 +2,9 @@ package com.mojang.minecraft.level;
 
 import ch.spacebase.openclassic.api.OpenClassic;
 import ch.spacebase.openclassic.api.data.NBTData;
+import ch.spacebase.openclassic.api.event.EventFactory;
+import ch.spacebase.openclassic.api.event.level.LevelLoadEvent;
+import ch.spacebase.openclassic.api.event.level.LevelSaveEvent;
 import ch.spacebase.openclassic.client.io.OpenClassicLevelFormat;
 import ch.spacebase.openclassic.client.level.ClientLevel;
 
@@ -44,6 +47,10 @@ public final class LevelIO {
 
 			return false;
 		} */
+		
+		if(EventFactory.callEvent(new LevelSaveEvent(level.openclassic)).isCancelled()) {
+			return true;
+		}
 		
 		try {
 			OpenClassicLevelFormat.save(level.openclassic);
@@ -94,6 +101,7 @@ public final class LevelIO {
 			Level level = ((ClientLevel) OpenClassicLevelFormat.load(name, false)).getHandle();
 			level.openclassic.data = new NBTData(level.name);
 			level.openclassic.data.load(OpenClassic.getGame().getDirectory().getPath() + "/levels/" + level.name + ".nbt");
+			EventFactory.callEvent(new LevelLoadEvent(level.openclassic));
 			return level;
 		} catch (IOException e) {
 			if (this.progress != null) {
@@ -279,6 +287,10 @@ public final class LevelIO {
 	} */
 
 	public static void saveOld(Level level) {
+		if(EventFactory.callEvent(new LevelSaveEvent(level.openclassic)).isCancelled()) {
+			return;
+		}
+		
 		try {
 			DataOutputStream data = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(new File(OpenClassic.getGame().getDirectory(), "levels/" + level.name + ".mine"))));
 			data.writeInt(656127880);

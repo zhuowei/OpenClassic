@@ -1,8 +1,11 @@
 package com.mojang.minecraft.gamemode;
 
+import ch.spacebase.openclassic.api.OpenClassic;
 import ch.spacebase.openclassic.api.block.BlockType;
 import ch.spacebase.openclassic.api.block.Blocks;
 import ch.spacebase.openclassic.api.block.StepSound;
+import ch.spacebase.openclassic.api.event.EventFactory;
+import ch.spacebase.openclassic.api.event.block.BlockBreakEvent;
 import ch.spacebase.openclassic.client.render.ClientRenderHelper;
 
 import com.mojang.minecraft.Minecraft;
@@ -37,6 +40,11 @@ public class GameMode {
 	public void breakBlock(int x, int y, int z) {
 		Level var4 = this.mc.level;
 		BlockType type = Blocks.fromId(var4.getTile(x, y, z));
+		
+		if(this.mc.netManager == null && EventFactory.callEvent(new BlockBreakEvent(var4.openclassic.getBlockAt(x, y, z), OpenClassic.getClient().getPlayer(), this.mc.renderer.heldBlock.block)).isCancelled()) {
+			return;
+		}
+		
 		boolean var6 = var4.netSetTile(x, y, z, 0);
 		if (type != null && var6) {
 			if (this.mc.isConnected()) {

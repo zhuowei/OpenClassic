@@ -1,5 +1,6 @@
 package com.mojang.minecraft;
 
+import ch.spacebase.openclassic.api.Position;
 import ch.spacebase.openclassic.api.block.Blocks;
 import ch.spacebase.openclassic.api.block.StepSound;
 import ch.spacebase.openclassic.api.block.VanillaBlock;
@@ -62,7 +63,18 @@ public abstract class Entity implements Serializable {
 	}
 
 	public void resetPos() {
-		if (this.level != null) {
+		this.resetPos(null);
+	}
+	
+	public void resetPos(Position pos) {
+		if (pos != null) {
+			this.setPos((float) pos.getX(), (float) pos.getY(), (float) pos.getZ());
+			this.xd = 0;
+			this.yd = 0;
+			this.zd = 0;
+			this.yRot = pos.getYaw();
+			this.xRot = pos.getPitch();
+		} else if (this.level != null) {
 			float x = this.level.xSpawn + 0.5F;
 			float y = this.level.ySpawn;
 

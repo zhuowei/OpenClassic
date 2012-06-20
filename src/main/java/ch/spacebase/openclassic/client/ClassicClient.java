@@ -38,6 +38,8 @@ import ch.spacebase.openclassic.api.command.CommandExecutor;
 import ch.spacebase.openclassic.api.command.Sender;
 import ch.spacebase.openclassic.api.config.Configuration;
 import ch.spacebase.openclassic.api.data.NBTData;
+import ch.spacebase.openclassic.api.event.EventFactory;
+import ch.spacebase.openclassic.api.event.game.PreCommandEvent;
 import ch.spacebase.openclassic.api.gui.GuiScreen;
 import ch.spacebase.openclassic.api.gui.MainScreen;
 import ch.spacebase.openclassic.api.input.InputHelper;
@@ -180,6 +182,13 @@ public class ClassicClient implements Client {
 	public void processCommand(Sender sender, String command) {
 		String split[] = command.split(" ");
 		if(split.length == 0) return;
+		
+		PreCommandEvent event = EventFactory.callEvent(new PreCommandEvent(sender, command));
+		if(event.isCancelled()) {
+			return;
+		}
+		
+		command = event.getCommand();
 		
 		for(CommandExecutor executor : this.executors.keySet()) {
 			if(executor.getCommand(split[0]) != null) {

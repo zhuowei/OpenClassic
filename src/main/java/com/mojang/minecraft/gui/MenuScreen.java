@@ -1,5 +1,8 @@
 package com.mojang.minecraft.gui;
 
+import ch.spacebase.openclassic.api.OpenClassic;
+import ch.spacebase.openclassic.api.event.EventFactory;
+import ch.spacebase.openclassic.api.event.level.LevelUnloadEvent;
 import ch.spacebase.openclassic.api.gui.GuiScreen;
 import ch.spacebase.openclassic.api.gui.widget.Button;
 import ch.spacebase.openclassic.api.render.RenderHelper;
@@ -34,7 +37,11 @@ public final class MenuScreen extends GuiScreen {
 		}
 
 		if (button.getId() == 2) {
-			if(mc.netManager == null)  {
+			if(mc.netManager == null) {
+				if(EventFactory.callEvent(new LevelUnloadEvent(OpenClassic.getClient().getLevel())).isCancelled()) {
+					return;
+				}
+				
 				mc.progressBar.setTitle("Saving level...");
 				mc.progressBar.setText("");
 				mc.progressBar.setProgress(0);
