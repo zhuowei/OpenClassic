@@ -68,7 +68,12 @@ public abstract class Entity implements Serializable {
 	
 	public void resetPos(Position pos) {
 		if (pos != null) {
-			this.setPos((float) pos.getX(), (float) pos.getY(), (float) pos.getZ());
+			pos = pos.clone();
+			while(pos.getY() > 0 && this.level.getCubes(this.bb).size() != 0) {
+				pos.setY(pos.getY() + 1);
+				this.setPos((float) pos.getX(), (float) pos.getY(), (float) pos.getZ());
+			}
+			
 			this.xd = 0;
 			this.yd = 0;
 			this.zd = 0;

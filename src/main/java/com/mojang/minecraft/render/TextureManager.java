@@ -1,5 +1,7 @@
 package com.mojang.minecraft.render;
 
+import ch.spacebase.openclassic.client.util.GeneralUtils;
+
 import com.mojang.minecraft.GameSettings;
 import com.mojang.minecraft.render.animation.AnimatedTexture;
 
@@ -13,9 +15,11 @@ import java.util.HashMap;
 import java.util.List;
 import javax.imageio.ImageIO;
 import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.EXTFramebufferObject;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL14;
+import org.lwjgl.opengl.GL30;
 
 public class TextureManager {
 
@@ -70,11 +74,10 @@ public class TextureManager {
 
 	public void bindTexture(BufferedImage image, int textureId) {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureId);
-		if(this.settings.smoothing) {
+		if(this.settings.smoothing && GeneralUtils.getMinecraft().mipmapMode > 0) {
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL12.GL_TEXTURE_MAX_LEVEL, 2);
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST_MIPMAP_LINEAR);
-			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL14.GL_GENERATE_MIPMAP, GL11.GL_TRUE);
 		} else {
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
@@ -108,6 +111,15 @@ public class TextureManager {
 
 		buffer.flip();
 		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, image.getWidth(), image.getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+	
+		switch(GeneralUtils.getMinecraft().mipmapMode) {
+		case 1:
+			GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+			break;
+		case 2:
+			EXTFramebufferObject.glGenerateMipmapEXT(GL11.GL_TEXTURE_2D);
+			break;
+		}
 	}
 
 	public final void addAnimatedTexture(AnimatedTexture animation) {

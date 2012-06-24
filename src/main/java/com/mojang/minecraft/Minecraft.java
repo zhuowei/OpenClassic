@@ -18,6 +18,7 @@ import ch.spacebase.openclassic.api.OpenClassic;
 import ch.spacebase.openclassic.api.Position;
 import ch.spacebase.openclassic.api.event.EventFactory;
 import ch.spacebase.openclassic.api.event.block.BlockPlaceEvent;
+import ch.spacebase.openclassic.api.event.player.PlayerJoinEvent;
 import ch.spacebase.openclassic.api.event.player.PlayerKickEvent;
 import ch.spacebase.openclassic.api.event.player.PlayerLoginEvent;
 import ch.spacebase.openclassic.api.event.player.PlayerLoginEvent.Result;
@@ -105,7 +106,9 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.glu.GLU;
 
 public final class Minecraft implements Runnable {
@@ -164,6 +167,7 @@ public final class Minecraft implements Runnable {
 	private int shader;
 	private boolean useShaders;
 	private boolean ctf;
+	public int mipmapMode = 0;
 
 	static {
 		// Apparently the enum needs a kickstart...
@@ -474,6 +478,20 @@ public final class Minecraft implements Runnable {
 			GL11.glMatrixMode(GL11.GL_PROJECTION);
 			GL11.glLoadIdentity();
 			GL11.glMatrixMode(GL11.GL_MODELVIEW);
+			
+			if (GLContext.getCapabilities().OpenGL30) {
+				System.out.println("Using OpenGL 3.0 for mipmap generation.");
+				this.mipmapMode = 1;
+			} else if (GLContext.getCapabilities().GL_EXT_framebuffer_object) {
+				System.out.println("Using GL_EXT_framebuffer_object extension for mipmap generation.");
+				this.mipmapMode = 2;
+			} else if (GLContext.getCapabilities().OpenGL14) {
+				System.out.println("Using GL_GENERATE_MIPMAP for mipmap generation. This might slow down with large textures.");
+				this.mipmapMode = 3;
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL14.GL_GENERATE_MIPMAP, GL11.GL_TRUE);
+			} else {
+				System.out.println("Mipmaps unsupported.");
+			}
 			
 			this.shader = GL20.glCreateProgram();
 			if(this.shader != 0) {
@@ -1475,10 +1493,12 @@ public final class Minecraft implements Runnable {
 
 								if (this.netManager.successful) {
 									if (type == PacketType.IDENTIFICATION) {
-										PlayerLoginEvent event = EventFactory.callEvent(new PlayerLoginEvent(OpenClassic.getClient().getPlayer(), InetSocketAddress.createUnresolved(this.server, this.port)));
-										if(event.getResult() != Result.ALLOWED) {
-											this.stopGame(false);
-											this.setCurrentScreen(new ErrorScreen("Login disallowed by plugin!", event.getKickMessage()));
+										if(!this.netManager.identified) {
+											PlayerLoginEvent event = EventFactory.callEvent(new PlayerLoginEvent(OpenClassic.getClient().getPlayer(), InetSocketAddress.createUnresolved(this.server, this.port)));
+											if(event.getResult() != Result.ALLOWED) {
+												this.stopGame(false);
+												this.setCurrentScreen(new ErrorScreen("Login disallowed by plugin!", event.getKickMessage()));
+											}
 										}
 										
 										this.progressBar.setTitle(params[1].toString());
@@ -1506,6 +1526,8 @@ public final class Minecraft implements Runnable {
 													Blocks.unregister(block.getId());
 												}
 											}
+											
+											EventFactory.callEvent(new PlayerJoinEvent(OpenClassic.getClient().getPlayer(), "Joined"));
 										}
 
 										this.netManager.identified = true;
@@ -1925,10 +1947,10 @@ public final class Minecraft implements Runnable {
 
 							if (this.mode instanceof CreativeGameMode) {
 								if (Keyboard.getEventKey() == this.settings.loadLocKey.key && !this.ctf) {
-									PlayerRespawnEvent event = new PlayerRespawnEvent(OpenClassic.getClient().getPlayer(), new Position(OpenClassic.getClient().getLevel(), this.level.xSpawn, this.level.ySpawn, this.level.zSpawn, (byte) this.level.rotSpawn, (byte) 0));
-									if(event.isCancelled()) return;
-									
-									this.player.resetPos(event.getPosition());
+									PlayerRespawnEvent event = new PlayerRespawnEvent(OpenClassic.getClient().getPlayer(), new Position(OpenClassic.getClient().getLevel(), this.level.xSpawn + 0.5F, this.level.ySpawn, this.level.zSpawn + 0.5F, (byte) this.level.rotSpawn, (byte) 0));
+									if(!event.isCancelled()) {
+										this.player.resetPos(event.getPosition());
+									}
 								}
 
 								if (Keyboard.getEventKey() == this.settings.saveLocKey.key && !this.ctf) {

@@ -35,6 +35,10 @@ public final class OptionsScreen extends GuiScreen {
 			this.getWidget(8, Button.class).setActive(false);
 		}
 		
+		if(GeneralUtils.getMinecraft().mipmapMode == 0) {
+			this.getWidget(9, Button.class).setActive(false);
+		}
+		
 		if(!GeneralUtils.getMinecraft().hacks || !GeneralUtils.getMinecraft().ingame) {
 			this.getWidget(75, Button.class).setActive(false);
 		}
