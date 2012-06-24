@@ -132,7 +132,7 @@ public final class HUDScreen implements MainScreen {
 
 		this.mc.fontRenderer.renderWithShadow(Minecraft.VERSION, 2, 2, 16777215);
 		if (this.mc.settings.showFPS) {
-			this.mc.fontRenderer.renderWithShadow(this.mc.fps, 2, 12, 16777215);
+			this.mc.fontRenderer.renderWithShadow(this.mc.debugInfo, 2, 12, 16777215);
 		}
 
 		if (this.mc.mode instanceof SurvivalGameMode) {

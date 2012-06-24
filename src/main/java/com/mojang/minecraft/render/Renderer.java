@@ -23,7 +23,7 @@ public final class Renderer {
 	public boolean displayActive = false;
 	public float d = 0.0F;
 	public HeldBlock heldBlock;
-	public int f;
+	public int levelTicks;
 	public Entity g = null;
 	public Random rand = new Random();
 	private FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
