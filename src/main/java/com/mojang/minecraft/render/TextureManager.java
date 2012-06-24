@@ -1,11 +1,13 @@
 package com.mojang.minecraft.render;
 
+import ch.spacebase.openclassic.api.OpenClassic;
 import ch.spacebase.openclassic.client.util.GeneralUtils;
 
 import com.mojang.minecraft.GameSettings;
 import com.mojang.minecraft.render.animation.AnimatedTexture;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -13,6 +15,8 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.zip.ZipFile;
+
 import javax.imageio.ImageIO;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.EXTFramebufferObject;
@@ -46,13 +50,25 @@ public class TextureManager {
 				GL11.glGenTextures(this.textureBuffer);
 				int textureId = this.textureBuffer.get(0);
 
-				BufferedImage img = !jar ? ImageIO.read(new FileInputStream(file)) : ImageIO.read(TextureManager.class.getResourceAsStream(file));
-				this.bindTexture(img, textureId);
-
-				if(file.contains("logo.png")) {
-					System.out.println(img.getWidth() + ", " + img.getHeight());
+				BufferedImage img = null;
+				if(!jar) {
+					img = ImageIO.read(new FileInputStream(file));
+				} else {
+					if(this.settings.texturePack.equals("none")) {
+						img = ImageIO.read(TextureManager.class.getResourceAsStream(file));
+					} else {
+						ZipFile zip = new ZipFile(new File(OpenClassic.getClient().getDirectory(), "texturepacks/" + this.settings.texturePack));
+						if(zip.getEntry(file.startsWith("/") ? file.substring(1, file.length()) : file) != null) {
+							img = ImageIO.read(zip.getInputStream(zip.getEntry(file.startsWith("/") ? file.substring(1, file.length()) : file)));
+						} else {
+							img = ImageIO.read(TextureManager.class.getResourceAsStream(file));
+						}
+						
+						zip.close();
+					}
 				}
-
+				
+				this.bindTexture(img, textureId);
 				this.textures.put(file, textureId);
 				this.jarTexture.put(file, jar);
 				return textureId;

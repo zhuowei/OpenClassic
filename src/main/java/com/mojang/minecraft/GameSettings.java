@@ -1,5 +1,7 @@
 package com.mojang.minecraft;
 
+import ch.spacebase.openclassic.api.OpenClassic;
+
 import com.mojang.minecraft.KeyBinding;
 import com.mojang.minecraft.Minecraft;
 import com.mojang.minecraft.gamemode.CreativeGameMode;
@@ -14,6 +16,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
+import java.util.zip.ZipFile;
+
 import javax.imageio.ImageIO;
 import org.lwjgl.input.Keyboard;
 
@@ -31,6 +35,7 @@ public final class GameSettings {
 	public boolean survival = false;
 	public boolean smoothing = false;
 	public boolean speed = false;
+	public String texturePack = "none";
 	public KeyBinding forwardKey = new KeyBinding("Forward", Keyboard.KEY_W);
 	public KeyBinding leftKey = new KeyBinding("Left", Keyboard.KEY_A);
 	public KeyBinding backKey = new KeyBinding("Back", Keyboard.KEY_S);
@@ -107,7 +112,24 @@ public final class GameSettings {
 				String texture = iter.next();
 
 				try {
-					BufferedImage img = !textureManager.jarTexture.get(texture) ? ImageIO.read(new FileInputStream(texture)) : ImageIO.read(TextureManager.class.getResourceAsStream(texture));
+					BufferedImage img = null;
+					if(!textureManager.jarTexture.get(texture)) {
+						img = ImageIO.read(new FileInputStream(file));
+					} else {
+						if(this.texturePack.equals("none")) {
+							img = ImageIO.read(TextureManager.class.getResourceAsStream(texture));
+						} else {
+							ZipFile zip = new ZipFile(new File(OpenClassic.getClient().getDirectory(), "texturepacks/" + this.texturePack));
+							if(zip.getEntry(texture.startsWith("/") ? texture.substring(1, texture.length()) : texture) != null) {
+								img = ImageIO.read(zip.getInputStream(zip.getEntry(texture.startsWith("/") ? texture.substring(1, texture.length()) : texture)));
+							} else {
+								img = ImageIO.read(TextureManager.class.getResourceAsStream(texture));
+							}
+							
+							zip.close();
+						}
+					}
+					
 					textureManager.bindTexture(img, textureManager.textures.get(texture));
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -148,7 +170,24 @@ public final class GameSettings {
 				String texture = iter.next();
 
 				try {
-					BufferedImage img = !textureManager.jarTexture.get(texture) ? ImageIO.read(new FileInputStream(texture)) : ImageIO.read(TextureManager.class.getResourceAsStream(texture));
+					BufferedImage img = null;
+					if(!textureManager.jarTexture.get(texture)) {
+						img = ImageIO.read(new FileInputStream(file));
+					} else {
+						if(this.texturePack.equals("none")) {
+							img = ImageIO.read(TextureManager.class.getResourceAsStream(texture));
+						} else {
+							ZipFile zip = new ZipFile(new File(OpenClassic.getClient().getDirectory(), "texturepacks/" + this.texturePack));
+							if(zip.getEntry(texture.startsWith("/") ? texture.substring(1, texture.length()) : texture) != null) {
+								img = ImageIO.read(zip.getInputStream(zip.getEntry(texture.startsWith("/") ? texture.substring(1, texture.length()) : texture)));
+							} else {
+								img = ImageIO.read(TextureManager.class.getResourceAsStream(texture));
+							}
+							
+							zip.close();
+						}
+					}
+					
 					textureManager.bindTexture(img, textureManager.textures.get(texture));
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -226,6 +265,10 @@ public final class GameSettings {
 					if (setting[0].equals("smoothing")) {
 						this.smoothing = setting[1].equals("true");
 					}
+					
+					if (setting[0].equals("texturepack")) {
+						this.texturePack = setting[1];
+					}
 
 					for (int index = 0; index < this.bindings.length; index++) {
 						if (setting[0].equals("key_" + this.bindings[index].key)) {
@@ -242,7 +285,7 @@ public final class GameSettings {
 		}
 	}
 
-	private void save() {
+	public void save() {
 		try {
 			PrintWriter writer = new PrintWriter(new FileWriter(this.file));
 			writer.println("music:" + this.music);
@@ -255,6 +298,7 @@ public final class GameSettings {
 			writer.println("limitFramerate:" + this.limitFPS);
 			writer.println("survival:" + this.survival);
 			writer.println("smoothing:" + this.smoothing);
+			writer.println("texturepack:" + this.texturePack);
 
 			for (int binding = 0; binding < this.bindings.length; ++binding) {
 				writer.println("key_" + this.bindings[binding].key + ":" + this.bindings[binding].key);

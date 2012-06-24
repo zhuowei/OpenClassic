@@ -431,6 +431,11 @@ public final class Minecraft implements Runnable {
 			if(!f.exists()) {
 				f.mkdirs();
 			}
+			
+			File fl = new File(this.dir, "texturepacks");
+			if(!fl.exists()) {
+				fl.mkdirs();
+			}
 
 			if (this.canvas != null) {
 				Display.setParent(this.canvas);

@@ -22,8 +22,9 @@ public class MainMenuScreen extends GuiScreen {
 		this.attachWidget(new Button(0, this.getWidth() / 2 - 100, this.getHeight() / 4 + 24, this, true, "Singleplayer"));
 		this.attachWidget(new Button(1, this.getWidth() / 2 - 100, this.getHeight() / 4 + 48, this, true, "Multiplayer"));
 		this.attachWidget(new Button(2, this.getWidth() / 2 - 100, this.getHeight() / 4 + 72, this, true, "Options"));
-		this.attachWidget(new Button(3, this.getWidth() / 2 - 102, this.getHeight() / 4 + 120, 100, 20, this, true, "About"));
-		this.attachWidget(new Button(4, this.getWidth() / 2 + 2, this.getHeight() / 4 + 120, 100, 20, this, true, "Quit"));
+		this.attachWidget(new Button(3, this.getWidth() / 2 - 100, this.getHeight() / 4 + 96, this, true, "Texture Packs"));
+		this.attachWidget(new Button(4, this.getWidth() / 2 - 102, this.getHeight() / 4 + 144, 100, 20, this, true, "About"));
+		this.attachWidget(new Button(5, this.getWidth() / 2 + 2, this.getHeight() / 4 + 144, 100, 20, this, true, "Quit"));
 	
 		if(!OpenClassic.getClient().getAudioManager().isPlaying("menu")) OpenClassic.getClient().getAudioManager().playMusic("menu", true);
 	}
@@ -40,12 +41,16 @@ public class MainMenuScreen extends GuiScreen {
 		if (button.getId() == 2) {
 			OpenClassic.getClient().setCurrentScreen(new OptionsScreen(this, GeneralUtils.getMinecraft().settings));
 		}
-
+		
 		if (button.getId() == 3) {
-			OpenClassic.getClient().setCurrentScreen(new AboutScreen(this));
+			OpenClassic.getClient().setCurrentScreen(new TexturePackScreen(this));
 		}
 
 		if (button.getId() == 4) {
+			OpenClassic.getClient().setCurrentScreen(new AboutScreen(this));
+		}
+
+		if (button.getId() == 5) {
 			OpenClassic.getClient().shutdown();
 		}
 	}
