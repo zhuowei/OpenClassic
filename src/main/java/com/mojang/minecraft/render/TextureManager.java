@@ -127,18 +127,24 @@ public class TextureManager {
 		buffer.flip();
 		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, image.getWidth(), image.getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
 	
-		switch(GeneralUtils.getMinecraft().mipmapMode) {
-		case 1:
-			GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
-			break;
-		case 2:
-			EXTFramebufferObject.glGenerateMipmapEXT(GL11.GL_TEXTURE_2D);
-			break;
+		if(this.settings.smoothing) {
+			switch(GeneralUtils.getMinecraft().mipmapMode) {
+			case 1:
+				GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+				break;
+			case 2:
+				EXTFramebufferObject.glGenerateMipmapEXT(GL11.GL_TEXTURE_2D);
+				break;
+			}
 		}
 	}
 
 	public final void addAnimatedTexture(AnimatedTexture animation) {
 		this.animations.add(animation);
 		animation.animate();
+	}
+
+	public void rebind() {
+		this.textures.clear();
 	}
 }

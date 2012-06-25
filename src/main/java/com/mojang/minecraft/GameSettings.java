@@ -1,24 +1,14 @@
 package com.mojang.minecraft;
 
-import ch.spacebase.openclassic.api.OpenClassic;
-
 import com.mojang.minecraft.KeyBinding;
 import com.mojang.minecraft.Minecraft;
 import com.mojang.minecraft.gamemode.CreativeGameMode;
 import com.mojang.minecraft.gamemode.SurvivalGameMode;
-import com.mojang.minecraft.render.TextureManager;
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Iterator;
-import java.util.zip.ZipFile;
-
-import javax.imageio.ImageIO;
 import org.lwjgl.input.Keyboard;
 
 public final class GameSettings {
@@ -98,43 +88,7 @@ public final class GameSettings {
 
 		if (setting == 6) {
 			this.anaglyph = !this.anaglyph;
-			TextureManager textureManager = this.mc.textureManager;
-			Iterator<Integer> itr = this.mc.textureManager.textureImgs.keySet().iterator();
-			
-			while (itr.hasNext()) {
-				int tex = itr.next().intValue();
-				textureManager.bindTexture(textureManager.textureImgs.get(Integer.valueOf(tex)), tex);
-			}
-
-			Iterator<String> iter = textureManager.textures.keySet().iterator();
-
-			while (itr.hasNext()) {
-				String texture = iter.next();
-
-				try {
-					BufferedImage img = null;
-					if(!textureManager.jarTexture.get(texture)) {
-						img = ImageIO.read(new FileInputStream(file));
-					} else {
-						if(this.texturePack.equals("none")) {
-							img = ImageIO.read(TextureManager.class.getResourceAsStream(texture));
-						} else {
-							ZipFile zip = new ZipFile(new File(OpenClassic.getClient().getDirectory(), "texturepacks/" + this.texturePack));
-							if(zip.getEntry(texture.startsWith("/") ? texture.substring(1, texture.length()) : texture) != null) {
-								img = ImageIO.read(zip.getInputStream(zip.getEntry(texture.startsWith("/") ? texture.substring(1, texture.length()) : texture)));
-							} else {
-								img = ImageIO.read(TextureManager.class.getResourceAsStream(texture));
-							}
-							
-							zip.close();
-						}
-					}
-					
-					textureManager.bindTexture(img, textureManager.textures.get(texture));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+			this.mc.textureManager.rebind();
 		}
 
 		if (setting == 7) {
@@ -156,43 +110,7 @@ public final class GameSettings {
 		
 		if (setting == 9) {
 			this.smoothing = !this.smoothing;
-			TextureManager textureManager = this.mc.textureManager;
-			Iterator<Integer> itr = this.mc.textureManager.textureImgs.keySet().iterator();
-			
-			while (itr.hasNext()) {
-				int tex = itr.next().intValue();
-				textureManager.bindTexture(textureManager.textureImgs.get(Integer.valueOf(tex)), tex);
-			}
-
-			Iterator<String> iter = textureManager.textures.keySet().iterator();
-
-			while (itr.hasNext()) {
-				String texture = iter.next();
-
-				try {
-					BufferedImage img = null;
-					if(!textureManager.jarTexture.get(texture)) {
-						img = ImageIO.read(new FileInputStream(file));
-					} else {
-						if(this.texturePack.equals("none")) {
-							img = ImageIO.read(TextureManager.class.getResourceAsStream(texture));
-						} else {
-							ZipFile zip = new ZipFile(new File(OpenClassic.getClient().getDirectory(), "texturepacks/" + this.texturePack));
-							if(zip.getEntry(texture.startsWith("/") ? texture.substring(1, texture.length()) : texture) != null) {
-								img = ImageIO.read(zip.getInputStream(zip.getEntry(texture.startsWith("/") ? texture.substring(1, texture.length()) : texture)));
-							} else {
-								img = ImageIO.read(TextureManager.class.getResourceAsStream(texture));
-							}
-							
-							zip.close();
-						}
-					}
-					
-					textureManager.bindTexture(img, textureManager.textures.get(texture));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+			this.mc.textureManager.rebind();
 		}
 
 		this.save();

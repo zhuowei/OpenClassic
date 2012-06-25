@@ -7,17 +7,8 @@ import ch.spacebase.openclassic.api.gui.widget.ButtonList;
 import ch.spacebase.openclassic.api.render.RenderHelper;
 import ch.spacebase.openclassic.client.util.GeneralUtils;
 
-import com.mojang.minecraft.render.TextureManager;
-
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.Arrays;
-import java.util.Iterator;
-import java.util.zip.ZipFile;
-
-import javax.imageio.ImageIO;
 
 public class TexturePackScreen extends GuiScreen {
 
@@ -64,43 +55,7 @@ public class TexturePackScreen extends GuiScreen {
 			GeneralUtils.getMinecraft().settings.save();
 			
 			// TODO: Textures won't rebind properly
-			TextureManager textureManager = GeneralUtils.getMinecraft().textureManager;
-			Iterator<Integer> itr = textureManager.textureImgs.keySet().iterator();
-			
-			while (itr.hasNext()) {
-				int tex = itr.next().intValue();
-				textureManager.bindTexture(textureManager.textureImgs.get(Integer.valueOf(tex)), tex);
-			}
-
-			Iterator<String> iter = textureManager.textures.keySet().iterator();
-
-			while (itr.hasNext()) {
-				String texture = iter.next();
-
-				try {
-					BufferedImage img = null;
-					if(!textureManager.jarTexture.get(texture)) {
-						img = ImageIO.read(new FileInputStream(texture));
-					} else {
-						if(GeneralUtils.getMinecraft().settings.texturePack.equals("none")) {
-							img = ImageIO.read(TextureManager.class.getResourceAsStream(texture));
-						} else {
-							ZipFile zip = new ZipFile(new File(OpenClassic.getClient().getDirectory(), "texturepacks/" + GeneralUtils.getMinecraft().settings.texturePack));
-							if(zip.getEntry(texture.startsWith("/") ? texture.substring(1, texture.length()) : texture) != null) {
-								img = ImageIO.read(zip.getInputStream(zip.getEntry(texture.startsWith("/") ? texture.substring(1, texture.length()) : texture)));
-							} else {
-								img = ImageIO.read(TextureManager.class.getResourceAsStream(texture));
-							}
-							
-							zip.close();
-						}
-					}
-					
-					textureManager.bindTexture(img, textureManager.textures.get(texture));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+			GeneralUtils.getMinecraft().textureManager.rebind();
 		}
 	}
 
