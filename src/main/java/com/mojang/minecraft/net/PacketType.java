@@ -25,6 +25,7 @@ public final class PacketType {
 	public static final PacketType CUSTOM_BLOCK;
 	public static final PacketType BLOCK_MODEL;
 	public static final PacketType QUAD;
+	public static final PacketType KEY_CHANGE;
 	
 	private static int lastOpcode;
 	
@@ -84,6 +85,7 @@ public final class PacketType {
 		CUSTOM_BLOCK = new PacketType(new Class[] { Byte.TYPE, Byte.TYPE, Byte.TYPE, String.class, Byte.TYPE, Integer.TYPE, Byte.TYPE, Byte.TYPE });
 		BLOCK_MODEL = new PacketType(new Class[] { Byte.TYPE, String.class, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE });
 		QUAD = new PacketType(new Class[] { Byte.TYPE, Integer.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, String.class, Byte.TYPE, Integer.TYPE, Integer.TYPE, Integer.TYPE, Integer.TYPE, Integer.TYPE });
+		KEY_CHANGE = new PacketType(new Class[] { Integer.TYPE, Byte.TYPE });
 		
 		lastOpcode = 0;
 	}

@@ -19,6 +19,7 @@ import ch.spacebase.openclassic.api.Position;
 import ch.spacebase.openclassic.api.event.EventFactory;
 import ch.spacebase.openclassic.api.event.block.BlockPlaceEvent;
 import ch.spacebase.openclassic.api.event.player.PlayerJoinEvent;
+import ch.spacebase.openclassic.api.event.player.PlayerKeyChangeEvent;
 import ch.spacebase.openclassic.api.event.player.PlayerKickEvent;
 import ch.spacebase.openclassic.api.event.player.PlayerLoginEvent;
 import ch.spacebase.openclassic.api.event.player.PlayerLoginEvent.Result;
@@ -1965,6 +1966,11 @@ public final class Minecraft implements Runnable {
 
 					if (Keyboard.getEventKey() == this.settings.fogKey.key) {
 						this.settings.toggleSetting(4, !Keyboard.isKeyDown(42) && !Keyboard.isKeyDown(54) ? 1 : -1);
+					}
+					
+					EventFactory.callEvent(new PlayerKeyChangeEvent(OpenClassic.getClient().getPlayer(), Keyboard.getEventKey(), Keyboard.isKeyDown(Keyboard.getEventKey())));
+					if(this.netManager != null && this.netManager.isConnected() && this.openclassicServer) {
+						this.netManager.netHandler.send(PacketType.KEY_CHANGE, Keyboard.getEventKey(), Keyboard.isKeyDown(Keyboard.getEventKey()) ? (byte) 1 : (byte) 0);
 					}
 				}
 			}

@@ -88,7 +88,7 @@ public final class GameSettings {
 
 		if (setting == 6) {
 			this.anaglyph = !this.anaglyph;
-			this.mc.textureManager.rebind();
+			this.mc.textureManager.clear();
 		}
 
 		if (setting == 7) {
@@ -110,7 +110,7 @@ public final class GameSettings {
 		
 		if (setting == 9) {
 			this.smoothing = !this.smoothing;
-			this.mc.textureManager.rebind();
+			this.mc.textureManager.clear();
 		}
 
 		this.save();
