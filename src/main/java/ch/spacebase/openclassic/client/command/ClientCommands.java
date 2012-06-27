@@ -121,6 +121,13 @@ public class ClientCommands extends CommandExecutor {
 		}
 	}
 	
+	@Command(aliases = {"reload"}, desc = "Reloads OpenClassic.", permission = "openclassic.commands.reload")
+	public void reload(Sender sender, String command, String args[]) {
+		sender.sendMessage(Color.AQUA + "Reloading OpenClassic...");
+		OpenClassic.getGame().reload();
+		sender.sendMessage(Color.GREEN + "Reload complete.");
+	}
+	
 	@Command(aliases = {"setspawn"}, desc = "Sets the spawn to your location", permission = "openclassic.commands.setspawn", senders = {Player.class})
 	public void setspawn(Sender sender, String command, String args[]) {
 		Player player = (Player) sender;
@@ -156,7 +163,7 @@ public class ClientCommands extends CommandExecutor {
 	}
 	
 	@Command(aliases = {"stillwater"}, desc = "Toggles still water placement mode.", permission = "openclassic.commands.stillwater", senders = {Player.class})
-	public void still_water(Sender sender, String command, String args[]) {
+	public void stillwater(Sender sender, String command, String args[]) {
 		Player player = (Player) sender;
 		if(player.getPlaceMode() != VanillaBlock.STATIONARY_WATER.getId()) {
 			player.setPlaceMode(VanillaBlock.STATIONARY_WATER.getId());
@@ -180,7 +187,7 @@ public class ClientCommands extends CommandExecutor {
 	}
 	
 	@Command(aliases = {"stilllava"}, desc = "Toggles still lava placement mode.", permission = "openclassic.commands.stilllava", senders = {Player.class})
-	public void still_lava(Sender sender, String command, String args[]) {
+	public void stilllava(Sender sender, String command, String args[]) {
 		Player player = (Player) sender;
 		if(player.getPlaceMode() != VanillaBlock.STATIONARY_LAVA.getId()) {
 			player.setPlaceMode(VanillaBlock.STATIONARY_LAVA.getId());
