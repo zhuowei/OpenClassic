@@ -78,7 +78,6 @@ public class TextureManager {
 		}
 	}
 
-	// TODO: Add texture packs to post
 	public final int bindTexture(BufferedImage image) {
 		this.textureBuffer.clear();
 		GL11.glGenTextures(this.textureBuffer);
