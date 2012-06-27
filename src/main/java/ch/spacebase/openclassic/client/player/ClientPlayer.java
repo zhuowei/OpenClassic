@@ -5,6 +5,8 @@ import java.net.SocketAddress;
 import ch.spacebase.openclassic.api.OpenClassic;
 import ch.spacebase.openclassic.api.Position;
 import ch.spacebase.openclassic.api.data.NBTData;
+import ch.spacebase.openclassic.api.event.EventFactory;
+import ch.spacebase.openclassic.api.event.player.PlayerTeleportEvent;
 import ch.spacebase.openclassic.api.level.Level;
 import ch.spacebase.openclassic.api.permissions.Group;
 import ch.spacebase.openclassic.api.player.Player;
@@ -104,12 +106,17 @@ public class ClientPlayer implements Player {
 
 	@Override
 	public void moveTo(Level level, double x, double y, double z, byte yaw, byte pitch) {
-		if(level != null && !this.handle.level.name.equals(level.getName())) {
-			this.handle.setLevel(((ClientLevel) level).getHandle());
-			GeneralUtils.getMinecraft().level = ((ClientLevel) level).getHandle();
+		PlayerTeleportEvent event = EventFactory.callEvent(new PlayerTeleportEvent(this, this.getPosition(), new Position(level, x, y, z, yaw, pitch)));
+		if(event.isCancelled()) {
+			return;
 		}
 		
-		this.handle.moveTo((float) x, (float) y, (float) z, yaw, pitch);
+		if(event.getTo().getLevel() != null && !this.handle.level.name.equals(event.getTo().getLevel().getName())) {
+			this.handle.setLevel(((ClientLevel) event.getTo().getLevel()).getHandle());
+			GeneralUtils.getMinecraft().setLevel(((ClientLevel) event.getTo().getLevel()).getHandle());
+		}
+		
+		this.handle.moveTo((float) event.getTo().getX(), (float) event.getTo().getY(), (float) event.getTo().getZ(), event.getTo().getYaw(), event.getTo().getPitch());
 	}
 
 	@Override

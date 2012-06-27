@@ -53,8 +53,6 @@ public class TexturePackScreen extends GuiScreen {
 			}
 			
 			GeneralUtils.getMinecraft().settings.save();
-			
-			// TODO: Textures won't rebind properly
 			GeneralUtils.getMinecraft().textureManager.clear();
 		}
 	}

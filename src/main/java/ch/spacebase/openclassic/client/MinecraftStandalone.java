@@ -34,38 +34,41 @@ import com.mojang.minecraft.render.TextureManager;
  * @author Steveice10 <Steveice10@gmail.com>
  */
 public class MinecraftStandalone {
-	
+
 	private static String username = "";
 	private static String haspaid = "";
-	
+
 	public static boolean debug;
-	
+
 	public static void main(String[] args) {
-		if(Arrays.asList(args).contains("debug")) debug = true;
-		
+		if (Arrays.asList(args).contains("debug"))
+			debug = true;
+
 		String user = "";
 		String pass = "";
-		for(String arg : args) {
-			if(arg.contains("username=")) user = arg.split("=")[1];
-			if(arg.contains("password=")) pass = arg.split("=")[1];
-			
-			if(!user.equals("") && !pass.equals("")) {
+		for (String arg : args) {
+			if (arg.contains("username="))
+				user = arg.split("=")[1];
+			if (arg.contains("password="))
+				pass = arg.split("=")[1];
+
+			if (!user.equals("") && !pass.equals("")) {
 				init(user, pass);
 				return;
 			}
 		}
-		
+
 		try {
-		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-		        if (info.getName().equals("Nimbus")) {
-		            UIManager.setLookAndFeel(info.getClassName());
-		            break;
-		        }
-		    }
+			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+				if (info.getName().equals("Nimbus")) {
+					UIManager.setLookAndFeel(info.getClassName());
+					break;
+				}
+			}
 		} catch (Exception e) {
-		    e.printStackTrace();
+			e.printStackTrace();
 		}
-		
+
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -79,7 +82,7 @@ public class MinecraftStandalone {
 			}
 		});
 	}
-	
+
 	public static void init(String user, String pass) {
 		final MinecraftApplet applet = new MinecraftApplet();
 		JFrame frame = new JFrame("Minecraft " + Minecraft.VERSION);
@@ -128,7 +131,7 @@ public class MinecraftStandalone {
 		});
 
 		if (user != null && pass != null && !user.equals("") && !pass.equals("")) {
-			if(!auth(user, pass)) {
+			if (!auth(user, pass)) {
 				JOptionPane.showMessageDialog(null, "Login Failed! You will not be able to play multiplayer.");
 			}
 		}
@@ -186,55 +189,68 @@ public class MinecraftStandalone {
 				try {
 					String play = HTTPUtil.fetchUrl("http://www.minecraft.net/classic/play/" + URLEncoder.encode(server, "UTF-8"), "", "http://www.minecraft.net/classic/list");
 					String mppass = HTTPUtil.getParameterOffPage(play, "mppass");
-	
+
 					if (mppass.length() > 0) {
 						String user = HTTPUtil.getParameterOffPage(play, "username");
 						System.out.println("Got user details: " + user);
-	
+
 						MinecraftStandalone.username = user;
-						
+
 						try {
 							haspaid = HTTPUtil.fetchUrl("http://www.minecraft.net/haspaid.jsp", "user=" + URLEncoder.encode(user, "UTF-8"));
-						} catch(UnsupportedEncodingException e) {
+						} catch (UnsupportedEncodingException e) {
 						}
-						
+
 						String validate = HTTPUtil.fetchUrl("https://direct.worldofminecraft.com/validate.php", "username=" + URLEncoder.encode(user, "UTF-8") + "&passHash=" + URLEncoder.encode(hash, "UTF-8") + "&server=" + URLEncoder.encode(server, "UTF-8") + "&mppass=" + URLEncoder.encode(mppass, "UTF-8"));
 						int index = validate.indexOf('\n');
-	
+
 						if (index > 0) {
 							String returnCode = validate.substring(0, index);
 							if (returnCode.startsWith("Validated")) {
 								System.out.println("Successfully validated with WOM direct.");
-							    String[] servers = validate.split("\n");
-
-							    for (String data : servers) {
-							    	if(data.startsWith("Validated")) continue;
-							    	Server s = new Server(username, data);
-							    	SessionData.servers.add(s);
-							    	if(s.username.contains("@")) {
-							    		s.username = s.username.substring(0, s.username.indexOf('@'));
-							    	}
-							    	
-							    	SessionData.serverInfo.add(s.name + " - " + s.description + " : Max Players: " + s.max + ", Online: " + s.users);
-							    }
-							    
+								parseServers(HTTPUtil.rawFetchUrl("http://www.minecraft.net/classic/list", "", "http://www.minecraft.net"));
 								return true;
 							}
 						}
-	
+
 						System.out.println("Unable to validate with WOM: " + validate);
 						return true;
 					}
-				} catch(UnsupportedEncodingException e) {
+				} catch (UnsupportedEncodingException e) {
 					System.out.println("UTF-8 not supported!");
 					return false;
 				}
 			}
-			
+
 			return true;
 		}
 
 		return false;
+	}
+
+	private static void parseServers(String data) {
+		int index = data.indexOf("<a href=\"");
+		while (index != -1) {
+			index = data.indexOf("classic/play/", index);
+			if (index == -1) {
+				break;
+			}
+			
+			String id = data.substring(index + 13, data.indexOf("\"", index));
+			
+			index = data.indexOf(">", index) + 1;
+			String name = data.substring(index, data.indexOf("</a>", index)).replaceAll("&amp;", "&").replaceAll("&hellip;", "...");
+
+			index = data.indexOf("<td>", index) + 4;
+			String users = data.substring(index, data.indexOf("</td>", index));
+
+			index = data.indexOf("<td>", index) + 4;
+			String max = data.substring(index, data.indexOf("</td>", index));
+
+			Server s = new Server(name, Integer.valueOf(users).intValue(), Integer.valueOf(max).intValue(), id);
+			SessionData.servers.add(s);
+			SessionData.serverInfo.add(s.name);
+		}
 	}
 
 	public static String toHex(byte[] data) {

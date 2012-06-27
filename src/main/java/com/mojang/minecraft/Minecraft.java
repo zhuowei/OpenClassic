@@ -1,5 +1,6 @@
 package com.mojang.minecraft;
 
+import ch.spacebase.openclassic.api.block.Block;
 import ch.spacebase.openclassic.api.block.BlockType;
 import ch.spacebase.openclassic.api.block.Blocks;
 import ch.spacebase.openclassic.api.block.StepSound;
@@ -34,7 +35,6 @@ import ch.spacebase.openclassic.client.ClassicClient;
 import ch.spacebase.openclassic.client.gui.MainMenuScreen;
 import ch.spacebase.openclassic.client.player.ClientPlayer;
 import ch.spacebase.openclassic.client.render.ClientRenderHelper;
-import ch.spacebase.openclassic.client.render.ShaderLoader;
 import ch.spacebase.openclassic.client.sound.ClientAudioManager;
 import ch.spacebase.openclassic.client.util.BlockUtils;
 import ch.spacebase.openclassic.client.util.LWJGLNatives;
@@ -108,7 +108,6 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
-import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.glu.GLU;
 
@@ -165,8 +164,6 @@ public final class Minecraft implements Runnable {
 	public boolean openclassicServer = false;
 	public boolean hacks = true;
 	private List<CustomBlock> clientCache = new ArrayList<CustomBlock>();
-	private int shader;
-	private boolean useShaders;
 	private boolean ctf;
 	public int mipmapMode = 0;
 
@@ -499,21 +496,6 @@ public final class Minecraft implements Runnable {
 				System.out.println("Mipmaps unsupported.");
 			}
 
-			if(GLContext.getCapabilities().OpenGL20) {
-				this.shader = GL20.glCreateProgram();
-				if(this.shader != 0) {
-					int vert = ShaderLoader.load(Minecraft.class.getResourceAsStream("/postprocess.vert"), GL20.GL_VERTEX_SHADER);
-					int frag = ShaderLoader.load(Minecraft.class.getResourceAsStream("/postprocess.frag"), GL20.GL_FRAGMENT_SHADER);
-					if(vert != 0 && frag != 0) {
-						GL20.glAttachShader(this.shader, vert);
-						GL20.glAttachShader(this.shader, frag);
-						GL20.glLinkProgram(this.shader);
-						GL20.glValidateProgram(this.shader);
-						this.useShaders = GL20.glGetProgram(this.shader, GL20.GL_VALIDATE_STATUS) == GL11.GL_TRUE; // TODO: Fix shader
-					}
-				}
-			}
-
 			checkGLError("Startup");
 			SessionData.loadFavorites(this.dir);
 
@@ -615,10 +597,6 @@ public final class Minecraft implements Runnable {
 						for (int var64 = 0; var64 < this.timer.c; var64++) {
 							this.ticks++;
 							this.tick();
-						}
-
-						if(this.useShaders && GLContext.getCapabilities().OpenGL20) {
-							GL20.glUseProgram(this.shader);
 						}
 
 						checkGLError("Pre render");
@@ -773,7 +751,7 @@ public final class Minecraft implements Runnable {
 										}
 
 										GL11.glClearColor(var82.i, var82.j, var82.k, 0.0F);
-										GL11.glClear(16640); // TODO: Find GL constant
+										GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_COLOR_BUFFER_BIT);
 										var82.b = 1.0F;
 										GL11.glEnable(GL11.GL_CULL_FACE);
 										var82.d = (512 >> (var82.mc.settings.viewDistance << 1));
@@ -1228,7 +1206,7 @@ public final class Minecraft implements Runnable {
 								} else {
 									GL11.glViewport(0, 0, this.width, this.height);
 									GL11.glClearColor(0.0F, 0.0F, 0.0F, 0.0F);
-									GL11.glClear(16640); // TODO: gl constant
+									GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_COLOR_BUFFER_BIT);
 									GL11.glMatrixMode(GL11.GL_PROJECTION);
 									GL11.glLoadIdentity();
 									GL11.glMatrixMode(GL11.GL_MODELVIEW);
@@ -1247,10 +1225,6 @@ public final class Minecraft implements Runnable {
 
 						if (this.settings.limitFPS) {
 							Thread.sleep(5L);
-						}
-
-						if(GLContext.getCapabilities().OpenGL20) {
-							GL20.glUseProgram(0);
 						}
 
 						checkGLError("Post render");
@@ -1374,9 +1348,9 @@ public final class Minecraft implements Runnable {
 							id = this.player.openclassic.getPlaceMode();
 						}
 
-						BlockType block = Blocks.fromId(this.level.getTile(x, y, z));
+						Block block = this.level.openclassic.getBlockAt(x, y, z);
 						AABB collision = BlockUtils.getCollisionBox(id, x, y, z);
-						if ((block == null || block == VanillaBlock.AIR || block == VanillaBlock.WATER || block == VanillaBlock.STATIONARY_WATER || block == VanillaBlock.LAVA || block == VanillaBlock.STATIONARY_LAVA) && (collision == null || (!this.player.bb.intersects(collision) && this.level.isFree(collision)))) {
+						if ((block == null || block.getType() == null || block.getType() == VanillaBlock.AIR || block.getType() == VanillaBlock.WATER || block.getType() == VanillaBlock.STATIONARY_WATER || block.getType() == VanillaBlock.LAVA || block.getType() == VanillaBlock.STATIONARY_LAVA) && (collision == null || (!this.player.bb.intersects(collision) && this.level.isFree(collision)))) {
 							if (!this.mode.canPlace(id)) {
 								return;
 							}

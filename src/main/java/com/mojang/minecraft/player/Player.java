@@ -1,6 +1,8 @@
 package com.mojang.minecraft.player;
 
 import ch.spacebase.openclassic.api.Position;
+import ch.spacebase.openclassic.api.event.EventFactory;
+import ch.spacebase.openclassic.api.event.player.PlayerMoveEvent;
 import ch.spacebase.openclassic.client.player.ClientPlayer;
 import ch.spacebase.openclassic.client.util.GeneralUtils;
 
@@ -179,6 +181,18 @@ public class Player extends Mob {
 		} else {
 			super.moveRelative(relX, relZ, var3);
 		}
+	}
+	
+	@Override
+	public void moveTo(float x, float y, float z, float yaw, float pitch) {
+		Position from = new Position(this.level.openclassic, this.x, this.y, this.z, (byte) this.yRot, (byte) this.xRot);
+		Position to = new Position(this.level.openclassic, x, y, z, (byte) yaw, (byte) pitch);
+		PlayerMoveEvent event = EventFactory.callEvent(new PlayerMoveEvent(this.openclassic, from, to));
+		if(event.isCancelled()) {
+			return;
+		}
+		
+		super.moveTo((float) event.getTo().getX(), (float) event.getTo().getY(), (float) event.getTo().getZ(), event.getTo().getYaw(), event.getTo().getPitch());
 	}
 	
 	public class PlayerAI extends BasicAI implements Serializable {

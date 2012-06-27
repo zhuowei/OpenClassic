@@ -70,7 +70,7 @@ public class ServerListScreen extends GuiScreen {
 			this.title = "Select a server.";
 			this.select = false;
 			
-			// TODO: Get URL from server.
+			SessionData.favorites.put(server.name, server.getUrl());
 		} else {
 			this.joinServer(server);
 		}
