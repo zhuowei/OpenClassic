@@ -86,11 +86,11 @@ public class Particle extends Entity {
 		float var14 = this.yo + (this.y - this.yo) * var2;
 		float var15 = this.zo + (this.z - this.zo) * var2;
 		var2 = this.getBrightness(var2);
-		renderer.addColor(this.rCol * var2, this.gCol * var2, this.bCol * var2);
-		renderer.addTexturedPoint(var13 - var3 * var12 - var6 * var12, var14 - var4 * var12, var15 - var5 * var12 - var7 * var12, var8, var11);
-		renderer.addTexturedPoint(var13 - var3 * var12 + var6 * var12, var14 + var4 * var12, var15 - var5 * var12 + var7 * var12, var8, var10);
-		renderer.addTexturedPoint(var13 + var3 * var12 + var6 * var12, var14 + var4 * var12, var15 + var5 * var12 + var7 * var12, var9, var10);
-		renderer.addTexturedPoint(var13 + var3 * var12 - var6 * var12, var14 - var4 * var12, var15 + var5 * var12 - var7 * var12, var9, var11);
+		renderer.color(this.rCol * var2, this.gCol * var2, this.bCol * var2);
+		renderer.vertexUV(var13 - var3 * var12 - var6 * var12, var14 - var4 * var12, var15 - var5 * var12 - var7 * var12, var8, var11);
+		renderer.vertexUV(var13 - var3 * var12 + var6 * var12, var14 + var4 * var12, var15 - var5 * var12 + var7 * var12, var8, var10);
+		renderer.vertexUV(var13 + var3 * var12 + var6 * var12, var14 + var4 * var12, var15 + var5 * var12 + var7 * var12, var9, var10);
+		renderer.vertexUV(var13 + var3 * var12 - var6 * var12, var14 - var4 * var12, var15 + var5 * var12 - var7 * var12, var9, var11);
 	}
 
 	public int getParticleTexture() {

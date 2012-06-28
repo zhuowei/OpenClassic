@@ -47,11 +47,11 @@ public class ClientRenderHelper extends RenderHelper {
 		int height = Display.getHeight() * 240 / Display.getHeight();
 
 		ShapeRenderer.instance.reset();
-		ShapeRenderer.instance.addColor(4210752);
-		ShapeRenderer.instance.addTexturedPoint(0, height, 0, 0, height / 32);
-		ShapeRenderer.instance.addTexturedPoint(width, height, 0, width / 32, height / 32);
-		ShapeRenderer.instance.addTexturedPoint(width, 0, 0, width / 32, 0);
-		ShapeRenderer.instance.addTexturedPoint(0, 0, 0, 0, 0);
+		ShapeRenderer.instance.color(4210752);
+		ShapeRenderer.instance.vertexUV(0, height, 0, 0, height / 32);
+		ShapeRenderer.instance.vertexUV(width, height, 0, width / 32, height / 32);
+		ShapeRenderer.instance.vertexUV(width, 0, 0, width / 32, 0);
+		ShapeRenderer.instance.vertexUV(0, 0, 0, 0, 0);
 		ShapeRenderer.instance.draw();
 	}
 	
@@ -89,10 +89,10 @@ public class ClientRenderHelper extends RenderHelper {
 		this.glColor(red, green, blue, alpha);
 		
 		ShapeRenderer.instance.reset();
-		ShapeRenderer.instance.addPoint(x1, y2, 0);
-		ShapeRenderer.instance.addPoint(x2, y2, 0);
-		ShapeRenderer.instance.addPoint(x2, y1, 0);
-		ShapeRenderer.instance.addPoint(x1, y1, 0);
+		ShapeRenderer.instance.vertex(x1, y2, 0);
+		ShapeRenderer.instance.vertex(x2, y2, 0);
+		ShapeRenderer.instance.vertex(x2, y1, 0);
+		ShapeRenderer.instance.vertex(x1, y1, 0);
 		ShapeRenderer.instance.draw();
 		
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
@@ -133,10 +133,10 @@ public class ClientRenderHelper extends RenderHelper {
 	
 	public void drawImage(int x, int y, int z, int imgX, int imgY, int imgWidth, int imgHeight) {
 		ShapeRenderer.instance.reset();
-		ShapeRenderer.instance.addTexturedPoint(x, (y + imgHeight), z, imgX * 0.00390625F, (imgY + imgHeight) * 0.00390625F);
-		ShapeRenderer.instance.addTexturedPoint((x + imgWidth), (y + imgHeight), z, (imgX + imgWidth) * 0.00390625F, (imgY + imgHeight) * 0.00390625F);
-		ShapeRenderer.instance.addTexturedPoint((x + imgWidth), y, z, (imgX + imgWidth) * 0.00390625F, imgY * 0.00390625F);
-		ShapeRenderer.instance.addTexturedPoint(x, y, z, imgX * 0.00390625F, imgY * 0.00390625F);
+		ShapeRenderer.instance.vertexUV(x, (y + imgHeight), z, imgX * 0.00390625F, (imgY + imgHeight) * 0.00390625F);
+		ShapeRenderer.instance.vertexUV((x + imgWidth), (y + imgHeight), z, (imgX + imgWidth) * 0.00390625F, (imgY + imgHeight) * 0.00390625F);
+		ShapeRenderer.instance.vertexUV((x + imgWidth), y, z, (imgX + imgWidth) * 0.00390625F, imgY * 0.00390625F);
+		ShapeRenderer.instance.vertexUV(x, y, z, imgX * 0.00390625F, imgY * 0.00390625F);
 		ShapeRenderer.instance.draw();
 	}
 
@@ -169,7 +169,7 @@ public class ClientRenderHelper extends RenderHelper {
 	public void drawQuad(Quad quad, int x, int y, int z, float brightness) {
 		ShapeRenderer.instance.reset();
 		this.bindTexture(quad.getTexture().getParent().getTexture(), quad.getTexture().getParent().isInJar());
-		ShapeRenderer.instance.addColor(brightness, brightness, brightness);
+		ShapeRenderer.instance.color(brightness, brightness, brightness);
 		
 		int y1 = quad.getTexture().getY1();
 		int y2 = quad.getTexture().getY2();
@@ -179,10 +179,10 @@ public class ClientRenderHelper extends RenderHelper {
 			y2 = (int) (y1 + quad.getVertex(1).getY() * quad.getTexture().getParent().getSubTextureHeight());
 		}
 		
-		ShapeRenderer.instance.addTexturedPoint(x + quad.getVertex(0).getX(), y + quad.getVertex(0).getY(), z + quad.getVertex(0).getZ(), quad.getTexture().getX2() * 0.00390625F, y2 * 0.00390625F);
-		ShapeRenderer.instance.addTexturedPoint(x + quad.getVertex(1).getX(), y + quad.getVertex(1).getY(), z + quad.getVertex(1).getZ(), quad.getTexture().getX2() * 0.00390625F, y1 * 0.00390625F);
-		ShapeRenderer.instance.addTexturedPoint(x + quad.getVertex(2).getX(), y + quad.getVertex(2).getY(), z + quad.getVertex(2).getZ(), quad.getTexture().getX1() * 0.00390625F, y1 * 0.00390625F);
-		ShapeRenderer.instance.addTexturedPoint(x + quad.getVertex(3).getX(), y + quad.getVertex(3).getY(), z + quad.getVertex(3).getZ(), quad.getTexture().getX1() * 0.00390625F, y2 * 0.00390625F);
+		ShapeRenderer.instance.vertexUV(x + quad.getVertex(0).getX(), y + quad.getVertex(0).getY(), z + quad.getVertex(0).getZ(), quad.getTexture().getX2() * 0.00390625F, y2 * 0.00390625F);
+		ShapeRenderer.instance.vertexUV(x + quad.getVertex(1).getX(), y + quad.getVertex(1).getY(), z + quad.getVertex(1).getZ(), quad.getTexture().getX2() * 0.00390625F, y1 * 0.00390625F);
+		ShapeRenderer.instance.vertexUV(x + quad.getVertex(2).getX(), y + quad.getVertex(2).getY(), z + quad.getVertex(2).getZ(), quad.getTexture().getX1() * 0.00390625F, y1 * 0.00390625F);
+		ShapeRenderer.instance.vertexUV(x + quad.getVertex(3).getX(), y + quad.getVertex(3).getY(), z + quad.getVertex(3).getZ(), quad.getTexture().getX1() * 0.00390625F, y2 * 0.00390625F);
 		
 		ShapeRenderer.instance.draw();
 	}
@@ -200,10 +200,10 @@ public class ClientRenderHelper extends RenderHelper {
 			y2 = (int) (y1 + quad.getVertex(1).getY() * texture.getParent().getSubTextureHeight());
 		}
 		
-		ShapeRenderer.instance.addTexturedPoint(x + quad.getVertex(0).getX(), y + quad.getVertex(0).getY(), z + quad.getVertex(0).getZ(), texture.getX2() * 0.00390625F, y2 * 0.00390625F);
-		ShapeRenderer.instance.addTexturedPoint(x + quad.getVertex(1).getX(), y + quad.getVertex(1).getY(), z + quad.getVertex(1).getZ(), texture.getX2() * 0.00390625F, y1 * 0.00390625F);
-		ShapeRenderer.instance.addTexturedPoint(x + quad.getVertex(2).getX(), y + quad.getVertex(2).getY(), z + quad.getVertex(2).getZ(), texture.getX1() * 0.00390625F, y1 * 0.00390625F);
-		ShapeRenderer.instance.addTexturedPoint(x + quad.getVertex(3).getX(), y + quad.getVertex(3).getY(), z + quad.getVertex(3).getZ(), texture.getX1() * 0.00390625F, y2 * 0.00390625F);
+		ShapeRenderer.instance.vertexUV(x + quad.getVertex(0).getX(), y + quad.getVertex(0).getY(), z + quad.getVertex(0).getZ(), texture.getX2() * 0.00390625F, y2 * 0.00390625F);
+		ShapeRenderer.instance.vertexUV(x + quad.getVertex(1).getX(), y + quad.getVertex(1).getY(), z + quad.getVertex(1).getZ(), texture.getX2() * 0.00390625F, y1 * 0.00390625F);
+		ShapeRenderer.instance.vertexUV(x + quad.getVertex(2).getX(), y + quad.getVertex(2).getY(), z + quad.getVertex(2).getZ(), texture.getX1() * 0.00390625F, y1 * 0.00390625F);
+		ShapeRenderer.instance.vertexUV(x + quad.getVertex(3).getX(), y + quad.getVertex(3).getY(), z + quad.getVertex(3).getZ(), texture.getX1() * 0.00390625F, y2 * 0.00390625F);
 		
 		ShapeRenderer.instance.draw();
 	}
@@ -219,10 +219,10 @@ public class ClientRenderHelper extends RenderHelper {
 		this.bindTexture(texture.getTexture(), texture.isInJar());
 		
 		this.glColor(1, 1, 1, 1);
-		ShapeRenderer.instance.addTexturedPoint(x, y, z, 0, 0);
-		ShapeRenderer.instance.addTexturedPoint(x, y + texture.getHeight(), z, 0, texture.getHeight() * 0.00390625F);
-		ShapeRenderer.instance.addTexturedPoint(x + texture.getWidth(), y + texture.getHeight(), z, texture.getWidth() * 0.00390625F, texture.getHeight() * 0.00390625F);
-		ShapeRenderer.instance.addTexturedPoint(x + texture.getWidth(), y, z, texture.getWidth() * 0.00390625F, 0);
+		ShapeRenderer.instance.vertexUV(x, y, z, 0, 0);
+		ShapeRenderer.instance.vertexUV(x, y + texture.getHeight(), z, 0, texture.getHeight() * 0.00390625F);
+		ShapeRenderer.instance.vertexUV(x + texture.getWidth(), y + texture.getHeight(), z, texture.getWidth() * 0.00390625F, texture.getHeight() * 0.00390625F);
+		ShapeRenderer.instance.vertexUV(x + texture.getWidth(), y, z, texture.getWidth() * 0.00390625F, 0);
 		
 		ShapeRenderer.instance.draw();
 	}
@@ -238,10 +238,10 @@ public class ClientRenderHelper extends RenderHelper {
 		this.bindTexture(texture.getParent().getTexture(), texture.getParent().isInJar());
 		
 		this.glColor(1, 1, 1, 1);
-		ShapeRenderer.instance.addTexturedPoint(x, y, z, texture.getX1() * 0.00390625F, texture.getY1() * 0.00390625F);
-		ShapeRenderer.instance.addTexturedPoint(x, y + (texture.getY2() - texture.getY1()), z, texture.getX1() * 0.00390625F, texture.getY2() * 0.00390625F);
-		ShapeRenderer.instance.addTexturedPoint(x + (texture.getX2() - texture.getX1()), y + (texture.getY2() - texture.getY1()), z, texture.getX2() * 0.00390625F, texture.getY2() * 0.00390625F);
-		ShapeRenderer.instance.addTexturedPoint(x + (texture.getX2() - texture.getX1()), y, z, texture.getX2() * 0.00390625F, texture.getY1() * 0.00390625F);
+		ShapeRenderer.instance.vertexUV(x, y, z, texture.getX1() * 0.00390625F, texture.getY1() * 0.00390625F);
+		ShapeRenderer.instance.vertexUV(x, y + (texture.getY2() - texture.getY1()), z, texture.getX1() * 0.00390625F, texture.getY2() * 0.00390625F);
+		ShapeRenderer.instance.vertexUV(x + (texture.getX2() - texture.getX1()), y + (texture.getY2() - texture.getY1()), z, texture.getX2() * 0.00390625F, texture.getY2() * 0.00390625F);
+		ShapeRenderer.instance.vertexUV(x + (texture.getX2() - texture.getX1()), y, z, texture.getX2() * 0.00390625F, texture.getY1() * 0.00390625F);
 		
 		ShapeRenderer.instance.draw();
 	}

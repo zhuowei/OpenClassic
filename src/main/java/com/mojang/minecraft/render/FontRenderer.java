@@ -73,7 +73,7 @@ public final class FontRenderer {
 
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.fontId);
 			ShapeRenderer.instance.reset();
-			ShapeRenderer.instance.addColor(color);
+			ShapeRenderer.instance.color(color);
 			int var7 = 0;
 
 			for (int count = 0; count < chars.length; ++count) {
@@ -99,17 +99,17 @@ public final class FontRenderer {
 						c = (c & 16579836) >> 2;
 					}		
 
-					ShapeRenderer.instance.addColor(c);
+					ShapeRenderer.instance.color(c);
 					count += 2;
 				}
 
 				color = chars[count] % 16 << 3;
 				int var9 = chars[count] / 16 << 3;
 				float var13 = 7.99F;
-				ShapeRenderer.instance.addTexturedPoint((x + var7), y + var13, 0.0F, color / 128.0F, (var9 + var13) / 128.0F);
-				ShapeRenderer.instance.addTexturedPoint((x + var7) + var13, y + var13, 0.0F, (color + var13) / 128.0F, (var9 + var13) / 128.0F);
-				ShapeRenderer.instance.addTexturedPoint((x + var7) + var13, y, 0.0F, (color + var13) / 128.0F, var9 / 128.0F);
-				ShapeRenderer.instance.addTexturedPoint((x + var7), y, 0.0F, color / 128.0F, var9 / 128.0F);
+				ShapeRenderer.instance.vertexUV((x + var7), y + var13, 0.0F, color / 128.0F, (var9 + var13) / 128.0F);
+				ShapeRenderer.instance.vertexUV((x + var7) + var13, y + var13, 0.0F, (color + var13) / 128.0F, (var9 + var13) / 128.0F);
+				ShapeRenderer.instance.vertexUV((x + var7) + var13, y, 0.0F, (color + var13) / 128.0F, var9 / 128.0F);
+				ShapeRenderer.instance.vertexUV((x + var7), y, 0.0F, color / 128.0F, var9 / 128.0F);
 				var7 += this.font[chars[count]];
 			}
 

@@ -918,18 +918,18 @@ public final class Minecraft implements Runnable {
 										var34 = (this.levelRenderer.ticks + var80) * var33 * 0.03F;
 										var35 = 0.0F;
 										var115.reset();
-										var115.addColor(var107, var29, var30);
+										var115.color(var107, var29, var30);
 
 										for (var86 = -2048; var86 < this.levelRenderer.level.width + 2048; var86 += 512) {
 											for (var125 = -2048; var125 < this.levelRenderer.level.height + 2048; var125 += 512) {
-												var115.addTexturedPoint(var86, var74, (var125 + 512), var86 * var33 + var34, (var125 + 512) * var33);
-												var115.addTexturedPoint((var86 + 512), var74, (var125 + 512), (var86 + 512) * var33 + var34, (var125 + 512) * var33);
-												var115.addTexturedPoint((var86 + 512), var74, var125, (var86 + 512) * var33 + var34, var125 * var33);
-												var115.addTexturedPoint(var86, var74, var125, var86 * var33 + var34, var125 * var33);
-												var115.addTexturedPoint(var86, var74, var125, var86 * var33 + var34, var125 * var33);
-												var115.addTexturedPoint((var86 + 512), var74, var125, (var86 + 512) * var33 + var34, var125 * var33);
-												var115.addTexturedPoint((var86 + 512), var74, (var125 + 512), (var86 + 512) * var33 + var34, (var125 + 512) * var33);
-												var115.addTexturedPoint(var86, var74, (var125 + 512), var86 * var33 + var34, (var125 + 512) * var33);
+												var115.vertexUV(var86, var74, (var125 + 512), var86 * var33 + var34, (var125 + 512) * var33);
+												var115.vertexUV((var86 + 512), var74, (var125 + 512), (var86 + 512) * var33 + var34, (var125 + 512) * var33);
+												var115.vertexUV((var86 + 512), var74, var125, (var86 + 512) * var33 + var34, var125 * var33);
+												var115.vertexUV(var86, var74, var125, var86 * var33 + var34, var125 * var33);
+												var115.vertexUV(var86, var74, var125, var86 * var33 + var34, var125 * var33);
+												var115.vertexUV((var86 + 512), var74, var125, (var86 + 512) * var33 + var34, var125 * var33);
+												var115.vertexUV((var86 + 512), var74, (var125 + 512), (var86 + 512) * var33 + var34, (var125 + 512) * var33);
+												var115.vertexUV(var86, var74, (var125 + 512), var86 * var33 + var34, (var125 + 512) * var33);
 											}
 										}
 
@@ -948,15 +948,15 @@ public final class Minecraft implements Runnable {
 											var87 = var74;
 										}
 
-										var115.addColor(var34, var35, var87);
+										var115.color(var34, var35, var87);
 										var74 = (this.levelRenderer.level.depth + 10);
 
 										for (var125 = -2048; var125 < this.levelRenderer.level.width + 2048; var125 += 512) {
 											for (var68 = -2048; var68 < this.levelRenderer.level.height + 2048; var68 += 512) {
-												var115.addPoint(var125, var74, var68);
-												var115.addPoint((var125 + 512), var74, var68);
-												var115.addPoint((var125 + 512), var74, (var68 + 512));
-												var115.addPoint(var125, var74, (var68 + 512));
+												var115.vertex(var125, var74, var68);
+												var115.vertex((var125 + 512), var74, var68);
+												var115.vertex((var125 + 512), var74, (var68 + 512));
+												var115.vertex(var125, var74, (var68 + 512));
 											}
 										}
 
@@ -1114,14 +1114,14 @@ public final class Minecraft implements Runnable {
 														float var92 = MathHelper.sqrt(var124 * var124 + var35 * var35) / 5;
 														GL11.glColor4f(1.0F, 1.0F, 1.0F, (1.0F - var92 * var92) * 0.7F);
 														var84.reset();
-														var84.addTexturedPoint(var110, var86, var122, 0.0F, var86 * 2.0F / 8.0F + var74 * 2.0F);
-														var84.addTexturedPoint((var110 + 1), var86, (var122 + 1), 2.0F, var86 * 2.0F / 8.0F + var74 * 2.0F);
-														var84.addTexturedPoint((var110 + 1), var125, (var122 + 1), 2.0F, var125 * 2.0F / 8.0F + var74 * 2.0F);
-														var84.addTexturedPoint(var110, var125, var122, 0.0F, var125 * 2.0F / 8.0F + var74 * 2.0F);
-														var84.addTexturedPoint(var110, var86, (var122 + 1), 0.0F, var86 * 2.0F / 8.0F + var74 * 2.0F);
-														var84.addTexturedPoint((var110 + 1), var86, var122, 2.0F, var86 * 2.0F / 8.0F + var74 * 2.0F);
-														var84.addTexturedPoint((var110 + 1), var125, var122, 2.0F, var125 * 2.0F / 8.0F + var74 * 2.0F);
-														var84.addTexturedPoint(var110, var125, (var122 + 1), 0.0F, var125 * 2.0F / 8.0F + var74 * 2.0F);
+														var84.vertexUV(var110, var86, var122, 0.0F, var86 * 2.0F / 8.0F + var74 * 2.0F);
+														var84.vertexUV((var110 + 1), var86, (var122 + 1), 2.0F, var86 * 2.0F / 8.0F + var74 * 2.0F);
+														var84.vertexUV((var110 + 1), var125, (var122 + 1), 2.0F, var125 * 2.0F / 8.0F + var74 * 2.0F);
+														var84.vertexUV(var110, var125, var122, 0.0F, var125 * 2.0F / 8.0F + var74 * 2.0F);
+														var84.vertexUV(var110, var86, (var122 + 1), 0.0F, var86 * 2.0F / 8.0F + var74 * 2.0F);
+														var84.vertexUV((var110 + 1), var86, var122, 2.0F, var86 * 2.0F / 8.0F + var74 * 2.0F);
+														var84.vertexUV((var110 + 1), var125, var122, 2.0F, var125 * 2.0F / 8.0F + var74 * 2.0F);
+														var84.vertexUV(var110, var125, (var122 + 1), 0.0F, var125 * 2.0F / 8.0F + var74 * 2.0F);
 														var84.draw();
 													}
 												}

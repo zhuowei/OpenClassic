@@ -167,26 +167,26 @@ public class Arrow extends Entity {
 		GL11.glScalef(0.05625F, var7, var7);
 		GL11.glNormal3f(var7, 0.0F, 0.0F);
 		var11.reset();
-		var11.addTexturedPoint(-7.0F, -2.0F, -2.0F, 0.0F, var6);
-		var11.addTexturedPoint(-7.0F, -2.0F, 2.0F, var5, var6);
-		var11.addTexturedPoint(-7.0F, 2.0F, 2.0F, var5, var8);
-		var11.addTexturedPoint(-7.0F, 2.0F, -2.0F, 0.0F, var8);
+		var11.vertexUV(-7.0F, -2.0F, -2.0F, 0.0F, var6);
+		var11.vertexUV(-7.0F, -2.0F, 2.0F, var5, var6);
+		var11.vertexUV(-7.0F, 2.0F, 2.0F, var5, var8);
+		var11.vertexUV(-7.0F, 2.0F, -2.0F, 0.0F, var8);
 		var11.draw();
 		GL11.glNormal3f(-var7, 0.0F, 0.0F);
 		var11.reset();
-		var11.addTexturedPoint(-7.0F, 2.0F, -2.0F, 0.0F, var6);
-		var11.addTexturedPoint(-7.0F, 2.0F, 2.0F, var5, var6);
-		var11.addTexturedPoint(-7.0F, -2.0F, 2.0F, var5, var8);
-		var11.addTexturedPoint(-7.0F, -2.0F, -2.0F, 0.0F, var8);
+		var11.vertexUV(-7.0F, 2.0F, -2.0F, 0.0F, var6);
+		var11.vertexUV(-7.0F, 2.0F, 2.0F, var5, var6);
+		var11.vertexUV(-7.0F, -2.0F, 2.0F, var5, var8);
+		var11.vertexUV(-7.0F, -2.0F, -2.0F, 0.0F, var8);
 		var11.draw();
 
 		for (int var9 = 0; var9 < 4; ++var9) {
 			GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
 			GL11.glNormal3f(0.0F, -var7, 0.0F);
-			var11.addTexturedPoint(-8.0F, -2.0F, 0.0F, 0.0F, var3);
-			var11.addTexturedPoint(8.0F, -2.0F, 0.0F, var2, var3);
-			var11.addTexturedPoint(8.0F, 2.0F, 0.0F, var2, var4);
-			var11.addTexturedPoint(-8.0F, 2.0F, 0.0F, 0.0F, var4);
+			var11.vertexUV(-8.0F, -2.0F, 0.0F, 0.0F, var3);
+			var11.vertexUV(8.0F, -2.0F, 0.0F, var2, var3);
+			var11.vertexUV(8.0F, 2.0F, 0.0F, var2, var4);
+			var11.vertexUV(-8.0F, 2.0F, 0.0F, 0.0F, var4);
 			var11.draw();
 		}
 

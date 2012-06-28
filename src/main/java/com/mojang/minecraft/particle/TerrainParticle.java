@@ -34,10 +34,10 @@ public class TerrainParticle extends Particle {
 		float var14 = this.yo + (this.y - this.yo) * var2;
 		float var15 = this.zo + (this.z - this.zo) * var2;
 		var2 = this.getBrightness(var2);
-		var1.addColor(var2 * this.rCol, var2 * this.gCol, var2 * this.bCol);
-		var1.addTexturedPoint(var13 - var3 * var12 - var6 * var12, var14 - var4 * var12, var15 - var5 * var12 - var7 * var12, var8, var11);
-		var1.addTexturedPoint(var13 - var3 * var12 + var6 * var12, var14 + var4 * var12, var15 - var5 * var12 + var7 * var12, var8, var10);
-		var1.addTexturedPoint(var13 + var3 * var12 + var6 * var12, var14 + var4 * var12, var15 + var5 * var12 + var7 * var12, var9, var10);
-		var1.addTexturedPoint(var13 + var3 * var12 - var6 * var12, var14 - var4 * var12, var15 + var5 * var12 - var7 * var12, var9, var11);
+		var1.color(var2 * this.rCol, var2 * this.gCol, var2 * this.bCol);
+		var1.vertexUV(var13 - var3 * var12 - var6 * var12, var14 - var4 * var12, var15 - var5 * var12 - var7 * var12, var8, var11);
+		var1.vertexUV(var13 - var3 * var12 + var6 * var12, var14 + var4 * var12, var15 - var5 * var12 + var7 * var12, var8, var10);
+		var1.vertexUV(var13 + var3 * var12 + var6 * var12, var14 + var4 * var12, var15 + var5 * var12 + var7 * var12, var9, var10);
+		var1.vertexUV(var13 + var3 * var12 - var6 * var12, var14 - var4 * var12, var15 + var5 * var12 - var7 * var12, var9, var11);
 	}
 }
