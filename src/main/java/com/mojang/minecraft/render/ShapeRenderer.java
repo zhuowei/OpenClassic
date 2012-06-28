@@ -17,7 +17,7 @@ public final class ShapeRenderer {
 	private boolean textures = false;
 	private int vertexSize = 3;
 	private int length = 0;
-	private boolean colorLock = false;
+	private boolean noColor = false;
 	public static ShapeRenderer instance = new ShapeRenderer();
 
 	public final void end() {
@@ -68,11 +68,11 @@ public final class ShapeRenderer {
 		this.clear();
 		this.colors = false;
 		this.textures = false;
-		this.colorLock = false;
+		this.noColor = false;
 	}
 
 	public final void color(float r, float g, float b) {
-		if (!this.colorLock) {
+		if (!this.noColor) {
 			if (!this.colors) {
 				this.vertexSize += 3;
 			}
@@ -124,8 +124,8 @@ public final class ShapeRenderer {
 		this.color((red & 255) / 255.0F, (green & 255) / 255.0F, (blue & 255) / 255.0F);
 	}
 
-	public final void lockColorSetting() {
-		this.colorLock = true;
+	public final void noColor() {
+		this.noColor = true;
 	}
 
 	public final void glNormal3f(float nx, float ny, float nz) {

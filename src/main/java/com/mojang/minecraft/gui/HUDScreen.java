@@ -102,9 +102,9 @@ public final class HUDScreen implements MainScreen {
 				
 				if (this.mc.player.inventory.popTime[slot] > 0) {
 					float var18 = (this.mc.player.inventory.popTime[slot] - var1) / 5;
-					float var21 = -MathHelper.a(var18 * var18 * (float) Math.PI) * 8;
-					float var19 = MathHelper.a(var18 * var18 * (float) Math.PI) + 1;
-					float var16 = MathHelper.a(var18 * (float) Math.PI) + 1;
+					float var21 = -MathHelper.sin(var18 * var18 * (float) Math.PI) * 8;
+					float var19 = MathHelper.sin(var18 * var18 * (float) Math.PI) + 1;
+					float var16 = MathHelper.sin(var18 * (float) Math.PI) + 1;
 					GL11.glTranslatef(10, var21 + 10, 0);
 					GL11.glScalef(var19, var16, 1);
 					GL11.glTranslatef(-10, -10, 0);

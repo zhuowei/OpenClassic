@@ -1,7 +1,7 @@
 package com.mojang.minecraft.phys;
 
 import com.mojang.minecraft.MovingObjectPosition;
-import com.mojang.minecraft.model.ModelPoint;
+import com.mojang.minecraft.model.Vector;
 import java.io.Serializable;
 
 public class AABB implements Serializable {
@@ -161,7 +161,7 @@ public class AABB implements Serializable {
 		return x1 > this.x0 && x0 < this.x1 && y1 > this.y0 && y0 < this.y1 && z1 > this.z0 && z0 < this.z1;
 	}
 
-	public boolean contains(ModelPoint point) {
+	public boolean contains(Vector point) {
 		return point.x > this.x0 && point.x < this.x1 && point.y > this.y0 && point.y < this.y1 && point.z > this.z0 && point.z < this.z1;
 	}
 
@@ -211,13 +211,13 @@ public class AABB implements Serializable {
 		return new AABB(this.x0, this.y0, this.z0, this.x1, this.y1, this.z1);
 	}
 
-	public MovingObjectPosition clip(ModelPoint point, ModelPoint other) {
-		ModelPoint x0 = point.getXIntersection(other, this.x0);
-		ModelPoint x1 = point.getXIntersection(other, this.x1);
-		ModelPoint y0 = point.getYIntersection(other, this.y0);
-		ModelPoint y1 = point.getYIntersection(other, this.y1);
-		ModelPoint z0 = point.getZIntersection(other, this.z0);
-		ModelPoint z1 = point.getZIntersection(other, this.z1);
+	public MovingObjectPosition clip(Vector point, Vector other) {
+		Vector x0 = point.getXIntersection(other, this.x0);
+		Vector x1 = point.getXIntersection(other, this.x1);
+		Vector y0 = point.getYIntersection(other, this.y0);
+		Vector y1 = point.getYIntersection(other, this.y1);
+		Vector z0 = point.getZIntersection(other, this.z0);
+		Vector z1 = point.getZIntersection(other, this.z1);
 		
 		if (!this.xIntersects(x0)) {
 			x0 = null;
@@ -243,7 +243,7 @@ public class AABB implements Serializable {
 			z1 = null;
 		}
 
-		ModelPoint result = null;
+		Vector result = null;
 		
 		if (x0 != null) {
 			result = x0;
@@ -301,15 +301,15 @@ public class AABB implements Serializable {
 		}
 	}
 
-	private boolean xIntersects(ModelPoint point) {
+	private boolean xIntersects(Vector point) {
 		return point != null && point.y >= this.y0 && point.y <= this.y1 && point.z >= this.z0 && point.z <= this.z1;
 	}
 
-	private boolean yIntersects(ModelPoint point) {
+	private boolean yIntersects(Vector point) {
 		return point != null && point.x >= this.x0 && point.x <= this.x1 && point.z >= this.z0 && point.z <= this.z1;
 	}
 
-	private boolean zIntersects(ModelPoint point) {
+	private boolean zIntersects(Vector point) {
 		return point != null && point.x >= this.x0 && point.x <= this.x1 && point.y >= this.y0 && point.y <= this.y1;
 	}
 }

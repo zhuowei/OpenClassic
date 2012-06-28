@@ -3,7 +3,7 @@ package com.mojang.minecraft.mob.ai;
 import com.mojang.minecraft.Entity;
 import com.mojang.minecraft.item.Arrow;
 import com.mojang.minecraft.mob.ai.BasicAI;
-import com.mojang.minecraft.model.ModelPoint;
+import com.mojang.minecraft.model.Vector;
 import com.mojang.util.MathHelper;
 
 public class BasicAttackAI extends BasicAI {
@@ -58,7 +58,7 @@ public class BasicAttackAI extends BasicAI {
 	}
 
 	public boolean attack(Entity entity) {
-		if (this.level.clip(new ModelPoint(this.mob.x, this.mob.y, this.mob.z), new ModelPoint(entity.x, entity.y, entity.z)) != null) {
+		if (this.level.clip(new Vector(this.mob.x, this.mob.y, this.mob.z), new Vector(entity.x, entity.y, entity.z)) != null) {
 			return false;
 		} else {
 			this.mob.attackTime = 5;

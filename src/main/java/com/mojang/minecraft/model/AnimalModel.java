@@ -37,10 +37,10 @@ public class AnimalModel extends Model {
 		this.b.g = var4 / 57.295776F;
 		this.b.f = var5 / 57.295776F;
 		this.c.f = 1.5707964F;
-		this.d.f = MathHelper.b(var1 * 0.6662F) * 1.4F * var2;
-		this.e.f = MathHelper.b(var1 * 0.6662F + 3.1415927F) * 1.4F * var2;
-		this.f.f = MathHelper.b(var1 * 0.6662F + 3.1415927F) * 1.4F * var2;
-		this.g.f = MathHelper.b(var1 * 0.6662F) * 1.4F * var2;
+		this.d.f = MathHelper.cos(var1 * 0.6662F) * 1.4F * var2;
+		this.e.f = MathHelper.cos(var1 * 0.6662F + 3.1415927F) * 1.4F * var2;
+		this.f.f = MathHelper.cos(var1 * 0.6662F + 3.1415927F) * 1.4F * var2;
+		this.g.f = MathHelper.cos(var1 * 0.6662F) * 1.4F * var2;
 		this.b.a(var6);
 		this.c.a(var6);
 		this.d.a(var6);

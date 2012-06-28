@@ -1,10 +1,10 @@
 package com.mojang.minecraft.level;
 
 import com.mojang.minecraft.Entity;
-import com.mojang.minecraft.model.ModelPoint;
+import com.mojang.minecraft.model.Vector;
 import com.mojang.minecraft.phys.AABB;
 import com.mojang.minecraft.render.TextureManager;
-import com.mojang.minecraft.render.ChunkDataChecker;
+import com.mojang.minecraft.render.ClippingHelper;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -174,7 +174,7 @@ public class BlockMap implements Serializable {
 
 	}
 
-	public void render(ModelPoint model, ChunkDataChecker var2, TextureManager textureManager, float var4) {
+	public void render(Vector model, ClippingHelper var2, TextureManager textureManager, float var4) {
 		for (int var5 = 0; var5 < this.width; ++var5) {
 			float var6 = ((var5 << 4) - 2);
 			float var7 = ((var5 + 1 << 4) + 2);
@@ -195,7 +195,7 @@ public class BlockMap implements Serializable {
 							var14 = var13;
 							var13 = var9;
 							float var18 = var6;
-							ChunkDataChecker var19 = var2;
+							ClippingHelper var19 = var2;
 							int var20 = 0;
 
 							boolean var10000;

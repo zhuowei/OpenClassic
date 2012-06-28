@@ -77,7 +77,7 @@ public class Item extends Entity {
 		float var3 = this.rot + (this.tickCount + var2) * 3.0F;
 		GL11.glPushMatrix();
 		GL11.glColor4f(var5, var5, var5, 1.0F);
-		float var4 = (var5 = MathHelper.a(var3 / 10.0F)) * 0.1F + 0.1F;
+		float var4 = (var5 = MathHelper.sin(var3 / 10.0F)) * 0.1F + 0.1F;
 		GL11.glTranslatef(this.xo + (this.x - this.xo) * var2, this.yo + (this.y - this.yo) * var2 + var4, this.zo + (this.z - this.zo) * var2);
 		GL11.glRotatef(var3, 0.0F, 1.0F, 0.0F);
 		

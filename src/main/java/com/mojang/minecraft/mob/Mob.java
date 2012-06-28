@@ -244,14 +244,14 @@ public class Mob extends Entity {
 			float var9;
 			GL11.glColor3f(var9 = this.getBrightness(var2), var9, var9);
 			var9 = 0.0625F;
-			float var10 = -Math.abs(MathHelper.b(var8 * 0.6662F)) * 5.0F * var5 * this.bobStrength - 23.0F;
+			float var10 = -Math.abs(MathHelper.cos(var8 * 0.6662F)) * 5.0F * var5 * this.bobStrength - 23.0F;
 			GL11.glTranslatef(this.xo + (this.x - this.xo) * var2, this.yo + (this.y - this.yo) * var2 - 1.62F + this.renderOffset, this.zo + (this.z - this.zo) * var2);
 			float var11;
 			if ((var11 = this.hurtTime - var2) > 0.0F || this.health <= 0) {
 				if (var11 < 0.0F) {
 					var11 = 0.0F;
 				} else {
-					var11 = MathHelper.a((var11 /= this.hurtDuration) * var11 * var11 * var11 * 3.1415927F) * 14.0F;
+					var11 = MathHelper.sin((var11 /= this.hurtDuration) * var11 * var11 * var11 * 3.1415927F) * 14.0F;
 				}
 
 				float var12 = 0.0F;

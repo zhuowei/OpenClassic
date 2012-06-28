@@ -5,7 +5,7 @@ import java.util.Random;
 import com.mojang.minecraft.MovingObjectPosition;
 import com.mojang.minecraft.item.Item;
 import com.mojang.minecraft.level.Level;
-import com.mojang.minecraft.model.ModelPoint;
+import com.mojang.minecraft.model.Vector;
 import com.mojang.minecraft.phys.AABB;
 
 import ch.spacebase.openclassic.api.block.BlockType;
@@ -18,17 +18,17 @@ public class BlockUtils {
 
 	private static Random rand = new Random();
 	
-	public static final MovingObjectPosition clipSelection(int id, int x, int y, int z, ModelPoint point, ModelPoint other) {
+	public static final MovingObjectPosition clipSelection(int id, int x, int y, int z, Vector point, Vector other) {
 		Model model = Blocks.fromId(id).getModel();
 		
 		point = point.add((-x), (-y), (-z));
 		other = other.add((-x), (-y), (-z));
-		ModelPoint x1 = point.getXIntersection(other, model.getSelectionBox().getX1());
-		ModelPoint x2 = point.getXIntersection(other, model.getSelectionBox().getX2());
-		ModelPoint y1 = point.getYIntersection(other, model.getSelectionBox().getY1());
-		ModelPoint y2 = point.getYIntersection(other, model.getSelectionBox().getY2());
-		ModelPoint z1 = point.getZIntersection(other, model.getSelectionBox().getZ1());
-		ModelPoint z2 = point.getZIntersection(other, model.getSelectionBox().getZ2());
+		Vector x1 = point.getXIntersection(other, model.getSelectionBox().getX1());
+		Vector x2 = point.getXIntersection(other, model.getSelectionBox().getX2());
+		Vector y1 = point.getYIntersection(other, model.getSelectionBox().getY1());
+		Vector y2 = point.getYIntersection(other, model.getSelectionBox().getY2());
+		Vector z1 = point.getZIntersection(other, model.getSelectionBox().getZ1());
+		Vector z2 = point.getZIntersection(other, model.getSelectionBox().getZ2());
 		if (!xIntersectsSelection(id, x1)) {
 			x1 = null;
 		}
@@ -53,7 +53,7 @@ public class BlockUtils {
 			z2 = null;
 		}
 
-		ModelPoint result = null;
+		Vector result = null;
 		if (x1 != null) {
 			result = x1;
 		}
@@ -110,17 +110,17 @@ public class BlockUtils {
 		}
 	}
 	
-	public static final MovingObjectPosition clip(int id, int x, int y, int z, ModelPoint point, ModelPoint other) {
+	public static final MovingObjectPosition clip(int id, int x, int y, int z, Vector point, Vector other) {
 		Model model = Blocks.fromId(id).getModel();
 		
 		point = point.add((-x), (-y), (-z));
 		other = other.add((-x), (-y), (-z));
-		ModelPoint x1 = point.getXIntersection(other, model.getCollisionBox().getX1());
-		ModelPoint x2 = point.getXIntersection(other, model.getCollisionBox().getX2());
-		ModelPoint y1 = point.getYIntersection(other, model.getCollisionBox().getY1());
-		ModelPoint y2 = point.getYIntersection(other, model.getCollisionBox().getY2());
-		ModelPoint z1 = point.getZIntersection(other, model.getCollisionBox().getZ1());
-		ModelPoint z2 = point.getZIntersection(other, model.getCollisionBox().getZ2());
+		Vector x1 = point.getXIntersection(other, model.getCollisionBox().getX1());
+		Vector x2 = point.getXIntersection(other, model.getCollisionBox().getX2());
+		Vector y1 = point.getYIntersection(other, model.getCollisionBox().getY1());
+		Vector y2 = point.getYIntersection(other, model.getCollisionBox().getY2());
+		Vector z1 = point.getZIntersection(other, model.getCollisionBox().getZ1());
+		Vector z2 = point.getZIntersection(other, model.getCollisionBox().getZ2());
 		if (!xIntersects(id, x1)) {
 			x1 = null;
 		}
@@ -145,7 +145,7 @@ public class BlockUtils {
 			z2 = null;
 		}
 
-		ModelPoint result = null;
+		Vector result = null;
 		if (x1 != null) {
 			result = x1;
 		}
@@ -202,32 +202,32 @@ public class BlockUtils {
 		}
 	}
 
-	private static boolean xIntersectsSelection(int id, ModelPoint point) {
+	private static boolean xIntersectsSelection(int id, Vector point) {
 		Model model = Blocks.fromId(id).getModel();
 		return point != null && point.y >= model.getSelectionBox().getY1() && point.y <= model.getSelectionBox().getY2() && point.z >= model.getSelectionBox().getZ1() && point.z <= model.getSelectionBox().getZ2();
 	}
 
-	private static boolean yIntersectsSelection(int id, ModelPoint point) {
+	private static boolean yIntersectsSelection(int id, Vector point) {
 		Model model = Blocks.fromId(id).getModel();
 		return point != null && point.x >= model.getSelectionBox().getX1() && point.x <= model.getSelectionBox().getX2() && point.z >= model.getSelectionBox().getZ1() && point.z <= model.getSelectionBox().getZ2();
 	}
 
-	private static boolean zIntersectsSelection(int id, ModelPoint point) {
+	private static boolean zIntersectsSelection(int id, Vector point) {
 		Model model = Blocks.fromId(id).getModel();
 		return point != null && point.x >= model.getSelectionBox().getX1() && point.x <= model.getSelectionBox().getX2() && point.y >= model.getSelectionBox().getY1() && point.y <= model.getSelectionBox().getY2();
 	}
 	
-	private static boolean xIntersects(int id, ModelPoint point) {
+	private static boolean xIntersects(int id, Vector point) {
 		Model model = Blocks.fromId(id).getModel();
 		return point != null && point.y >= model.getCollisionBox().getY1() && point.y <= model.getCollisionBox().getY2() && point.z >= model.getCollisionBox().getZ1() && point.z <= model.getCollisionBox().getZ2();
 	}
 
-	private static boolean yIntersects(int id, ModelPoint point) {
+	private static boolean yIntersects(int id, Vector point) {
 		Model model = Blocks.fromId(id).getModel();
 		return point != null && point.x >= model.getCollisionBox().getX1() && point.x <= model.getCollisionBox().getX2() && point.z >= model.getCollisionBox().getZ1() && point.z <= model.getCollisionBox().getZ2();
 	}
 
-	private static boolean zIntersects(int id, ModelPoint point) {
+	private static boolean zIntersects(int id, Vector point) {
 		Model model = Blocks.fromId(id).getModel();
 		return point != null && point.x >= model.getCollisionBox().getX1() && point.x <= model.getCollisionBox().getX2() && point.y >= model.getCollisionBox().getY1() && point.y <= model.getCollisionBox().getY2();
 	}

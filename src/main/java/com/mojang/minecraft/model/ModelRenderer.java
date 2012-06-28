@@ -1,6 +1,6 @@
 package com.mojang.minecraft.model;
 
-import com.mojang.minecraft.model.ModelPoint;
+import com.mojang.minecraft.model.Vector;
 import com.mojang.minecraft.model.Quad;
 import com.mojang.minecraft.model.Vertex;
 import org.lwjgl.opengl.GL11;
@@ -132,9 +132,9 @@ public final class ModelRenderer {
 			Quad var10000 = this.quads[var2];
 			float var3 = var1;
 			Quad var4 = var10000;
-			ModelPoint var5 = var10000.vertices[1].a.subtract(var4.vertices[0].a).a();
-			ModelPoint var6 = var4.vertices[1].a.subtract(var4.vertices[2].a).a();
-			GL11.glNormal3f((var5 = (new ModelPoint(var5.y * var6.z - var5.z * var6.y, var5.z * var6.x - var5.x * var6.z, var5.x * var6.y - var5.y * var6.x)).a()).x, var5.y, var5.z);
+			Vector var5 = var10000.vertices[1].a.subtract(var4.vertices[0].a).a();
+			Vector var6 = var4.vertices[1].a.subtract(var4.vertices[2].a).a();
+			GL11.glNormal3f((var5 = (new Vector(var5.y * var6.z - var5.z * var6.y, var5.z * var6.x - var5.x * var6.z, var5.x * var6.y - var5.y * var6.x)).a()).x, var5.y, var5.z);
 
 			for (int var7 = 0; var7 < 4; ++var7) {
 				Vertex var8;

@@ -3,7 +3,7 @@ package com.mojang.minecraft.net;
 import com.mojang.minecraft.Minecraft;
 import com.mojang.minecraft.mob.HumanoidMob;
 import com.mojang.minecraft.net.SkinDownloadThread;
-import com.mojang.minecraft.net.NetworkPosition;
+import com.mojang.minecraft.net.PositionUpdate;
 import com.mojang.minecraft.render.FontRenderer;
 import com.mojang.minecraft.render.TextureManager;
 import java.awt.image.BufferedImage;
@@ -14,7 +14,7 @@ import org.lwjgl.opengl.GL11;
 public class NetworkPlayer extends HumanoidMob {
 
 	public static final long serialVersionUID = 77479605454997290L;
-	private List<NetworkPosition> moveQueue = new LinkedList<NetworkPosition>();
+	private List<PositionUpdate> moveQueue = new LinkedList<PositionUpdate>();
 	private Minecraft minecraft;
 	private int xp;
 	private int yp;
@@ -145,11 +145,11 @@ public class NetworkPlayer extends HumanoidMob {
 
 		yaw = this.yRot + yaw * 0.5F;
 		pitch = this.xRot + pitch * 0.5F;
-		this.moveQueue.add(new NetworkPosition((this.xp + xChange / 2.0F) / 32.0F, (this.yp + yChange / 2.0F) / 32.0F, (this.zp + zChange / 2.0F) / 32.0F, yaw, pitch));
+		this.moveQueue.add(new PositionUpdate((this.xp + xChange / 2.0F) / 32.0F, (this.yp + yChange / 2.0F) / 32.0F, (this.zp + zChange / 2.0F) / 32.0F, yaw, pitch));
 		this.xp += xChange;
 		this.yp += yChange;
 		this.zp += zChange;
-		this.moveQueue.add(new NetworkPosition(this.xp / 32.0F, this.yp / 32.0F, this.zp / 32.0F, yawChange, pitchChange));
+		this.moveQueue.add(new PositionUpdate(this.xp / 32.0F, this.yp / 32.0F, this.zp / 32.0F, yawChange, pitchChange));
 	}
 
 	public void teleport(short x, short y, short z, float yaw, float pitch) {
@@ -172,19 +172,19 @@ public class NetworkPlayer extends HumanoidMob {
 
 		newYaw = this.yRot + newYaw * 0.5F;
 		newPitch = this.xRot + newPitch * 0.5F;
-		this.moveQueue.add(new NetworkPosition((this.xp + x) / 64.0F, (this.yp + y) / 64.0F, (this.zp + z) / 64.0F, newYaw, newPitch));
+		this.moveQueue.add(new PositionUpdate((this.xp + x) / 64.0F, (this.yp + y) / 64.0F, (this.zp + z) / 64.0F, newYaw, newPitch));
 		this.xp = x;
 		this.yp = y;
 		this.zp = z;
-		this.moveQueue.add(new NetworkPosition(this.xp / 32.0F, this.yp / 32.0F, this.zp / 32.0F, yaw, pitch));
+		this.moveQueue.add(new PositionUpdate(this.xp / 32.0F, this.yp / 32.0F, this.zp / 32.0F, yaw, pitch));
 	}
 
 	public void queue(byte x, byte y, byte z) {
-		this.moveQueue.add(new NetworkPosition((this.xp + x / 2.0F) / 32.0F, (this.yp + y / 2.0F) / 32.0F, (this.zp + z / 2.0F) / 32.0F));
+		this.moveQueue.add(new PositionUpdate((this.xp + x / 2.0F) / 32.0F, (this.yp + y / 2.0F) / 32.0F, (this.zp + z / 2.0F) / 32.0F));
 		this.xp += x;
 		this.yp += y;
 		this.zp += z;
-		this.moveQueue.add(new NetworkPosition(this.xp / 32.0F, this.yp / 32.0F, this.zp / 32.0F));
+		this.moveQueue.add(new PositionUpdate(this.xp / 32.0F, this.yp / 32.0F, this.zp / 32.0F));
 	}
 
 	public void queue(float yaw, float pitch) {
@@ -209,8 +209,8 @@ public class NetworkPlayer extends HumanoidMob {
 
 		newYaw = this.yRot + newYaw * 0.5F;
 		newPitch = this.xRot + newPitch * 0.5F;
-		this.moveQueue.add(new NetworkPosition(newYaw, newPitch));
-		this.moveQueue.add(new NetworkPosition(yaw, pitch));
+		this.moveQueue.add(new PositionUpdate(newYaw, newPitch));
+		this.moveQueue.add(new PositionUpdate(yaw, pitch));
 	}
 
 	public void clear() {

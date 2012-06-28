@@ -1,17 +1,17 @@
 package com.mojang.minecraft.level.generator.algorithm;
 
-import com.mojang.minecraft.level.generator.algorithm.Algorithm;
+import com.mojang.minecraft.level.generator.algorithm.Noise;
 import java.util.Random;
 
-public final class d extends Algorithm {
+public final class PerlinNoise extends Noise {
 
 	private int[] data;
 
-	public d() {
+	public PerlinNoise() {
 		this(new Random());
 	}
 
-	public d(Random rand) {
+	public PerlinNoise(Random rand) {
 		this.data = new int[512];
 
 		for (int count = 0; count < 256; this.data[count] = count++);

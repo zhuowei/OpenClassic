@@ -7,7 +7,7 @@ import ch.spacebase.openclassic.api.block.VanillaBlock;
 import com.mojang.minecraft.Entity;
 import com.mojang.minecraft.Minecraft;
 import com.mojang.minecraft.level.Level;
-import com.mojang.minecraft.model.ModelPoint;
+import com.mojang.minecraft.model.Vector;
 import com.mojang.minecraft.player.Player;
 import com.mojang.minecraft.render.HeldBlock;
 import com.mojang.util.MathHelper;
@@ -16,7 +16,7 @@ import java.util.Random;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
-public final class Renderer {
+public final class EntityRenderer {
 
 	public Minecraft mc;
 	public float b = 1.0F;
@@ -31,17 +31,17 @@ public final class Renderer {
 	public float j;
 	public float k;
 
-	public Renderer(Minecraft mc) {
+	public EntityRenderer(Minecraft mc) {
 		this.mc = mc;
 		this.heldBlock = new HeldBlock(mc);
 	}
 
-	public com.mojang.minecraft.model.ModelPoint a(float var1) {
+	public com.mojang.minecraft.model.Vector a(float var1) {
 		Player var4;
 		float var2 = (var4 = this.mc.player).xo + (var4.x - var4.xo) * var1;
 		float var3 = var4.yo + (var4.y - var4.yo) * var1;
 		float var5 = var4.zo + (var4.z - var4.zo) * var1;
-		return new com.mojang.minecraft.model.ModelPoint(var2, var3, var5);
+		return new com.mojang.minecraft.model.Vector(var2, var3, var5);
 	}
 
 	public void b(float var1) {
@@ -53,7 +53,7 @@ public final class Renderer {
 		}
 
 		if (var2 >= 0.0F) {
-			var2 = MathHelper.a((var2 /= var3.hurtDuration) * var2 * var2 * var2 * 3.1415927F);
+			var2 = MathHelper.sin((var2 /= var3.hurtDuration) * var2 * var2 * var2 * 3.1415927F);
 			var1 = var3.hurtDir;
 			GL11.glRotatef(-var3.hurtDir, 0.0F, 1.0F, 0.0F);
 			GL11.glRotatef(-var2 * 14.0F, 0.0F, 0.0F, 1.0F);
@@ -67,9 +67,9 @@ public final class Renderer {
 		var2 = var4.walkDist + var2 * var1;
 		float var3 = var4.oBob + (var4.bob - var4.oBob) * var1;
 		float var5 = var4.oTilt + (var4.tilt - var4.oTilt) * var1;
-		GL11.glTranslatef(MathHelper.a(var2 * 3.1415927F) * var3 * 0.5F, -Math.abs(MathHelper.b(var2 * 3.1415927F) * var3), 0.0F);
-		GL11.glRotatef(MathHelper.a(var2 * 3.1415927F) * var3 * 3.0F, 0.0F, 0.0F, 1.0F);
-		GL11.glRotatef(Math.abs(MathHelper.b(var2 * 3.1415927F + 0.2F) * var3) * 5.0F, 1.0F, 0.0F, 0.0F);
+		GL11.glTranslatef(MathHelper.sin(var2 * 3.1415927F) * var3 * 0.5F, -Math.abs(MathHelper.cos(var2 * 3.1415927F) * var3), 0.0F);
+		GL11.glRotatef(MathHelper.sin(var2 * 3.1415927F) * var3 * 3.0F, 0.0F, 0.0F, 1.0F);
+		GL11.glRotatef(Math.abs(MathHelper.cos(var2 * 3.1415927F + 0.2F) * var3) * 5.0F, 1.0F, 0.0F, 0.0F);
 		GL11.glRotatef(var5, 1.0F, 0.0F, 0.0F);
 	}
 
@@ -84,7 +84,7 @@ public final class Renderer {
 			GL11.glColorMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_AMBIENT_AND_DIFFUSE);
 			float var4 = 0.7F;
 			float var2 = 0.3F;
-			ModelPoint var3 = (new ModelPoint(0.0F, -1.0F, 0.5F)).a();
+			Vector var3 = (new Vector(0.0F, -1.0F, 0.5F)).a();
 			GL11.glLight(GL11.GL_COLOR_BUFFER_BIT, GL11.GL_POSITION, this.a(var3.x, var3.y, var3.z, 0.0F));
 			GL11.glLight(GL11.GL_COLOR_BUFFER_BIT, GL11.GL_DIFFUSE, this.a(var2, var2, var2, 1.0F));
 			GL11.glLight(GL11.GL_COLOR_BUFFER_BIT, GL11.GL_AMBIENT, this.a(0.0F, 0.0F, 0.0F, 1.0F));

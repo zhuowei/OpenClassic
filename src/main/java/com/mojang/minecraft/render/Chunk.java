@@ -6,7 +6,7 @@ import ch.spacebase.openclassic.api.block.VanillaBlock;
 
 import com.mojang.minecraft.level.Level;
 import com.mojang.minecraft.player.Player;
-import com.mojang.minecraft.render.ChunkDataChecker;
+import com.mojang.minecraft.render.ClippingHelper;
 import org.lwjgl.opengl.GL11;
 
 public final class Chunk {
@@ -109,7 +109,7 @@ public final class Chunk {
 		}
 	}
 
-	public final void setChunkRendered(ChunkDataChecker check) {
+	public final void setChunkRendered(ClippingHelper check) {
 		this.chunkDirty = check.isChunkDirty(this.x, this.y, this.z, this.x + this.width, this.y + this.height, this.z + this.depth);
 	}
 

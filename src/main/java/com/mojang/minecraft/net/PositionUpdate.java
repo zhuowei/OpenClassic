@@ -1,6 +1,6 @@
 package com.mojang.minecraft.net;
 
-public final class NetworkPosition {
+public final class PositionUpdate {
 
 	public float x;
 	public float y;
@@ -10,7 +10,7 @@ public final class NetworkPosition {
 	public boolean rotation = false;
 	public boolean position = false;
 
-	public NetworkPosition(float x, float y, float z, float yaw, float pitch) {
+	public PositionUpdate(float x, float y, float z, float yaw, float pitch) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -20,7 +20,7 @@ public final class NetworkPosition {
 		this.position = true;
 	}
 
-	public NetworkPosition(float x, float y, float z) {
+	public PositionUpdate(float x, float y, float z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -28,7 +28,7 @@ public final class NetworkPosition {
 		this.rotation = false;
 	}
 
-	public NetworkPosition(float yaw, float pitch) {
+	public PositionUpdate(float yaw, float pitch) {
 		this.yaw = yaw;
 		this.pitch = pitch;
 		this.rotation = true;

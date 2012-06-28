@@ -119,8 +119,8 @@ public class Sheep extends QuadrupedMob {
 		private static final long serialVersionUID = 1L;
 
 		public final void update() {
-			float xDiff = -0.7F * MathHelper.a(Sheep.this.yRot * (float) Math.PI / 180.0F);
-			float zDiff = 0.7F * MathHelper.b(Sheep.this.yRot * (float) Math.PI / 180.0F);
+			float xDiff = -0.7F * MathHelper.sin(Sheep.this.yRot * (float) Math.PI / 180.0F);
+			float zDiff = 0.7F * MathHelper.cos(Sheep.this.yRot * (float) Math.PI / 180.0F);
 			int x = (int) (this.mob.x + xDiff);
 			int y = (int) (this.mob.y - 2.0F);
 			int z = (int) (this.mob.z + zDiff);

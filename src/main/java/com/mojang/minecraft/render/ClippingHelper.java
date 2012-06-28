@@ -5,9 +5,9 @@ import java.nio.FloatBuffer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
-public final class ChunkDataChecker {
+public final class ClippingHelper {
 
-	private static ChunkDataChecker instance = new ChunkDataChecker();
+	private static ClippingHelper instance = new ClippingHelper();
 	
 	public float[][] data = new float[16][16];
 	public float[] widthData = new float[16];
@@ -17,7 +17,7 @@ public final class ChunkDataChecker {
 	private FloatBuffer widthBuffer = BufferUtils.createFloatBuffer(16);
 	private FloatBuffer depthBuffer = BufferUtils.createFloatBuffer(16);
 
-	public static ChunkDataChecker prepare() {
+	public static ClippingHelper prepare() {
 		instance.widthBuffer.clear();
 		instance.depthBuffer.clear();
 		GL11.glGetFloat(2983, instance.widthBuffer);

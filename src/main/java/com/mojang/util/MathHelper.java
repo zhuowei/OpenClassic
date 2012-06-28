@@ -2,14 +2,14 @@ package com.mojang.util;
 
 public final class MathHelper {
 
-	private static float[] a = new float[65536];
+	private static float[] values = new float[65536];
 
-	public static final float a(float f) {
-		return a[(int) (f * 10430.378) & Character.MAX_VALUE];
+	public static final float sin(float f) {
+		return values[(int) (f * 10430.378) & Character.MAX_VALUE];
 	}
 
-	public static final float b(float f) {
-		return a[(int) (f * 10430.378 + 16384) & Character.MAX_VALUE];
+	public static final float cos(float f) {
+		return values[(int) (f * 10430.378 + 16384) & Character.MAX_VALUE];
 	}
 
 	public static final float sqrt(float f) {
@@ -17,8 +17,8 @@ public final class MathHelper {
 	}
 
 	static {
-		for (int var0 = 0; var0 < Character.MAX_VALUE; ++var0) {
-			a[var0] = (float) Math.sin(var0 * Math.PI * 2 / Character.MAX_VALUE);
+		for (int count = 0; count < Character.MAX_VALUE; ++count) {
+			values[count] = (float) Math.sin(count * Math.PI * 2 / Character.MAX_VALUE);
 		}
 
 	}

@@ -42,10 +42,10 @@ public class Arrow extends Entity {
 		}
 
 		this.heightOffset = 0.25F;
-		float var10 = MathHelper.b(-var6 * 0.017453292F - (float) Math.PI);
-		float var11 = MathHelper.a(-var6 * 0.017453292F - (float) Math.PI);
-		var6 = MathHelper.b(-var7 * 0.017453292F);
-		var7 = MathHelper.a(-var7 * 0.017453292F);
+		float var10 = MathHelper.cos(-var6 * 0.017453292F - (float) Math.PI);
+		float var11 = MathHelper.sin(-var6 * 0.017453292F - (float) Math.PI);
+		var6 = MathHelper.cos(-var7 * 0.017453292F);
+		var7 = MathHelper.sin(-var7 * 0.017453292F);
 		this.slide = false;
 		this.gravity = 1.0F / var8;
 		this.xo -= var10 * 0.2F;

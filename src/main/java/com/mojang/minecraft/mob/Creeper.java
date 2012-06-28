@@ -28,7 +28,7 @@ public class Creeper extends Mob {
 
 	public float getBrightness(float additionalTicks) {
 		float brightness = (20 - this.health) / 20.0F;
-		return ((MathHelper.a(this.tickCount + additionalTicks) * 0.5F + 0.5F) * brightness * 0.5F + 0.25F + brightness * 0.25F) * super.getBrightness(additionalTicks);
+		return ((MathHelper.sin(this.tickCount + additionalTicks) * 0.5F + 0.5F) * brightness * 0.5F + 0.25F + brightness * 0.25F) * super.getBrightness(additionalTicks);
 	}
 	
 	public class CreeperAI extends BasicAttackAI implements Serializable {

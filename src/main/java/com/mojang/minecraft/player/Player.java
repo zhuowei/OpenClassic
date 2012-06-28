@@ -131,8 +131,8 @@ public class Player extends Mob {
 		this.yd = 0.1F;
 		
 		if (cause != null) {
-			this.xd = -MathHelper.b((this.hurtDir + this.yRot) * 3.1415927F / 180.0F) * 0.1F;
-			this.zd = -MathHelper.a((this.hurtDir + this.yRot) * 3.1415927F / 180.0F) * 0.1F;
+			this.xd = -MathHelper.cos((this.hurtDir + this.yRot) * 3.1415927F / 180.0F) * 0.1F;
+			this.zd = -MathHelper.sin((this.hurtDir + this.yRot) * 3.1415927F / 180.0F) * 0.1F;
 		} else {
 			this.xd = this.zd = 0.0F;
 		}

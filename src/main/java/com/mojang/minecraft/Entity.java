@@ -7,8 +7,8 @@ import ch.spacebase.openclassic.api.block.VanillaBlock;
 
 import com.mojang.minecraft.level.BlockMap;
 import com.mojang.minecraft.level.Level;
-import com.mojang.minecraft.model.ModelPoint;
-import com.mojang.minecraft.net.NetworkPosition;
+import com.mojang.minecraft.model.Vector;
+import com.mojang.minecraft.net.PositionUpdate;
 import com.mojang.minecraft.phys.AABB;
 import com.mojang.minecraft.render.TextureManager;
 import com.mojang.util.MathHelper;
@@ -105,7 +105,7 @@ public abstract class Entity implements Serializable {
 		this.bbHeight = height;
 	}
 
-	public void setPos(NetworkPosition pos) {
+	public void setPos(PositionUpdate pos) {
 		if (pos.position) {
 			this.setPos(pos.x, pos.y, pos.z);
 		} else {
@@ -360,8 +360,8 @@ public abstract class Entity implements Serializable {
 			var4 = var3 / var4;
 			relX *= var4;
 			relZ *= var4;
-			var3 = MathHelper.a(this.yRot * (float) Math.PI / 180);
-			var4 = MathHelper.b(this.yRot * (float) Math.PI / 180);
+			var3 = MathHelper.sin(this.yRot * (float) Math.PI / 180);
+			var4 = MathHelper.cos(this.yRot * (float) Math.PI / 180);
 			
 			relX *= speed;
 			relZ *= speed;
@@ -475,7 +475,7 @@ public abstract class Entity implements Serializable {
 	public void awardKillScore(Entity entity, int amount) {
 	}
 
-	public boolean shouldRender(ModelPoint point) {
+	public boolean shouldRender(Vector point) {
 		float x = this.x - point.x;
 		float y = this.y - point.y;
 		float z = this.z - point.z;

@@ -1,20 +1,20 @@
 package com.mojang.minecraft.level.generator.algorithm;
 
-import com.mojang.minecraft.level.generator.algorithm.Algorithm;
-import com.mojang.minecraft.level.generator.algorithm.d;
+import com.mojang.minecraft.level.generator.algorithm.Noise;
+import com.mojang.minecraft.level.generator.algorithm.PerlinNoise;
 import java.util.Random;
 
-public final class b extends Algorithm {
+public final class OctaveNoise extends Noise {
 
-	private d[] algs;
+	private PerlinNoise[] algs;
 	private int count;
 
-	public b(Random rand, int algs) {
+	public OctaveNoise(Random rand, int algs) {
 		this.count = algs;
-		this.algs = new d[algs];
+		this.algs = new PerlinNoise[algs];
 
 		for (int count = 0; count < algs; ++count) {
-			this.algs[count] = new d(rand);
+			this.algs[count] = new PerlinNoise(rand);
 		}
 
 	}

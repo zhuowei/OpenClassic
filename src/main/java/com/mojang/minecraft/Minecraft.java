@@ -62,9 +62,9 @@ import com.mojang.minecraft.particle.WaterDropParticle;
 import com.mojang.minecraft.phys.AABB;
 import com.mojang.minecraft.player.InputHandler;
 import com.mojang.minecraft.player.Player;
-import com.mojang.minecraft.render.ChunkDataChecker;
+import com.mojang.minecraft.render.ClippingHelper;
 import com.mojang.minecraft.render.FontRenderer;
-import com.mojang.minecraft.render.Renderer;
+import com.mojang.minecraft.render.EntityRenderer;
 import com.mojang.minecraft.render.ShapeRenderer;
 import com.mojang.minecraft.render.TextureManager;
 import com.mojang.minecraft.render.LevelRenderer;
@@ -135,7 +135,7 @@ public final class Minecraft implements Runnable {
 	public FontRenderer fontRenderer;
 	public GuiScreen currentScreen = null;
 	public ProgressBarDisplay progressBar = new ProgressBarDisplay(this);
-	public Renderer renderer = new Renderer(this);
+	public EntityRenderer renderer = new EntityRenderer(this);
 	public LevelIO levelIo;
 	public ClientAudioManager audio;
 	public ResourceDownloadThread resourceThread;
@@ -605,7 +605,7 @@ public final class Minecraft implements Runnable {
 						if (!this.online) {
 							this.mode.applyBlockCracks(this.timer.time);
 							float var65 = this.timer.time;
-							com.mojang.minecraft.render.Renderer var66 = this.renderer;
+							com.mojang.minecraft.render.EntityRenderer var66 = this.renderer;
 							if (this.renderer.displayActive && !Display.isActive() && !Mouse.isButtonDown(0) && !Mouse.isButtonDown(1) && !Mouse.isButtonDown(2)) { // Fixed focus bug for some computers/OS's
 								this.displayMenu();
 							}
@@ -650,19 +650,19 @@ public final class Minecraft implements Runnable {
 								var70 = var86 - Mouse.getY() * var86 / this.height - 1;
 								if (this.level != null) {
 									float var80 = var65;
-									com.mojang.minecraft.render.Renderer var82 = var66;
-									com.mojang.minecraft.render.Renderer var27 = var66;
+									com.mojang.minecraft.render.EntityRenderer var82 = var66;
+									com.mojang.minecraft.render.EntityRenderer var27 = var66;
 									float var29 = (this.player = var66.mc.player).xRotO + (this.player.xRot - this.player.xRotO) * var65;
 									float var30 = this.player.yRotO + (this.player.yRot - this.player.yRotO) * var65;
-									com.mojang.minecraft.model.ModelPoint var31 = var66.a(var65);
-									float var32 = MathHelper.b(-var30 * 0.017453292F - (float) Math.PI);
-									float var69 = MathHelper.a(-var30 * 0.017453292F - (float) Math.PI);
-									float var74 = MathHelper.b(-var29 * 0.017453292F);
-									float var33 = MathHelper.a(-var29 * 0.017453292F);
+									com.mojang.minecraft.model.Vector var31 = var66.a(var65);
+									float var32 = MathHelper.cos(-var30 * 0.017453292F - (float) Math.PI);
+									float var69 = MathHelper.sin(-var30 * 0.017453292F - (float) Math.PI);
+									float var74 = MathHelper.cos(-var29 * 0.017453292F);
+									float var33 = MathHelper.sin(-var29 * 0.017453292F);
 									float var34 = var69 * var74;
 									float var87 = var32 * var74;
 									float var36 = this.mode.d();
-									com.mojang.minecraft.model.ModelPoint var71 = var31.add(var34 * var36, var33 * var36, var87 * var36);
+									com.mojang.minecraft.model.Vector var71 = var31.add(var34 * var36, var33 * var36, var87 * var36);
 									this.selected = this.level.clip(var31, var71, true);
 									var74 = var36;
 									if (this.selected != null) {
@@ -789,8 +789,8 @@ public final class Minecraft implements Runnable {
 										var74 = var116.yo + (var116.y - var116.yo) * var80;
 										var33 = var116.zo + (var116.z - var116.zo) * var80;
 										GL11.glTranslatef(-var69, -var74, -var33);
-										ChunkDataChecker var76 = com.mojang.minecraft.render.ChunkDataChecker.prepare();
-										ChunkDataChecker var100 = var76;
+										ClippingHelper var76 = com.mojang.minecraft.render.ClippingHelper.prepare();
+										ClippingHelper var100 = var76;
 
 										int var98;
 										for (var98 = 0; var98 < this.levelRenderer.chunkCache.length; ++var98) {
@@ -860,16 +860,16 @@ public final class Minecraft implements Runnable {
 										}
 
 										var82.a(true);
-										com.mojang.minecraft.model.ModelPoint var103 = var82.a(var80);
+										com.mojang.minecraft.model.Vector var103 = var82.a(var80);
 										this.levelRenderer.level.blockMap.render(var103, var76, this.levelRenderer.textureManager, var80);
 										var82.a(false);
 										var82.renderFog();
 										float var107 = var80;
 										ParticleManager var96 = this.particleManager;
-										var29 = -MathHelper.b(this.player.yRot * 3.1415927F / 180.0F);
-										var117 = -(var30 = -MathHelper.a(this.player.yRot * 3.1415927F / 180.0F)) * MathHelper.a(this.player.xRot * 3.1415927F / 180.0F);
-										var32 = var29 * MathHelper.a(this.player.xRot * 3.1415927F / 180.0F);
-										var69 = MathHelper.b(this.player.xRot * 3.1415927F / 180.0F);
+										var29 = -MathHelper.cos(this.player.yRot * 3.1415927F / 180.0F);
+										var117 = -(var30 = -MathHelper.sin(this.player.yRot * 3.1415927F / 180.0F)) * MathHelper.sin(this.player.xRot * 3.1415927F / 180.0F);
+										var32 = var29 * MathHelper.sin(this.player.xRot * 3.1415927F / 180.0F);
+										var69 = MathHelper.cos(this.player.xRot * 3.1415927F / 180.0F);
 
 										for (var83 = 0; var83 < 2; ++var83) {
 											if (var96.particles[var83].size() != 0) {
@@ -973,7 +973,7 @@ public final class Minecraft implements Runnable {
 											GL11.glEnable(GL11.GL_BLEND);
 											GL11.glEnable(GL11.GL_ALPHA_TEST);
 											GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-											GL11.glColor4f(1.0F, 1.0F, 1.0F, (MathHelper.a(System.currentTimeMillis() / 100.0F) * 0.2F + 0.4F) * 0.5F);
+											GL11.glColor4f(1.0F, 1.0F, 1.0F, (MathHelper.sin(System.currentTimeMillis() / 100.0F) * 0.2F + 0.4F) * 0.5F);
 											if (this.levelRenderer.cracks > 0) {
 												GL11.glBlendFunc(GL11.GL_DST_COLOR, GL11.GL_SRC_COLOR);
 												var108 = this.levelRenderer.textureManager.bindTexture("/terrain.png");
@@ -990,7 +990,7 @@ public final class Minecraft implements Runnable {
 												GL11.glScalef(1.01F, var35, var35);
 												GL11.glTranslatef(-(var102.x + var74), -(var102.y + var33), -(var102.z + var34));
 												var113.begin();
-												var113.lockColorSetting();
+												var113.noColor();
 												GL11.glDepthMask(false);
 												if (var73 == null) {
 													var73 = VanillaBlock.STONE;
@@ -1156,16 +1156,16 @@ public final class Minecraft implements Runnable {
 										GL11.glPushMatrix();
 										var69 = 0.8F;
 										if (var82.heldBlock.moving) {
-											var33 = MathHelper.a((var74 = (var82.heldBlock.heldOffset + var80) / 7.0F) * 3.1415927F);
-											GL11.glTranslatef(-MathHelper.a(MathHelper.sqrt(var74) * 3.1415927F) * 0.4F, MathHelper.a(MathHelper.sqrt(var74) * 3.1415927F * 2.0F) * 0.2F, -var33 * 0.2F);
+											var33 = MathHelper.sin((var74 = (var82.heldBlock.heldOffset + var80) / 7.0F) * 3.1415927F);
+											GL11.glTranslatef(-MathHelper.sin(MathHelper.sqrt(var74) * 3.1415927F) * 0.4F, MathHelper.sin(MathHelper.sqrt(var74) * 3.1415927F * 2.0F) * 0.2F, -var33 * 0.2F);
 										}
 
 										GL11.glTranslatef(0.7F * var69, -0.65F * var69 - (1.0F - var117) * 0.6F, -0.9F * var69);
 										GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
 										GL11.glEnable(GL11.GL_NORMALIZE);
 										if (var82.heldBlock.moving) {
-											var33 = MathHelper.a((var74 = (var82.heldBlock.heldOffset + var80) / 7.0F) * var74 * 3.1415927F);
-											GL11.glRotatef(MathHelper.a(MathHelper.sqrt(var74) * 3.1415927F) * 80.0F, 0.0F, 1.0F, 0.0F);
+											var33 = MathHelper.sin((var74 = (var82.heldBlock.heldOffset + var80) / 7.0F) * var74 * 3.1415927F);
+											GL11.glRotatef(MathHelper.sin(MathHelper.sqrt(var74) * 3.1415927F) * 80.0F, 0.0F, 1.0F, 0.0F);
 											GL11.glRotatef(-var33 * 20.0F, 1.0F, 0.0F, 0.0F);
 										}
 

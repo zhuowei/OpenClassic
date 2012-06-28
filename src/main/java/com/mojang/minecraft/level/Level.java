@@ -654,10 +654,10 @@ public class Level implements Serializable {
 	}
 
 	public float getCaveness(Entity var1) {
-		float var2 = MathHelper.b(-var1.yRot * 0.017453292F + (float) Math.PI);
-		float var3 = MathHelper.a(-var1.yRot * 0.017453292F + (float) Math.PI);
-		float var4 = MathHelper.b(-var1.xRot * 0.017453292F);
-		float var5 = MathHelper.a(-var1.xRot * 0.017453292F);
+		float var2 = MathHelper.cos(-var1.yRot * 0.017453292F + (float) Math.PI);
+		float var3 = MathHelper.sin(-var1.yRot * 0.017453292F + (float) Math.PI);
+		float var4 = MathHelper.cos(-var1.xRot * 0.017453292F);
+		float var5 = MathHelper.sin(-var1.xRot * 0.017453292F);
 		float var6 = var1.x;
 		float var7 = var1.y;
 		float var21 = var1.z;
@@ -725,11 +725,11 @@ public class Level implements Serializable {
 		this.networkMode = var1;
 	}
 
-	public MovingObjectPosition clip(com.mojang.minecraft.model.ModelPoint var1, com.mojang.minecraft.model.ModelPoint var2) {
+	public MovingObjectPosition clip(com.mojang.minecraft.model.Vector var1, com.mojang.minecraft.model.Vector var2) {
 		return this.clip(var1, var2, false);
 	}
 	
-	public MovingObjectPosition clip(com.mojang.minecraft.model.ModelPoint var1, com.mojang.minecraft.model.ModelPoint var2, boolean selection) {
+	public MovingObjectPosition clip(com.mojang.minecraft.model.Vector var1, com.mojang.minecraft.model.Vector var2, boolean selection) {
 		if (!Float.isNaN(var1.x) && !Float.isNaN(var1.y) && !Float.isNaN(var1.z)) {
 			if (!Float.isNaN(var2.x) && !Float.isNaN(var2.y) && !Float.isNaN(var2.z)) {
 				int var3 = (int) Math.floor(var2.x);
@@ -827,8 +827,8 @@ public class Level implements Serializable {
 						var1.z = var12;
 					}
 
-					com.mojang.minecraft.model.ModelPoint var20;
-					var6 = (int) ((var20 = new com.mojang.minecraft.model.ModelPoint(var1.x, var1.y, var1.z)).x = (float) Math.floor(var1.x));
+					com.mojang.minecraft.model.Vector var20;
+					var6 = (int) ((var20 = new com.mojang.minecraft.model.Vector(var1.x, var1.y, var1.z)).x = (float) Math.floor(var1.x));
 					if (var24 == 5) {
 						--var6;
 						++var20.x;

@@ -37,10 +37,10 @@ public final class CreeperModel extends Model {
 	public final void a(float var1, float var2, float var3, float var4, float var5, float var6) {
 		this.b.g = var4 / 57.295776F;
 		this.b.f = var5 / 57.295776F;
-		this.e.f = MathHelper.b(var1 * 0.6662F) * 1.4F * var2;
-		this.f.f = MathHelper.b(var1 * 0.6662F + 3.1415927F) * 1.4F * var2;
-		this.g.f = MathHelper.b(var1 * 0.6662F + 3.1415927F) * 1.4F * var2;
-		this.h.f = MathHelper.b(var1 * 0.6662F) * 1.4F * var2;
+		this.e.f = MathHelper.cos(var1 * 0.6662F) * 1.4F * var2;
+		this.f.f = MathHelper.cos(var1 * 0.6662F + 3.1415927F) * 1.4F * var2;
+		this.g.f = MathHelper.cos(var1 * 0.6662F + 3.1415927F) * 1.4F * var2;
+		this.h.f = MathHelper.cos(var1 * 0.6662F) * 1.4F * var2;
 		this.b.a(var6);
 		this.d.a(var6);
 		this.e.a(var6);

@@ -8,8 +8,8 @@ import ch.spacebase.openclassic.client.util.GeneralUtils;
 
 import com.mojang.minecraft.ProgressBarDisplay;
 import com.mojang.minecraft.level.Level;
-import com.mojang.minecraft.level.generator.algorithm.CombinedAlgorithm;
-import com.mojang.minecraft.level.generator.algorithm.b;
+import com.mojang.minecraft.level.generator.algorithm.CombinedNoise;
+import com.mojang.minecraft.level.generator.algorithm.OctaveNoise;
 import com.mojang.util.MathHelper;
 import java.util.ArrayList;
 import java.util.Random;
@@ -56,9 +56,9 @@ public final class LevelGenerator extends Generator {
 		this.g = 32;
 		this.data = new byte[this.width * this.height * this.depth];
 		this.progress.setText("Raising..");
-		CombinedAlgorithm alg1 = new CombinedAlgorithm(new b(this.rand, 8), new b(this.rand, 8));
-		CombinedAlgorithm alg2 = new CombinedAlgorithm(new b(this.rand, 8), new b(this.rand, 8));
-		b var8 = new b(this.rand, 6);
+		CombinedNoise alg1 = new CombinedNoise(new OctaveNoise(this.rand, 8), new OctaveNoise(this.rand, 8));
+		CombinedNoise alg2 = new CombinedNoise(new OctaveNoise(this.rand, 8), new OctaveNoise(this.rand, 8));
+		OctaveNoise var8 = new OctaveNoise(this.rand, 6);
 		int[] var9 = new int[this.width * this.depth];
 		float var10 = 1.3F;
 
@@ -85,8 +85,8 @@ public final class LevelGenerator extends Generator {
 
 		this.progress.setText("Eroding..");
 		int[] var42 = var9;
-		alg2 = new CombinedAlgorithm(new b(this.rand, 8), new b(this.rand, 8));
-		CombinedAlgorithm var49 = new CombinedAlgorithm(new b(this.rand, 8), new b(this.rand, 8));
+		alg2 = new CombinedNoise(new OctaveNoise(this.rand, 8), new OctaveNoise(this.rand, 8));
+		CombinedNoise var49 = new CombinedNoise(new OctaveNoise(this.rand, 8), new OctaveNoise(this.rand, 8));
 
 		int var23;
 		int var51;
@@ -109,7 +109,7 @@ public final class LevelGenerator extends Generator {
 		int var46 = this.width;
 		int var48 = this.depth;
 		var51 = this.d;
-		b var53 = new b(this.rand, 8);
+		OctaveNoise var53 = new OctaveNoise(this.rand, 8);
 
 		int var25;
 		int var24;
@@ -170,9 +170,9 @@ public final class LevelGenerator extends Generator {
 			float var31 = this.rand.nextFloat() * this.rand.nextFloat();
 
 			for (int var32 = 0; var32 < var26; ++var32) {
-				var55 += MathHelper.a(var61) * MathHelper.b(var29);
-				var56 += MathHelper.b(var61) * MathHelper.b(var29);
-				var59 += MathHelper.a(var29);
+				var55 += MathHelper.sin(var61) * MathHelper.cos(var29);
+				var56 += MathHelper.cos(var61) * MathHelper.cos(var29);
+				var59 += MathHelper.sin(var29);
 				var61 += var64 * 0.2F;
 				var64 = (var64 *= 0.9F) + (this.rand.nextFloat() - this.rand.nextFloat());
 				var29 = (var29 + var30 * 0.5F) * 0.5F;
@@ -183,7 +183,7 @@ public final class LevelGenerator extends Generator {
 					float var33 = var56 + (this.rand.nextFloat() * 4.0F - 2.0F) * 0.2F;
 					float var34 = (this.d - var50) / this.d;
 					var34 = 1.2F + (var34 * 3.5F + 1.0F) * var31;
-					var34 = MathHelper.a(var32 * 3.1415927F / var26) * var34;
+					var34 = MathHelper.sin(var32 * 3.1415927F / var26) * var34;
 
 					for (int var35 = (int) (var43 - var34); var35 <= (int) (var43 + var34); ++var35) {
 						for (int var36 = (int) (var50 - var34); var36 <= (int) (var50 + var34); ++var36) {
@@ -259,8 +259,8 @@ public final class LevelGenerator extends Generator {
 		var46 = this.width;
 		var48 = this.depth;
 		var51 = this.d;
-		var53 = new b(this.rand, 8);
-		b var58 = new b(this.rand, 8);
+		var53 = new OctaveNoise(this.rand, 8);
+		OctaveNoise var58 = new OctaveNoise(this.rand, 8);
 
 		int var63;
 		for (x = 0; x < var46; ++x) {
@@ -408,14 +408,14 @@ public final class LevelGenerator extends Generator {
 			float var16 = 0.0F;
 
 			for (int var17 = 0; var17 < var12; ++var17) {
-				var9 += MathHelper.a(var13) * MathHelper.b(var15);
-				var11 += MathHelper.b(var13) * MathHelper.b(var15);
-				var10 += MathHelper.a(var15);
+				var9 += MathHelper.sin(var13) * MathHelper.cos(var15);
+				var11 += MathHelper.cos(var13) * MathHelper.cos(var15);
+				var10 += MathHelper.sin(var15);
 				var13 += var14 * 0.2F;
 				var14 = (var14 *= 0.9F) + (this.rand.nextFloat() - this.rand.nextFloat());
 				var15 = (var15 + var16 * 0.5F) * 0.5F;
 				var16 = (var16 *= 0.9F) + (this.rand.nextFloat() - this.rand.nextFloat());
-				float var18 = MathHelper.a(var17 * 3.1415927F / var12) * var2 / 100.0F + 1.0F;
+				float var18 = MathHelper.sin(var17 * 3.1415927F / var12) * var2 / 100.0F + 1.0F;
 
 				for (int var19 = (int) (var9 - var18); var19 <= (int) (var9 + var18); ++var19) {
 					for (int var20 = (int) (var10 - var18); var20 <= (int) (var10 + var18); ++var20) {
