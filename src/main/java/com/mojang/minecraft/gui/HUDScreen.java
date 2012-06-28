@@ -118,9 +118,9 @@ public final class HUDScreen implements MainScreen {
 				GL11.glScalef(-1, -1, -1);
 				
 				GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.textureManager.bindTexture("/terrain.png"));
-				ShapeRenderer.instance.reset();
+				ShapeRenderer.instance.begin();
 				Blocks.fromId(block).getModel().renderFullbright(-2, 0, 0);
-				ShapeRenderer.instance.draw();
+				ShapeRenderer.instance.end();
 				
 				GL11.glPopMatrix();
 				

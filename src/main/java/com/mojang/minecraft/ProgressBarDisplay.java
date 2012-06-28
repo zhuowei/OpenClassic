@@ -66,7 +66,7 @@ public final class ProgressBarDisplay implements ProgressBar {
 					int barX = x / 2 - 50;
 					int barY = y / 2 + 16;
 					GL11.glDisable(GL11.GL_TEXTURE_2D);
-					render.reset();
+					render.begin();
 					render.color(8421504);
 					render.vertex(barX, barY, 0.0F);
 					render.vertex(barX, (barY + 2), 0.0F);
@@ -77,7 +77,7 @@ public final class ProgressBarDisplay implements ProgressBar {
 					render.vertex(barX, (barY + 2), 0.0F);
 					render.vertex((barX + progress), (barY + 2), 0.0F);
 					render.vertex((barX + progress), barY, 0.0F);
-					render.draw();
+					render.end();
 					GL11.glEnable(GL11.GL_TEXTURE_2D);
 				}
 

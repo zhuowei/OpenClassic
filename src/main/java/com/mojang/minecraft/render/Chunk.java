@@ -44,7 +44,7 @@ public final class Chunk {
 			boolean continuing = false;
 			boolean cleaned = false;
 			GL11.glNewList(this.baseListId + count, 4864);
-			ShapeRenderer.instance.reset();
+			ShapeRenderer.instance.begin();
 
 			for (int x = this.x; x < this.x + this.width; x++) {
 				for (int y = this.y; y < this.y + this.height; y++) {
@@ -66,7 +66,7 @@ public final class Chunk {
 				}
 			}
 
-			ShapeRenderer.instance.draw();
+			ShapeRenderer.instance.end();
 			GL11.glEndList();
 			if (cleaned) {
 				this.dirty[count] = false;

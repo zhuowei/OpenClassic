@@ -72,7 +72,7 @@ public final class FontRenderer {
 			}
 
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.fontId);
-			ShapeRenderer.instance.reset();
+			ShapeRenderer.instance.begin();
 			ShapeRenderer.instance.color(color);
 			int var7 = 0;
 
@@ -113,7 +113,7 @@ public final class FontRenderer {
 				var7 += this.font[chars[count]];
 			}
 
-			ShapeRenderer.instance.draw();
+			ShapeRenderer.instance.end();
 		}
 	}
 

@@ -840,17 +840,17 @@ public final class Minecraft implements Runnable {
 															GL11.glColor4f(0.2F, 0.2F, 0.2F, 1.0F);
 															GL11.glDepthFunc(GL11.GL_LESS);
 															var115 = ShapeRenderer.instance;
-															ShapeRenderer.instance.reset();
+															ShapeRenderer.instance.begin();
 
 															Blocks.fromId(var99).getModel().renderAll(var122, var98, var105, 0.2F);
 
-															var115.draw();
+															var115.end();
 															GL11.glCullFace(GL11.GL_FRONT);
-															var115.reset();
+															var115.begin();
 
 															Blocks.fromId(var99).getModel().renderAll(var122, var98, var105, 0.2F);
 
-															var115.draw();
+															var115.end();
 															GL11.glCullFace(GL11.GL_BACK);
 															GL11.glDepthFunc(GL11.GL_LEQUAL);
 														}
@@ -883,13 +883,13 @@ public final class Minecraft implements Runnable {
 												}
 
 												GL11.glBindTexture(GL11.GL_TEXTURE_2D, var110);
-												ShapeRenderer.instance.reset();
+												ShapeRenderer.instance.begin();
 
 												for (var120 = 0; var120 < var96.particles[var83].size(); ++var120) {
 													var96.particles[var83].get(var120).render(ShapeRenderer.instance, var107, var29, var69, var30, var117, var32);
 												}
 
-												ShapeRenderer.instance.draw();
+												ShapeRenderer.instance.end();
 											}
 										}
 
@@ -917,7 +917,7 @@ public final class Minecraft implements Runnable {
 										var74 = (this.levelRenderer.level.depth + 2);
 										var34 = (this.levelRenderer.ticks + var80) * var33 * 0.03F;
 										var35 = 0.0F;
-										var115.reset();
+										var115.begin();
 										var115.color(var107, var29, var30);
 
 										for (var86 = -2048; var86 < this.levelRenderer.level.width + 2048; var86 += 512) {
@@ -933,9 +933,9 @@ public final class Minecraft implements Runnable {
 											}
 										}
 
-										var115.draw();
+										var115.end();
 										GL11.glDisable(GL11.GL_TEXTURE_2D);
-										var115.reset();
+										var115.begin();
 										var34 = (this.levelRenderer.level.skyColor >> 16 & 255) / 255.0F;
 										var35 = (this.levelRenderer.level.skyColor >> 8 & 255) / 255.0F;
 										var87 = (this.levelRenderer.level.skyColor & 255) / 255.0F;
@@ -960,7 +960,7 @@ public final class Minecraft implements Runnable {
 											}
 										}
 
-										var115.draw();
+										var115.end();
 										GL11.glEnable(GL11.GL_TEXTURE_2D);
 										var82.renderFog();
 										int var108;
@@ -989,7 +989,7 @@ public final class Minecraft implements Runnable {
 												var35 = 1.01F;
 												GL11.glScalef(1.01F, var35, var35);
 												GL11.glTranslatef(-(var102.x + var74), -(var102.y + var33), -(var102.z + var34));
-												var113.reset();
+												var113.begin();
 												var113.lockColorSetting();
 												GL11.glDepthMask(false);
 												if (var73 == null) {
@@ -1000,7 +1000,7 @@ public final class Minecraft implements Runnable {
 													ClientRenderHelper.getHelper().drawCracks(var73.getModel().getQuad(var86), var102.x, var102.y, var102.z, 240 + (int) (this.levelRenderer.cracks * 10.0F));
 												}
 
-												var113.draw();
+												var113.end();
 												GL11.glDepthMask(true);
 												GL11.glPopMatrix();
 											}
@@ -1113,7 +1113,7 @@ public final class Minecraft implements Runnable {
 														var35 = var122 + 0.5F - this.player.z;
 														float var92 = MathHelper.sqrt(var124 * var124 + var35 * var35) / 5;
 														GL11.glColor4f(1.0F, 1.0F, 1.0F, (1.0F - var92 * var92) * 0.7F);
-														var84.reset();
+														var84.begin();
 														var84.vertexUV(var110, var86, var122, 0.0F, var86 * 2.0F / 8.0F + var74 * 2.0F);
 														var84.vertexUV((var110 + 1), var86, (var122 + 1), 2.0F, var86 * 2.0F / 8.0F + var74 * 2.0F);
 														var84.vertexUV((var110 + 1), var125, (var122 + 1), 2.0F, var125 * 2.0F / 8.0F + var74 * 2.0F);
@@ -1122,7 +1122,7 @@ public final class Minecraft implements Runnable {
 														var84.vertexUV((var110 + 1), var86, var122, 2.0F, var86 * 2.0F / 8.0F + var74 * 2.0F);
 														var84.vertexUV((var110 + 1), var125, var122, 2.0F, var125 * 2.0F / 8.0F + var74 * 2.0F);
 														var84.vertexUV(var110, var125, (var122 + 1), 0.0F, var125 * 2.0F / 8.0F + var74 * 2.0F);
-														var84.draw();
+														var84.end();
 													}
 												}
 											}

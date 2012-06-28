@@ -46,13 +46,13 @@ public class ClientRenderHelper extends RenderHelper {
 		int width = Display.getWidth() * 240 / Display.getHeight();
 		int height = Display.getHeight() * 240 / Display.getHeight();
 
-		ShapeRenderer.instance.reset();
+		ShapeRenderer.instance.begin();
 		ShapeRenderer.instance.color(4210752);
 		ShapeRenderer.instance.vertexUV(0, height, 0, 0, height / 32);
 		ShapeRenderer.instance.vertexUV(width, height, 0, width / 32, height / 32);
 		ShapeRenderer.instance.vertexUV(width, 0, 0, width / 32, 0);
 		ShapeRenderer.instance.vertexUV(0, 0, 0, 0, 0);
-		ShapeRenderer.instance.draw();
+		ShapeRenderer.instance.end();
 	}
 	
 	public void renderText(String text, int x, int y) {
@@ -88,12 +88,12 @@ public class ClientRenderHelper extends RenderHelper {
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		this.glColor(red, green, blue, alpha);
 		
-		ShapeRenderer.instance.reset();
+		ShapeRenderer.instance.begin();
 		ShapeRenderer.instance.vertex(x1, y2, 0);
 		ShapeRenderer.instance.vertex(x2, y2, 0);
 		ShapeRenderer.instance.vertex(x2, y1, 0);
 		ShapeRenderer.instance.vertex(x1, y1, 0);
-		ShapeRenderer.instance.draw();
+		ShapeRenderer.instance.end();
 		
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glDisable(GL11.GL_BLEND);
@@ -132,12 +132,12 @@ public class ClientRenderHelper extends RenderHelper {
 	}
 	
 	public void drawImage(int x, int y, int z, int imgX, int imgY, int imgWidth, int imgHeight) {
-		ShapeRenderer.instance.reset();
+		ShapeRenderer.instance.begin();
 		ShapeRenderer.instance.vertexUV(x, (y + imgHeight), z, imgX * 0.00390625F, (imgY + imgHeight) * 0.00390625F);
 		ShapeRenderer.instance.vertexUV((x + imgWidth), (y + imgHeight), z, (imgX + imgWidth) * 0.00390625F, (imgY + imgHeight) * 0.00390625F);
 		ShapeRenderer.instance.vertexUV((x + imgWidth), y, z, (imgX + imgWidth) * 0.00390625F, imgY * 0.00390625F);
 		ShapeRenderer.instance.vertexUV(x, y, z, imgX * 0.00390625F, imgY * 0.00390625F);
-		ShapeRenderer.instance.draw();
+		ShapeRenderer.instance.end();
 	}
 
 	@Override
@@ -167,7 +167,7 @@ public class ClientRenderHelper extends RenderHelper {
 	
 	@Override
 	public void drawQuad(Quad quad, int x, int y, int z, float brightness) {
-		ShapeRenderer.instance.reset();
+		ShapeRenderer.instance.begin();
 		this.bindTexture(quad.getTexture().getParent().getTexture(), quad.getTexture().getParent().isInJar());
 		ShapeRenderer.instance.color(brightness, brightness, brightness);
 		
@@ -184,11 +184,11 @@ public class ClientRenderHelper extends RenderHelper {
 		ShapeRenderer.instance.vertexUV(x + quad.getVertex(2).getX(), y + quad.getVertex(2).getY(), z + quad.getVertex(2).getZ(), quad.getTexture().getX1() * 0.00390625F, y1 * 0.00390625F);
 		ShapeRenderer.instance.vertexUV(x + quad.getVertex(3).getX(), y + quad.getVertex(3).getY(), z + quad.getVertex(3).getZ(), quad.getTexture().getX1() * 0.00390625F, y2 * 0.00390625F);
 		
-		ShapeRenderer.instance.draw();
+		ShapeRenderer.instance.end();
 	}
 	
 	public void drawCracks(Quad quad, int x, int y, int z, int crackTexture) {
-		ShapeRenderer.instance.reset();
+		ShapeRenderer.instance.begin();
 		this.bindTexture(VanillaBlock.TERRAIN.getTexture(), true);
 		
 		SubTexture texture = quad.getTexture().getParent().getSubTexture(crackTexture);
@@ -205,7 +205,7 @@ public class ClientRenderHelper extends RenderHelper {
 		ShapeRenderer.instance.vertexUV(x + quad.getVertex(2).getX(), y + quad.getVertex(2).getY(), z + quad.getVertex(2).getZ(), texture.getX1() * 0.00390625F, y1 * 0.00390625F);
 		ShapeRenderer.instance.vertexUV(x + quad.getVertex(3).getX(), y + quad.getVertex(3).getY(), z + quad.getVertex(3).getZ(), texture.getX1() * 0.00390625F, y2 * 0.00390625F);
 		
-		ShapeRenderer.instance.draw();
+		ShapeRenderer.instance.end();
 	}
 	
 	@Override
@@ -215,7 +215,7 @@ public class ClientRenderHelper extends RenderHelper {
 	
 	@Override
 	public void drawTexture(Texture texture, int x, int y, int z) {
-		ShapeRenderer.instance.reset();
+		ShapeRenderer.instance.begin();
 		this.bindTexture(texture.getTexture(), texture.isInJar());
 		
 		this.glColor(1, 1, 1, 1);
@@ -224,7 +224,7 @@ public class ClientRenderHelper extends RenderHelper {
 		ShapeRenderer.instance.vertexUV(x + texture.getWidth(), y + texture.getHeight(), z, texture.getWidth() * 0.00390625F, texture.getHeight() * 0.00390625F);
 		ShapeRenderer.instance.vertexUV(x + texture.getWidth(), y, z, texture.getWidth() * 0.00390625F, 0);
 		
-		ShapeRenderer.instance.draw();
+		ShapeRenderer.instance.end();
 	}
 	
 	@Override
@@ -234,7 +234,7 @@ public class ClientRenderHelper extends RenderHelper {
 	
 	@Override
 	public void drawSubTex(SubTexture texture, int x, int y, int z) {
-		ShapeRenderer.instance.reset();
+		ShapeRenderer.instance.begin();
 		this.bindTexture(texture.getParent().getTexture(), texture.getParent().isInJar());
 		
 		this.glColor(1, 1, 1, 1);
@@ -243,7 +243,7 @@ public class ClientRenderHelper extends RenderHelper {
 		ShapeRenderer.instance.vertexUV(x + (texture.getX2() - texture.getX1()), y + (texture.getY2() - texture.getY1()), z, texture.getX2() * 0.00390625F, texture.getY2() * 0.00390625F);
 		ShapeRenderer.instance.vertexUV(x + (texture.getX2() - texture.getX1()), y, z, texture.getX2() * 0.00390625F, texture.getY1() * 0.00390625F);
 		
-		ShapeRenderer.instance.draw();
+		ShapeRenderer.instance.end();
 	}
 	
 	@Override
@@ -303,7 +303,7 @@ public class ClientRenderHelper extends RenderHelper {
 	
 	@Override
 	public void renderPreview(Model model) {
-		ShapeRenderer.instance.reset();
+		ShapeRenderer.instance.begin();
 
 		for (int side = 0; side < model.getQuads().size(); ++side) {
 			if (side == 0) {
@@ -333,7 +333,7 @@ public class ClientRenderHelper extends RenderHelper {
 			model.getQuad(side).render(0, 0, 0, 1);
 		}
 
-		ShapeRenderer.instance.draw();
+		ShapeRenderer.instance.end();
 	}
 	
 	public void spawnDestructionParticles(BlockType block, Level level, int x, int y, int z, ParticleManager particles) {

@@ -84,7 +84,7 @@ public final class LevelRenderer {
 		}
 
 		int var6 = 2048 / var5;
-		ShapeRenderer.instance.reset();
+		ShapeRenderer.instance.begin();
 
 		for (int var7 = -var5 * var6; var7 < this.level.width + var5 * var6; var7 += var5) {
 			for (int var8 = -var5 * var6; var8 < this.level.height + var5 * var6; var8 += var5) {
@@ -100,9 +100,9 @@ public final class LevelRenderer {
 			}
 		}
 
-		ShapeRenderer.instance.draw();
+		ShapeRenderer.instance.end();
 		GL11.glColor3f(0.8F, 0.8F, 0.8F);
-		ShapeRenderer.instance.reset();
+		ShapeRenderer.instance.begin();
 
 		for (int var7 = 0; var7 < this.level.width; var7 += var5) {
 			ShapeRenderer.instance.vertexUV(var7, 0.0F, 0.0F, 0.0F, 0.0F);
@@ -128,7 +128,7 @@ public final class LevelRenderer {
 			ShapeRenderer.instance.vertexUV(this.level.width, groundLevel, var7, 0.0F, 0.0F);
 		}
 
-		ShapeRenderer.instance.draw();
+		ShapeRenderer.instance.end();
 		GL11.glEndList();
 		GL11.glNewList(this.listId + 1, 4864);
 		GL11.glColor3f(1.0F, 1.0F, 1.0F);
@@ -144,7 +144,7 @@ public final class LevelRenderer {
 		}
 
 		var5 = 2048 / var100;
-		ShapeRenderer.instance.reset();
+		ShapeRenderer.instance.begin();
 
 		for (int var1000 = -var100 * var5; var1000 < this.level.width + var100 * var5; var1000 += var100) {
 			for (int var7 = -var100 * var5; var7 < this.level.height + var100 * var5; var7 += var100) {
@@ -162,7 +162,7 @@ public final class LevelRenderer {
 			}
 		}
 
-		ShapeRenderer.instance.draw();
+		ShapeRenderer.instance.end();
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glEndList();
 		this.addChunks(0, 0, 0, this.level.width, this.level.depth, this.level.height);

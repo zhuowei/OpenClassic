@@ -14,33 +14,33 @@ public class LWJGLNatives {
 	public static void load(OS os, File dir) {
 		switch (os) {
 		case linux:
-			load(dir.getPath(), "libjinput-linux.so");
-			load(dir.getPath(), "libjinput-linux64.so");
-			load(dir.getPath(), "liblwjgl.so");
-			load(dir.getPath(), "liblwjgl64.so");
-			load(dir.getPath(), "libopenal.so");
-			load(dir.getPath(), "libopenal64.so");
+			load(dir.getPath(), "libjinput-linux.so", "86");
+			load(dir.getPath(), "libjinput-linux64.so", "64");
+			load(dir.getPath(), "liblwjgl.so", "86");
+			load(dir.getPath(), "liblwjgl64.so", "64");
+			load(dir.getPath(), "libopenal.so", "86");
+			load(dir.getPath(), "libopenal64.so", "64");
 			break;
 		case solaris:
-			load(dir.getPath(), "liblwjgl.so");
-			load(dir.getPath(), "liblwjgl64.so");
-			load(dir.getPath(), "libopenal.so");
-			load(dir.getPath(), "libopenal64.so");
+			load(dir.getPath(), "liblwjgl.so", "86");
+			load(dir.getPath(), "liblwjgl64.so", "64");
+			load(dir.getPath(), "libopenal.so", "86");
+			load(dir.getPath(), "libopenal64.so", "64");
 			break;
 		case windows:
-			load(dir.getPath(), "OpenAL64.dll");
-			load(dir.getPath(), "OpenAL32.dll");
-			load(dir.getPath(), "lwjgl64.dll");
-			load(dir.getPath(), "lwjgl.dll");
-			load(dir.getPath(), "jinput-raw_64.dll");
-			load(dir.getPath(), "jinput-raw.dll");
-			load(dir.getPath(), "jinput-dx8_64.dll");
-			load(dir.getPath(), "jinput-dx8.dll");
+			load(dir.getPath(), "OpenAL64.dll", "64");
+			load(dir.getPath(), "OpenAL32.dll", "86");
+			load(dir.getPath(), "lwjgl64.dll", "64");
+			load(dir.getPath(), "lwjgl.dll", "86");
+			load(dir.getPath(), "jinput-raw_64.dll", "64");
+			load(dir.getPath(), "jinput-raw.dll", "86");
+			load(dir.getPath(), "jinput-dx8_64.dll", "64");
+			load(dir.getPath(), "jinput-dx8.dll", "86");
 			break;
 		case macos:
-			load(dir.getPath(), "openal.dylib");
-			load(dir.getPath(), "liblwjgl.jnilib");
-			load(dir.getPath(), "libjinput-osx.jnilib");
+			load(dir.getPath(), "openal.dylib", "both");
+			load(dir.getPath(), "liblwjgl.jnilib", "both");
+			load(dir.getPath(), "libjinput-osx.jnilib", "both");
 			break;
 		}
 		
@@ -48,10 +48,13 @@ public class LWJGLNatives {
 		System.setProperty("org.lwjgl.librarypath", dir.getPath());
 	}
 
-	private static void load(String dir, String lib) {
+	private static void load(String dir, String lib, String arch) {
 		File file = new File(dir + "/" + lib);
 		if(file.exists()) {
-			if(!(System.getProperty("os.arch").equals("i386") && lib.contains("64"))) System.load(file.getPath());
+			if(System.getProperty("os.arch").contains(arch) || arch.equals("both")) {
+				System.load(file.getPath());
+			}
+			
 			return;
 		}
 		
@@ -60,7 +63,7 @@ public class LWJGLNatives {
 			System.out.println("Writing " + lib + " to " + file.getPath());
 			copy(in, file);
 			in.close();
-			if(!(System.getProperty("os.arch").equals("i386") && lib.contains("64"))) System.load(file.getPath());
+			if(System.getProperty("os.arch").contains(arch) || arch.equals("both")) System.load(file.getPath());
 		} catch (Exception e) {
 			System.out.println("Failed to unpack native " + lib + "!");
 			e.printStackTrace();

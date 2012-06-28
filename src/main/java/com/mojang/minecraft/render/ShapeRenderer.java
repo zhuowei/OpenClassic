@@ -20,7 +20,7 @@ public final class ShapeRenderer {
 	private boolean colorLock = false;
 	public static ShapeRenderer instance = new ShapeRenderer();
 
-	public final void draw() {
+	public final void end() {
 		if (this.vertices > 0) {
 			FloatBuffer buffer = BufferUtils.createFloatBuffer(this.length);
 			buffer.put(this.data, 0, this.length);
@@ -64,7 +64,7 @@ public final class ShapeRenderer {
 		this.length = 0;
 	}
 
-	public final void reset() {
+	public final void begin() {
 		this.clear();
 		this.colors = false;
 		this.textures = false;
@@ -112,7 +112,7 @@ public final class ShapeRenderer {
 		this.data[this.length++] = z;
 		this.vertices++;
 		if (this.vertices % 4 == 0 && this.length >= 524288 - (this.vertexSize << 2)) {
-			this.draw();
+			this.end();
 		}
 	}
 

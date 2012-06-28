@@ -166,19 +166,19 @@ public class Arrow extends Entity {
 		float var7 = 0.05625F;
 		GL11.glScalef(0.05625F, var7, var7);
 		GL11.glNormal3f(var7, 0.0F, 0.0F);
-		var11.reset();
+		var11.begin();
 		var11.vertexUV(-7.0F, -2.0F, -2.0F, 0.0F, var6);
 		var11.vertexUV(-7.0F, -2.0F, 2.0F, var5, var6);
 		var11.vertexUV(-7.0F, 2.0F, 2.0F, var5, var8);
 		var11.vertexUV(-7.0F, 2.0F, -2.0F, 0.0F, var8);
-		var11.draw();
+		var11.end();
 		GL11.glNormal3f(-var7, 0.0F, 0.0F);
-		var11.reset();
+		var11.begin();
 		var11.vertexUV(-7.0F, 2.0F, -2.0F, 0.0F, var6);
 		var11.vertexUV(-7.0F, 2.0F, 2.0F, var5, var6);
 		var11.vertexUV(-7.0F, -2.0F, 2.0F, var5, var8);
 		var11.vertexUV(-7.0F, -2.0F, -2.0F, 0.0F, var8);
-		var11.draw();
+		var11.end();
 
 		for (int var9 = 0; var9 < 4; ++var9) {
 			GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
@@ -187,7 +187,7 @@ public class Arrow extends Entity {
 			var11.vertexUV(8.0F, -2.0F, 0.0F, var2, var3);
 			var11.vertexUV(8.0F, 2.0F, 0.0F, var2, var4);
 			var11.vertexUV(-8.0F, 2.0F, 0.0F, 0.0F, var4);
-			var11.draw();
+			var11.end();
 		}
 
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

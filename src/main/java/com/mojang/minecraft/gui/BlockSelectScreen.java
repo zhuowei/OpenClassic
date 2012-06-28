@@ -65,9 +65,9 @@ public final class BlockSelectScreen extends GuiScreen {
 	
 				GL11.glTranslatef(-1.5F, 0.5F, 0.5F);
 				GL11.glScalef(-1.0F, -1.0F, -1.0F);
-				ShapeRenderer.instance.reset();
+				ShapeRenderer.instance.begin();
 				b.getModel().renderFullbright(-2, 0, 0);
-				ShapeRenderer.instance.draw();
+				ShapeRenderer.instance.end();
 				GL11.glPopMatrix();
 				
 				count++;
