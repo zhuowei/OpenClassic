@@ -56,7 +56,7 @@ public class ServerURLScreen extends GuiScreen {
 			if (mppass.length() > 0) {
 				String user = HTTPUtil.getParameterOffPage(play, "username");
 				String sessionid = HTTPUtil.getParameterOffPage(play, "sessionid");
-				System.out.println("Got user details: user=" + user + ", mppass=" + mppass);
+				System.out.println("Got user details: user=" + user);
 					
 				mc.data = new SessionData(user, sessionid);
 				mc.data.key = mppass;

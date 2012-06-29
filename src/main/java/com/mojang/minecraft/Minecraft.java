@@ -333,9 +333,9 @@ public final class Minecraft implements Runnable {
 		} else {
 			try {
 				if (!this.noLevel) {
-					Level var11 = this.levelIo.load("level");
-					if (var11 != null) {
-						this.setLevel(var11);
+					Level level = this.levelIo.load("level");
+					if (level != null) {
+						this.setLevel(level);
 					}
 				}
 			} catch (Exception e) {
@@ -361,8 +361,7 @@ public final class Minecraft implements Runnable {
 				e.printStackTrace();
 			}
 		}
-
-		checkGLError("Post startup");
+		
 		this.hud = new HUDScreen(this, this.width, this.height);
 		(new SkinDownloadThread(this)).start();
 		if (this.server != null && this.data != null) {
@@ -515,7 +514,8 @@ public final class Minecraft implements Runnable {
 			Item.initModels();
 			Mob.modelCache = new ModelManager();
 			GL11.glViewport(0, 0, this.width, this.height);
-
+			checkGLError("Post Startup");
+			
 			((ClassicClient) OpenClassic.getClient()).init();
 
 			try {

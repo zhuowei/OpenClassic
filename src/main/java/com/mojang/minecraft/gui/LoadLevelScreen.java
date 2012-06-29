@@ -99,7 +99,7 @@ public class LoadLevelScreen extends GuiScreen implements Runnable {
 			if(this.delete) {
 				File file = null;
 				for(File f : (new File(GeneralUtils.getMinecraft().dir, "levels")).listFiles()) {
-					if(f != null && f.getName().equals(button.getText() + ".mine")) {
+					if(f != null && f.getName().equals(button.getText() + ".mine") || f.getName().equals(button.getText() + ".map") || f.getName().equals(button.getText() + ".oclvl") || f.getName().equals(button.getText() + ".lvl") || f.getName().equals(button.getText() + ".dat") || f.getName().equals(button.getText() + ".mclevel")) {
 						file = f;
 						break;
 					}
