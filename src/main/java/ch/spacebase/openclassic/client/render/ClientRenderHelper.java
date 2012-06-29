@@ -273,12 +273,7 @@ public class ClientRenderHelper extends RenderHelper {
 					return false;
 				}
 				
-				//int x = relative.getPosition().getBlockX();
-				//int y = relative.getPosition().getBlockY();
-				//int z = relative.getPosition().getBlockZ();
-				//return x >= 0 && y >= 0 && z >= 0 && x < block.getLevel().getWidth() && z < block.getLevel().getDepth() && Level.toMoving(relative.getType()) != Level.toMoving(block.getType()) && (face == BlockFace.UP && (block.getLevel().getBlockTypeAt(x - 1, y, z) == VanillaBlock.AIR || block.getLevel().getBlockTypeAt(x + 1, y, z) == VanillaBlock.AIR || block.getLevel().getBlockTypeAt(x, y, z - 1) == VanillaBlock.AIR || block.getLevel().getBlockTypeAt(x, y, z + 1) == VanillaBlock.AIR) || !this.isSolidTile(relative));
 				return !this.isSolidTile(relative);
-				//return face == BlockFace.UP && (block.getLevel().getBlockTypeAt(x - 1, y, z) == VanillaBlock.AIR || block.getLevel().getBlockTypeAt(x + 1, y, z) == VanillaBlock.AIR || block.getLevel().getBlockTypeAt(x, y, z - 1) == VanillaBlock.AIR || block.getLevel().getBlockTypeAt(x, y, z + 1) == VanillaBlock.AIR) || !this.isSolidTile(relative);
 			}
 			case SLAB: {
 				return block.getRelative(face) == null || face == BlockFace.UP || (!this.isSolidTile(block.getRelative(face)) && (face == BlockFace.DOWN || block.getRelative(face).getType() != VanillaBlock.SLAB));

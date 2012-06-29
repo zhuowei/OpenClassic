@@ -207,7 +207,6 @@ public final class Minecraft implements Runnable {
 		if (canvas != null) {
 			try {
 				this.robot = new Robot();
-				return;
 			} catch (AWTException e) {
 				e.printStackTrace();
 			}
@@ -1721,8 +1720,7 @@ public final class Minecraft implements Runnable {
 													int length = 0;
 													while (this.running) {
 														length = in.read(data);
-														if (length < 0) return;
-
+														if (length < 0) break;
 														out.write(data, 0, length);
 													}
 												} catch (IOException e) {

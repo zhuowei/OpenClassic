@@ -297,9 +297,11 @@ public class ClassicClient implements Client {
 		level.name = info.getName();
 		level.creator = this.mc.data != null ? this.mc.data.username : "unknown";
 		level.createTime = System.currentTimeMillis();
-		level.setData(info.getWidth(), info.getHeight(), info.getDepth(), new byte[info.getWidth() * info.getHeight() * info.getDepth()]);
-		generator.generate(level.openclassic);
-
+		byte[] data = new byte[info.getWidth() * info.getHeight() * info.getDepth()];
+		level.setData(info.getWidth(), info.getHeight(), info.getDepth(), data);
+		generator.generate(level.openclassic, data);
+		level.setData(info.getWidth(), info.getHeight(), info.getDepth(), data);
+				
 		if(level.openclassic.getSpawn() == null) {
 			level.openclassic.setSpawn(generator.findSpawn(level.openclassic));
 		}

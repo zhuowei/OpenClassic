@@ -15,16 +15,8 @@ public final class ChunkDistanceComparator implements Comparator<com.mojang.mine
 	public int compare(Chunk chunk, Chunk other) {
 		float sqDist = chunk.distanceSquared(this.player);
 		float otherSqDist = other.distanceSquared(this.player);
-
-		/* if (sqDist > otherSqDist) {
-			return -1;
-		} else if (sqDist < otherSqDist) {
-			return 1;	
-		} else {
-			return 0;
-		} */
 		
-		if (sqDist >= otherSqDist) {
+		if (sqDist <= otherSqDist) {
 			return -1;
 		} else {
 			return 1;	

@@ -2,7 +2,9 @@ package com.mojang.minecraft.gamemode;
 
 import ch.spacebase.openclassic.api.OpenClassic;
 import ch.spacebase.openclassic.api.block.Block;
+import ch.spacebase.openclassic.api.block.BlockType;
 import ch.spacebase.openclassic.api.block.StepSound;
+import ch.spacebase.openclassic.api.block.VanillaBlock;
 import ch.spacebase.openclassic.api.entity.BlockEntity.BlockRemoveCause;
 import ch.spacebase.openclassic.api.event.EventFactory;
 import ch.spacebase.openclassic.api.event.block.BlockBreakEvent;
@@ -49,6 +51,7 @@ public class GameMode {
 			return;
 		}
 		
+		BlockType old = block != null ? block.getType() : VanillaBlock.STONE;
 		boolean var6 = this.mc.level.netSetTile(x, y, z, 0);
 		if (block != null && block.getType() != null && var6) {
 			if (this.mc.isConnected()) {
@@ -65,7 +68,7 @@ public class GameMode {
 				}
 			}
 			
-			ClientRenderHelper.getHelper().spawnDestructionParticles(block.getType(), this.mc.level, x, y, z, this.mc.particleManager);
+			ClientRenderHelper.getHelper().spawnDestructionParticles(old, this.mc.level, x, y, z, this.mc.particleManager);
 		}
 	}
 

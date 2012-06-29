@@ -18,7 +18,7 @@ public final class ChunkDirtyAndDistanceComparator implements Comparator<com.moj
 				float sqDist = chunk.distanceSquared(this.player);
 				float otherSqDist = other.distanceSquared(this.player);
 
-				if (sqDist >= otherSqDist) {
+				if (sqDist <= otherSqDist) {
 					return -1;
 				} else {
 					return 1;	
