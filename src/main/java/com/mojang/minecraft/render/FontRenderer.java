@@ -110,7 +110,9 @@ public final class FontRenderer {
 				ShapeRenderer.instance.vertexUV((x + var7) + var13, y + var13, 0.0F, (color + var13) / 128.0F, (var9 + var13) / 128.0F);
 				ShapeRenderer.instance.vertexUV((x + var7) + var13, y, 0.0F, (color + var13) / 128.0F, var9 / 128.0F);
 				ShapeRenderer.instance.vertexUV((x + var7), y, 0.0F, color / 128.0F, var9 / 128.0F);
-				var7 += this.font[chars[count]];
+				if (chars[count] < this.font.length) {
+					var7 += this.font[chars[count]];
+				}
 			}
 
 			ShapeRenderer.instance.end();
@@ -124,10 +126,10 @@ public final class FontRenderer {
 			char[] chars = string.toCharArray();
 			int width = 0;
 
-			for (int index = 0; index < chars.length; ++index) {
+			for (int index = 0; index < chars.length; index++) {
 				if (chars[index] == '&') {
 					index++;
-				} else {
+				} else if (chars[index] < this.font.length) {
 					width += this.font[chars[index]];
 				}
 			}

@@ -1869,7 +1869,7 @@ public final class Minecraft implements Runnable {
 							ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4);
 							GL11.glReadPixels(0, 0, width, height, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
 
-							File file = new File(this.dir, "screenshots/" + (new Date(System.currentTimeMillis()).toString().replaceAll(" ", "-")) + ".png");
+							File file = new File(this.dir, "screenshots/" + (new Date(System.currentTimeMillis()).toString().replaceAll(" ", "-").replaceAll(":", "-")) + ".png");
 							BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
 							for(int x = 0; x < width; x++) {
