@@ -25,7 +25,6 @@ import ch.spacebase.openclassic.client.cookie.CookieList;
 import ch.spacebase.openclassic.client.util.HTTPUtil;
 import ch.spacebase.openclassic.client.util.Server;
 
-import com.mojang.minecraft.Minecraft;
 import com.mojang.minecraft.MinecraftApplet;
 import com.mojang.minecraft.SessionData;
 import com.mojang.minecraft.render.TextureManager;
@@ -39,7 +38,8 @@ public class MinecraftStandalone {
 	private static String haspaid = "";
 
 	public static boolean debug;
-
+	public static JFrame frame;
+	
 	public static void main(String[] args) {
 		if (Arrays.asList(args).contains("debug"))
 			debug = true;
@@ -85,7 +85,7 @@ public class MinecraftStandalone {
 
 	public static void init(String user, String pass) {
 		final MinecraftApplet applet = new MinecraftApplet();
-		JFrame frame = new JFrame("Minecraft " + Minecraft.VERSION);
+		frame = new JFrame("Loading...");
 
 		try {
 			frame.setIconImage(ImageIO.read(TextureManager.class.getResourceAsStream("/icon.png")));

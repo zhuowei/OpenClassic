@@ -32,6 +32,7 @@ import ch.spacebase.openclassic.api.level.generator.Generator;
 import ch.spacebase.openclassic.api.plugin.Plugin;
 import ch.spacebase.openclassic.api.util.Constants;
 import ch.spacebase.openclassic.client.ClassicClient;
+import ch.spacebase.openclassic.client.MinecraftStandalone;
 import ch.spacebase.openclassic.client.gui.MainMenuScreen;
 import ch.spacebase.openclassic.client.player.ClientPlayer;
 import ch.spacebase.openclassic.client.render.ClientRenderHelper;
@@ -419,6 +420,9 @@ public final class Minecraft implements Runnable {
 			}
 
 			LWJGLNatives.load(os, lib);
+			if(MinecraftStandalone.frame != null) {
+				MinecraftStandalone.frame.setTitle("Minecraft " + Minecraft.VERSION);
+			}
 
 			File file = new File(this.dir, "levels");
 			if(!file.exists()) {

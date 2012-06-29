@@ -110,7 +110,7 @@ public final class Chunk {
 	}
 
 	public final void setChunkRendered(ClippingHelper check) {
-		this.chunkDirty = check.isChunkDirty(this.x, this.y, this.z, this.x + this.width, this.y + this.height, this.z + this.depth);
+		this.chunkDirty = check.checkClipping(this.x, this.y, this.z, this.x + this.width, this.y + this.height, this.z + this.depth);
 	}
 
 }

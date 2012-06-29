@@ -82,8 +82,8 @@ public class LWJGLNatives {
 		
 		DataOutputStream out = new DataOutputStream(new FileOutputStream(to));
 		
-		byte next;
-		while((next = (byte) in.read()) != -1) {
+		int next;
+		while((next = in.read()) != -1) {
 			out.write(next);
 		}
 		

@@ -83,7 +83,7 @@ public final class ClippingHelper {
 		var0[var1][3] /= var2;
 	}
 	
-	public boolean isChunkDirty(float x1, float y1, float z1, float x2, float y2, float z2) {
+	public boolean checkClipping(float x1, float y1, float z1, float x2, float y2, float z2) {
 		for (int var7 = 0; var7 < 6; ++var7) {
 			if (this.data[var7][0] * x1 + this.data[var7][1] * y1 + this.data[var7][2] * z1 + this.data[var7][3] <= 0.0F && this.data[var7][0] * x2 + this.data[var7][1] * y1 + this.data[var7][2] * z1 + this.data[var7][3] <= 0.0F && this.data[var7][0] * x1 + this.data[var7][1] * y2 + this.data[var7][2] * z1 + this.data[var7][3] <= 0.0F && this.data[var7][0] * x2 + this.data[var7][1] * y2 + this.data[var7][2] * z1 + this.data[var7][3] <= 0.0F && this.data[var7][0] * x1 + this.data[var7][1] * y1 + this.data[var7][2] * z2 + this.data[var7][3] <= 0.0F && this.data[var7][0] * x2 + this.data[var7][1] * y1 + this.data[var7][2] * z2 + this.data[var7][3] <= 0.0F && this.data[var7][0] * x1 + this.data[var7][1] * y2 + this.data[var7][2] * z2 + this.data[var7][3] <= 0.0F && this.data[var7][0] * x2 + this.data[var7][1] * y2 + this.data[var7][2] * z2 + this.data[var7][3] <= 0.0F) {
 				return false;
