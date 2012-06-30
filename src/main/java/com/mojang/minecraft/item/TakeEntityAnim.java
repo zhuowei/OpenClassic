@@ -14,10 +14,10 @@ public class TakeEntityAnim extends Entity {
 	private float yorg;
 	private float zorg;
 
-	public TakeEntityAnim(Level level, Entity item, Entity to) {
+	public TakeEntityAnim(Level level, Entity item, Entity player) {
 		super(level);
 		this.item = item;
-		this.player = to;
+		this.player = player;
 		this.setSize(1.0F, 1.0F);
 		this.xorg = item.x;
 		this.yorg = item.y;

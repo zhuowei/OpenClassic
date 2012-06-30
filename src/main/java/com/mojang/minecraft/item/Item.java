@@ -102,13 +102,11 @@ public class Item extends Entity {
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 	}
 
-	public void playerTouch(Entity var1) {
-		Player var2;
-		if ((var2 = (Player) var1).addResource(this.resource)) {
-			this.level.addEntity(new TakeEntityAnim(this.level, this, var2));
+	public void playerTouch(Entity entity) {
+		if (((Player) entity).addResource(this.resource)) {
+			this.level.addEntity(new TakeEntityAnim(this.level, this, entity));
 			this.remove();
 		}
-
 	}
 
 }

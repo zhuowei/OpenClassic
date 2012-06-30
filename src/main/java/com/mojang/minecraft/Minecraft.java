@@ -1178,7 +1178,7 @@ public final class Minecraft implements Runnable {
 											GL11.glScalef(0.4F, var34, var34);
 											GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
 											GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.textureManager.bindTexture("/terrain.png"));
-											var82.heldBlock.block.getModel().renderPreview();
+											var82.heldBlock.block.getModel().renderPreview(1);
 										} else {
 											var116.bindTexture(this.textureManager);
 											GL11.glScalef(1.0F, -1.0F, -1.0F);

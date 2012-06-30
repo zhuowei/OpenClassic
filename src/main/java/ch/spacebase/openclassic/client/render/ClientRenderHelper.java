@@ -169,7 +169,10 @@ public class ClientRenderHelper extends RenderHelper {
 	public void drawQuad(Quad quad, int x, int y, int z, float brightness) {
 		ShapeRenderer.instance.begin();
 		this.bindTexture(quad.getTexture().getParent().getTexture(), quad.getTexture().getParent().isInJar());
-		ShapeRenderer.instance.color(brightness, brightness, brightness);
+		
+		if(brightness >= 0) {
+			ShapeRenderer.instance.color(brightness, brightness, brightness);
+		}
 		
 		int y1 = quad.getTexture().getY1();
 		int y2 = quad.getTexture().getY2();
@@ -297,7 +300,7 @@ public class ClientRenderHelper extends RenderHelper {
 	}
 	
 	@Override
-	public void renderPreview(Model model) {
+	public void renderPreview(Model model, float brightness) {
 		ShapeRenderer.instance.begin();
 
 		for (int side = 0; side < model.getQuads().size(); ++side) {
@@ -325,7 +328,7 @@ public class ClientRenderHelper extends RenderHelper {
 				ShapeRenderer.instance.glNormal3f(-1, 0, 0);
 			}
 
-			model.getQuad(side).render(0, 0, 0, 1);
+			model.getQuad(side).render(0, 0, 0, brightness);
 		}
 
 		ShapeRenderer.instance.end();

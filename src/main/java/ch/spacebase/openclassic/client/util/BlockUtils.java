@@ -285,6 +285,8 @@ public class BlockUtils {
 					return 12;
 				case STONE:
 				case MOSSY_COBBLESTONE:
+				case SLAB:
+				case DOUBLE_SLAB:
 					return 20;
 				case COBBLESTONE:
 				case WOOD:
@@ -365,7 +367,7 @@ public class BlockUtils {
 		if (!level.creativeMode) {
 			int dropCount = getDropCount(Blocks.fromId(block));
 
-			for (int count = 0; count < dropCount; ++count) {
+			for (int count = 0; count < dropCount; count++) {
 				if (rand.nextFloat() <= chance) {
 					float xOffset = rand.nextFloat() * 0.7F + (1.0F - 0.7F) * 0.5F;
 					float yOffset = rand.nextFloat() * 0.7F + (1.0F - 0.7F) * 0.5F;

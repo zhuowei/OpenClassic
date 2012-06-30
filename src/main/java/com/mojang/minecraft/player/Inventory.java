@@ -99,9 +99,7 @@ public class Inventory implements Serializable {
 	public boolean addResource(int block) {
 		int slot = this.getFirstNotFull(block);
 		if (slot < 0) {
-			if(slot < 0) {
-				slot = this.getFirst(-1);
-			}
+			slot = this.getFirst(-1);
 		}
 
 		if (slot >= 0) {
@@ -128,8 +126,10 @@ public class Inventory implements Serializable {
 		if (slot < 0) {
 			return false;
 		} else {
-			if (this.count[slot]-- <= 0) {
+			this.count[slot]--;
+			if (this.count[slot] <= 0) {
 				this.slots[slot] = -1;
+				this.count[slot] = 0;
 			}
 
 			return true;
@@ -141,8 +141,10 @@ public class Inventory implements Serializable {
 		if (block != this.slots[slot]) {
 			return false;
 		} else {
-			if (this.count[slot]-- <= 0) {
+			this.count[slot]--;
+			if (this.count[slot] <= 0) {
 				this.slots[slot] = -1;
+				this.count[slot] = 0;
 			}
 
 			return true;

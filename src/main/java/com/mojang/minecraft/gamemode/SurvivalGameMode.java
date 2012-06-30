@@ -96,7 +96,7 @@ public final class SurvivalGameMode extends GameMode {
 		if (block == VanillaBlock.RED_MUSHROOM && this.mc.player.inventory.removeSelected(type)) {
 			player.hurt(null, 3);
 			return true;
-		} else if (block == VanillaBlock.BROWN_MUSHROOM && this.mc.player.inventory.removeResource(type)) {
+		} else if (block == VanillaBlock.BROWN_MUSHROOM && this.mc.player.inventory.removeSelected(type)) {
 			player.heal(5);
 			return true;
 		}

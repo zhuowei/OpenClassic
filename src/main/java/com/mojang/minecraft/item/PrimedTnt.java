@@ -74,14 +74,13 @@ public class PrimedTnt extends Entity {
 				this.level.particleEngine.spawnParticle(new SmokeParticle(this.level, this.x, this.y + 0.6F, this.z));
 			} else {
 				this.remove();
-				Random var1 = new Random();
-				float var2 = 4.0F;
-				this.level.explode((Entity) null, this.x, this.y, this.z, var2);
+				Random rand = new Random();
+				this.level.explode(null, this.x, this.y, this.z, 4.0F);
 
 				for (int var3 = 0; var3 < 100; ++var3) {
-					float var4 = (float) var1.nextGaussian() * var2 / 4.0F;
-					float var5 = (float) var1.nextGaussian() * var2 / 4.0F;
-					float var6 = (float) var1.nextGaussian() * var2 / 4.0F;
+					float var4 = (float) rand.nextGaussian();
+					float var5 = (float) rand.nextGaussian();
+					float var6 = (float) rand.nextGaussian();
 					float var7 = MathHelper.sqrt(var4 * var4 + var5 * var5 + var6 * var6);
 					float var8 = var4 / var7 / var7;
 					float var9 = var5 / var7 / var7;
@@ -93,41 +92,39 @@ public class PrimedTnt extends Entity {
 		}
 	}
 
-	public void playerTouch(Entity var1) {
+	public void playerTouch(Entity entity) {
 		if (this.defused) {
-			Player var2;
-			if ((var2 = (Player) var1).addResource(VanillaBlock.TNT.getId())) {
-				this.level.addEntity(new TakeEntityAnim(this.level, this, var2));
+			if (((Player) entity).addResource(VanillaBlock.TNT.getId())) {
+				this.level.addEntity(new TakeEntityAnim(this.level, this, entity));
 				this.remove();
 			}
-
 		}
 	}
 
 	public void render(TextureManager textures, float var2) {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textures.bindTexture("/terrain.png"));
-		float var4 = this.level.getBrightness((int) this.x, (int) this.y, (int) this.z);
+		float brightness = this.level.getBrightness((int) this.x, (int) this.y, (int) this.z);
 		GL11.glPushMatrix();
-		GL11.glColor4f(var4, var4, var4, 1.0F);
 		GL11.glTranslatef(this.xo + (this.x - this.xo) * var2 - 0.5F, this.yo + (this.y - this.yo) * var2 - 0.5F, this.zo + (this.z - this.zo) * var2 - 0.5F);
+		GL11.glColor4f(brightness, brightness, brightness, 1);
 		GL11.glPushMatrix();
-		VanillaBlock.TNT.getModel().renderPreview();
+		VanillaBlock.TNT.getModel().renderPreview(-1);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, ((this.life / 4 + 1) % 2) * 0.4F);
+		GL11.glColor4f(1, 1, 1, ((this.life / 4 + 1) % 2) * 0.4F);
 		if (this.life <= 16) {
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, ((this.life + 1) % 2) * 0.6F);
+			GL11.glColor4f(1, 1, 1, ((this.life + 1) % 2) * 0.6F);
 		}
 
 		if (this.life <= 2) {
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.9F);
+			GL11.glColor4f(1, 1, 1, 0.9F);
 		}
 
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-		VanillaBlock.TNT.getModel().renderPreview();
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		VanillaBlock.TNT.getModel().renderPreview(-1);
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glPopMatrix();
 		GL11.glPopMatrix();
