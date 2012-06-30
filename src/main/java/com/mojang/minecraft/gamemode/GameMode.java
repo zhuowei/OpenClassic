@@ -52,19 +52,19 @@ public class GameMode {
 		}
 		
 		BlockType old = block != null ? block.getType() : VanillaBlock.STONE;
-		boolean var6 = this.mc.level.netSetTile(x, y, z, 0);
-		if (block != null && block.getType() != null && var6) {
+		boolean success = this.mc.level.netSetTile(x, y, z, 0);
+		if (old != null && success) {
 			if (this.mc.isConnected()) {
 				this.mc.netManager.sendBlockChange(x, y, z, 0, this.mc.player.inventory.getSelected());
-			} else if(block.getType().getPhysics() != null) {
-				block.getType().getPhysics().onBreak(this.mc.level.openclassic.getBlockAt(x, y, z));
+			} else if(old.getPhysics() != null) {
+				old.getPhysics().onBreak(this.mc.level.openclassic.getBlockAt(x, y, z));
 			}
 
-			if (block.getType().getStepSound() != StepSound.NONE) {
-				if(block.getType().getStepSound() == StepSound.SAND) {
+			if (old.getStepSound() != StepSound.NONE) {
+				if(old.getStepSound() == StepSound.SAND) {
 					this.mc.level.playSound(StepSound.GRAVEL.getSound(), x, y, z, (StepSound.GRAVEL.getVolume() + 1.0F) / 2.0F, StepSound.GRAVEL.getPitch() * 0.8F);
 				} else {
-					this.mc.level.playSound(block.getType().getStepSound().getSound(), x, y, z, (block.getType().getStepSound().getVolume() + 1.0F) / 2.0F, block.getType().getStepSound().getPitch() * 0.8F);
+					this.mc.level.playSound(old.getStepSound().getSound(), x, y, z, (old.getStepSound().getVolume() + 1.0F) / 2.0F, old.getStepSound().getPitch() * 0.8F);
 				}
 			}
 			
