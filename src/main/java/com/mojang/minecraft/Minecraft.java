@@ -1543,7 +1543,7 @@ public final class Minecraft implements Runnable {
 										this.netManager.levelLoaded = true;
 									} else if (type == PacketType.CLIENT_SET_BLOCK) {
 										// Server is OpenClassic
-										this.openclassicServer = true;
+										this.openclassicServer = (Byte) params[4] == 1;
 										this.netManager.netHandler.send(PacketType.CLIENT_INFO, Constants.CLIENT_VERSION);
 									} else if (type == PacketType.SET_BLOCK) {
 										if (this.level != null) {
