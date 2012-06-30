@@ -114,7 +114,6 @@ import org.lwjgl.util.glu.GLU;
 
 public final class Minecraft implements Runnable {
 
-	public static final String VERSION = "0.31";
 	private static final Random rand = new Random();
 
 	public GameMode mode;
@@ -419,7 +418,7 @@ public final class Minecraft implements Runnable {
 
 			LWJGLNatives.load(os, lib);
 			if(MinecraftStandalone.frame != null) {
-				MinecraftStandalone.frame.setTitle("Minecraft " + Minecraft.VERSION);
+				MinecraftStandalone.frame.setTitle("Minecraft " + Constants.CLIENT_VERSION);
 			}
 
 			File file = new File(this.dir, "levels");
@@ -447,7 +446,7 @@ public final class Minecraft implements Runnable {
 				Display.setDisplayMode(new DisplayMode(this.width, this.height));
 			}
 
-			Display.setTitle("Minecraft " + VERSION);
+			Display.setTitle("Minecraft " + Constants.CLIENT_VERSION);
 
 			try {
 				Display.create();

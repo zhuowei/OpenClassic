@@ -3,6 +3,7 @@ package com.mojang.minecraft.gui;
 import ch.spacebase.openclassic.api.block.Blocks;
 import ch.spacebase.openclassic.api.gui.MainScreen;
 import ch.spacebase.openclassic.api.render.RenderHelper;
+import ch.spacebase.openclassic.api.util.Constants;
 
 import com.mojang.minecraft.Minecraft;
 import com.mojang.minecraft.ChatLine;
@@ -130,7 +131,7 @@ public final class HUDScreen implements MainScreen {
 			}
 		}
 
-		this.mc.fontRenderer.renderWithShadow(Minecraft.VERSION, 2, 2, 16777215);
+		this.mc.fontRenderer.renderWithShadow(Constants.CLIENT_VERSION, 2, 2, 16777215);
 		if (this.mc.settings.showFPS) {
 			this.mc.fontRenderer.renderWithShadow(this.mc.debugInfo, 2, 12, 16777215);
 		}

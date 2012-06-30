@@ -4,8 +4,7 @@ import ch.spacebase.openclassic.api.OpenClassic;
 import ch.spacebase.openclassic.api.gui.GuiScreen;
 import ch.spacebase.openclassic.api.gui.widget.Button;
 import ch.spacebase.openclassic.api.render.RenderHelper;
-
-import com.mojang.minecraft.Minecraft;
+import ch.spacebase.openclassic.api.util.Constants;
 
 /**
  * @author Steveice10 <Steveice10@gmail.com>
@@ -33,7 +32,7 @@ public class AboutScreen extends GuiScreen {
 		RenderHelper.getHelper().drawDirtBG();
 		
 		RenderHelper.getHelper().renderText("Minecraft Classic", this.getWidth() / 2, (this.getHeight() / 2) - 32);
-		RenderHelper.getHelper().renderText("Version " + Minecraft.VERSION, this.getWidth() / 2, (this.getHeight() / 2) - 21);
+		RenderHelper.getHelper().renderText("Version " + Constants.CLIENT_VERSION, this.getWidth() / 2, (this.getHeight() / 2) - 21);
 		RenderHelper.getHelper().renderText("Modded By Steveice10 (Steveice10@gmail.com)", this.getWidth() / 2, (this.getHeight() / 2) - 10);
 		super.render();
 	}
