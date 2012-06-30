@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 
 public final class ResourceDownloadThread extends Thread {
@@ -40,7 +41,9 @@ public final class ResourceDownloadThread extends Thread {
 			URL base = new URL("http://dl.dropbox.com/u/40737374/minecraft_resources/");
 			URL url = new URL(base, "resources/");
 			
-			reader = new BufferedReader(new InputStreamReader(url.openStream()));
+			URLConnection con = url.openConnection();
+			con.setConnectTimeout(20000);
+			reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
 			String line = null;
 
 			while ((line = reader.readLine()) != null)
