@@ -35,11 +35,22 @@
     		</developer>
   	</developers>
 
+       <distributionManagement>        
+                <repository>            
+                        <id>dropbox</id>                        
+                        <url>file:///home/steven/Dropbox/Public/maven</url>                      
+                </repository>           
+        </distributionManagement>
+
 	<repositories>
     		<repository>
         		<id>libs-mvn-repo</id>
         		<url>https://github.com/Steveice10/libs-mvn-repo/raw/master/releases</url>
     		</repository>
+              	<repository>
+                    	<id>spacebase</id>
+                    	<url>http://repo.spacebase.ch</url>
+              	</repository>
 	</repositories>
 
 	<!--  Dependencies -->

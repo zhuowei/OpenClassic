@@ -25,7 +25,7 @@ The Minecraft Classic client with many improvements and an implementation of the
 <b>Building the Source</b>
 --------
 
-The source has a maven script for required dependencies, so just run 'mvn clean install' in the project folder. OpenClassic does not have a Maven repository yet, so you will have to build the OpenClassicAPI before you build this.
+The source has a maven script for required dependencies, so just run 'mvn clean install' in the project folder.
 
 
 <b>License</b>
