@@ -65,7 +65,7 @@ import com.mojang.minecraft.player.InputHandler;
 import com.mojang.minecraft.player.Player;
 import com.mojang.minecraft.render.ClippingHelper;
 import com.mojang.minecraft.render.FontRenderer;
-import com.mojang.minecraft.render.EntityRenderer;
+import com.mojang.minecraft.render.Renderer;
 import com.mojang.minecraft.render.ShapeRenderer;
 import com.mojang.minecraft.render.TextureManager;
 import com.mojang.minecraft.render.LevelRenderer;
@@ -135,7 +135,7 @@ public final class Minecraft implements Runnable {
 	public FontRenderer fontRenderer;
 	public GuiScreen currentScreen = null;
 	public ProgressBarDisplay progressBar = new ProgressBarDisplay(this);
-	public EntityRenderer renderer = new EntityRenderer(this);
+	public Renderer renderer = new Renderer(this);
 	public LevelIO levelIo;
 	public ClientAudioManager audio;
 	public ResourceDownloadThread resourceThread;
@@ -606,7 +606,7 @@ public final class Minecraft implements Runnable {
 						if (!this.online) {
 							this.mode.applyBlockCracks(this.timer.time);
 							float var65 = this.timer.time;
-							com.mojang.minecraft.render.EntityRenderer var66 = this.renderer;
+							com.mojang.minecraft.render.Renderer var66 = this.renderer;
 							if (this.renderer.displayActive && !Display.isActive() && !Mouse.isButtonDown(0) && !Mouse.isButtonDown(1) && !Mouse.isButtonDown(2)) { // Fixed focus bug for some computers/OS's
 								this.displayMenu();
 							}
@@ -651,8 +651,8 @@ public final class Minecraft implements Runnable {
 								var70 = var86 - Mouse.getY() * var86 / this.height - 1;
 								if (this.level != null) {
 									float var80 = var65;
-									com.mojang.minecraft.render.EntityRenderer var82 = var66;
-									com.mojang.minecraft.render.EntityRenderer var27 = var66;
+									com.mojang.minecraft.render.Renderer var82 = var66;
+									com.mojang.minecraft.render.Renderer var27 = var66;
 									float var29 = (this.player = var66.mc.player).xRotO + (this.player.xRot - this.player.xRotO) * var65;
 									float var30 = this.player.yRotO + (this.player.yRot - this.player.yRotO) * var65;
 									com.mojang.minecraft.model.Vector var31 = var66.a(var65);
@@ -678,7 +678,7 @@ public final class Minecraft implements Runnable {
 									}
 
 									var71 = var31.add(var34 * var36, var33 * var36, var87 * var36);
-									var66.g = null;
+									var66.entity = null;
 									List<Entity> var37 = this.level.blockMap.getEntities(this.player, this.player.bb.expand(var34 * var36, var33 * var36, var87 * var36));
 									float var35 = 0.0F;
 
@@ -688,14 +688,14 @@ public final class Minecraft implements Runnable {
 											var74 = 0.1F;
 											MovingObjectPosition var78;
 											if ((var78 = var88.bb.grow(var74, var74, var74).clip(var31, var71)) != null && ((var74 = var31.distance(var78.blockPos)) < var35 || var35 == 0.0F)) {
-												var27.g = var88;
+												var27.entity = var88;
 												var35 = var74;
 											}
 										}
 									}
 
-									if (var27.g != null && !(this.mode instanceof CreativeGameMode)) {
-										var27.mc.selected = new MovingObjectPosition(var27.g);
+									if (var27.entity != null && !(this.mode instanceof CreativeGameMode)) {
+										var27.mc.selected = new MovingObjectPosition(var27.entity);
 									}
 
 									int var77 = 0;
@@ -720,42 +720,38 @@ public final class Minecraft implements Runnable {
 										var30 = (this.level.skyColor >> 16 & 255) / 255.0F;
 										float var117 = (this.level.skyColor >> 8 & 255) / 255.0F;
 										var32 = (this.level.skyColor & 255) / 255.0F;
-										var82.i = (this.level.fogColor >> 16 & 255) / 255.0F;
-										var82.j = (this.level.fogColor >> 8 & 255) / 255.0F;
-										var82.k = (this.level.fogColor & 255) / 255.0F;
-										var82.i += (var30 - var82.i) * var29;
-										var82.j += (var117 - var82.j) * var29;
-										var82.k += (var32 - var82.k) * var29;
-										var82.i *= var82.b;
-										var82.j *= var82.b;
-										var82.k *= var82.b;
+										var82.fogRed = (this.level.fogColor >> 16 & 255) / 255.0F;
+										var82.fogBlue = (this.level.fogColor >> 8 & 255) / 255.0F;
+										var82.fogGreen = (this.level.fogColor & 255) / 255.0F;
+										var82.fogRed += (var30 - var82.fogRed) * var29;
+										var82.fogBlue += (var117 - var82.fogBlue) * var29;
+										var82.fogGreen += (var32 - var82.fogGreen) * var29;
 										BlockType var73 = Blocks.fromId(this.level.getTile((int) this.player.x, (int) (this.player.y + 0.12F), (int) this.player.z));
 										if (var73 != null && var73.isLiquid()) {
 											if (var73 == VanillaBlock.WATER || var73 == VanillaBlock.STATIONARY_WATER) {
-												var82.i = 0.02F;
-												var82.j = 0.02F;
-												var82.k = 0.2F;
+												var82.fogRed = 0.02F;
+												var82.fogBlue = 0.02F;
+												var82.fogGreen = 0.2F;
 											} else if (var73 == VanillaBlock.LAVA || var73 == VanillaBlock.STATIONARY_LAVA) {
-												var82.i = 0.6F;
-												var82.j = 0.1F;
-												var82.k = 0.0F;
+												var82.fogRed = 0.6F;
+												var82.fogBlue = 0.1F;
+												var82.fogGreen = 0.0F;
 											}
 										}
 
 										if (var82.mc.settings.anaglyph) {
-											var74 = (var82.i * 30.0F + var82.j * 59.0F + var82.k * 11.0F) / 100.0F;
-											var33 = (var82.i * 30.0F + var82.j * 70.0F) / 100.0F;
-											var34 = (var82.i * 30.0F + var82.k * 70.0F) / 100.0F;
-											var82.i = var74;
-											var82.j = var33;
-											var82.k = var34;
+											var74 = (var82.fogRed * 30.0F + var82.fogBlue * 59.0F + var82.fogGreen * 11.0F) / 100.0F;
+											var33 = (var82.fogRed * 30.0F + var82.fogBlue * 70.0F) / 100.0F;
+											var34 = (var82.fogRed * 30.0F + var82.fogGreen * 70.0F) / 100.0F;
+											var82.fogRed = var74;
+											var82.fogBlue = var33;
+											var82.fogGreen = var34;
 										}
 
-										GL11.glClearColor(var82.i, var82.j, var82.k, 0.0F);
+										GL11.glClearColor(var82.fogRed, var82.fogBlue, var82.fogGreen, 0.0F);
 										GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_COLOR_BUFFER_BIT);
-										var82.b = 1.0F;
 										GL11.glEnable(GL11.GL_CULL_FACE);
-										var82.d = (512 >> (var82.mc.settings.viewDistance << 1));
+										var82.fogEnd = (512 >> (var82.mc.settings.viewDistance << 1));
 										GL11.glMatrixMode(GL11.GL_PROJECTION);
 										GL11.glLoadIdentity();
 										var29 = 0.07F;
@@ -770,16 +766,16 @@ public final class Minecraft implements Runnable {
 											var69 /= (1.0F - 500.0F / (var74 + 500.0F)) * 2.0F + 1.0F;
 										}
 
-										GLU.gluPerspective(var69, (float) var82.mc.width / (float) var82.mc.height, 0.05F, var82.d);
+										GLU.gluPerspective(var69, (float) var82.mc.width / (float) var82.mc.height, 0.05F, var82.fogEnd);
 										GL11.glMatrixMode(GL11.GL_MODELVIEW);
 										GL11.glLoadIdentity();
 										if (var82.mc.settings.anaglyph) {
 											GL11.glTranslatef(((var77 << 1) - 1) * 0.1F, 0.0F, 0.0F);
 										}
 
-										var82.b(var80);
+										var82.hurtEffect(var80);
 										if (var82.mc.settings.viewBobbing) {
-											var82.c(var80);
+											var82.applyBobbing(var80);
 										}
 
 										var116 = var82.mc.player;
@@ -860,10 +856,10 @@ public final class Minecraft implements Runnable {
 											}
 										}
 
-										var82.a(true);
+										var82.setLighting(true);
 										com.mojang.minecraft.model.Vector var103 = var82.a(var80);
 										this.levelRenderer.level.blockMap.render(var103, var76, this.levelRenderer.textureManager, var80);
-										var82.a(false);
+										var82.setLighting(false);
 										var82.renderFog();
 										float var107 = var80;
 										ParticleManager var96 = this.particleManager;
@@ -1132,8 +1128,8 @@ public final class Minecraft implements Runnable {
 											GL11.glDisable(GL11.GL_BLEND);
 										}
 
-										if (var82.g != null) {
-											var82.g.renderHover(var82.mc.textureManager, var80);
+										if (var82.entity != null) {
+											var82.entity.renderHover(var82.mc.textureManager, var80);
 										}
 
 										GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
@@ -1142,9 +1138,9 @@ public final class Minecraft implements Runnable {
 											GL11.glTranslatef(((var77 << 1) - 1) * 0.1F, 0.0F, 0.0F);
 										}
 
-										var82.b(var80);
+										var82.hurtEffect(var80);
 										if (var82.mc.settings.viewBobbing) {
-											var82.c(var80);
+											var82.applyBobbing(var80);
 										}
 
 										var117 = var82.heldBlock.lastPosition + (var82.heldBlock.heldPosition - var82.heldBlock.lastPosition) * var80;
@@ -1152,7 +1148,7 @@ public final class Minecraft implements Runnable {
 										GL11.glPushMatrix();
 										GL11.glRotatef(var116.xRotO + (var116.xRot - var116.xRotO) * var80, 1.0F, 0.0F, 0.0F);
 										GL11.glRotatef(var116.yRotO + (var116.yRot - var116.yRotO) * var80, 0.0F, 1.0F, 0.0F);
-										var82.heldBlock.mc.renderer.a(true);
+										var82.heldBlock.mc.renderer.setLighting(true);
 										GL11.glPopMatrix();
 										GL11.glPushMatrix();
 										var69 = 0.8F;
@@ -1195,7 +1191,7 @@ public final class Minecraft implements Runnable {
 
 										GL11.glDisable(GL11.GL_NORMALIZE);
 										GL11.glPopMatrix();
-										var82.heldBlock.mc.renderer.a(false);
+										var82.heldBlock.mc.renderer.setLighting(false);
 										if (!var82.mc.settings.anaglyph) {
 											break;
 										}
@@ -1212,7 +1208,7 @@ public final class Minecraft implements Runnable {
 									GL11.glLoadIdentity();
 									GL11.glMatrixMode(GL11.GL_MODELVIEW);
 									GL11.glLoadIdentity();
-									var66.a();
+									var66.reset();
 								}
 
 								if (this.currentScreen != null) {

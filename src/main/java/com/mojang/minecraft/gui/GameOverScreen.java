@@ -23,9 +23,11 @@ public final class GameOverScreen extends GuiScreen {
 		Minecraft mc = GeneralUtils.getMinecraft();
 		
 		if (button.getId() == 0) {
-			mc.player.inventory.count = new int[9];
-			mc.player.inventory.slots = new int[9];
-			mc.player.inventory.popTime = new int[9];
+			for(int slot = 0; slot < 9; slot++) {
+				mc.player.inventory.slots[slot] = -1;
+				mc.player.inventory.count[slot] = 0;
+			}
+			
 			mc.player.airSupply = 20;
 			mc.player.arrows = 20;
 			mc.player.deathTime = 0;

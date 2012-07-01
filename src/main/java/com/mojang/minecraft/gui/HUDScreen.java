@@ -34,7 +34,7 @@ public final class HUDScreen implements MainScreen {
 	}
 
 	public final void render(float var1, boolean focus, int mouseX, int mouseY) {
-		this.mc.renderer.a();
+		this.mc.renderer.reset();
 		RenderHelper.getHelper().bindTexture("/gui/gui.png", true);
 		GL11.glColor4f(1, 1, 1, 1);
 		GL11.glEnable(GL11.GL_BLEND);
