@@ -76,6 +76,8 @@ public class ClientAudioManager implements AudioManager {
 	public void registerMusic(String music, URL file) {
 		if(!this.music.containsKey(music)) this.music.put(music, new ArrayList<URL>());
 		this.music.get(music).add(file);
+		this.system.backgroundMusic(music, file, file.getFile(), false);
+		this.system.backgroundMusic(music + "_loop", file, file.getFile(), true);
 	}
 	
 	public boolean playSound(String sound, float x, float y, float z, float volume, float pitch) {
@@ -122,10 +124,7 @@ public class ClientAudioManager implements AudioManager {
 				this.stopMusic();
 			}
 			
-			URL file = files.get(rand.nextInt(files.size()));
-			this.system.backgroundMusic(music, file, file.getFile(), loop);
-			this.system.setTemporary(music, true);
-			this.system.play(music);
+			this.system.play(music + (loop ? "_loop" : ""));
 			return true;
 		}
 		
@@ -134,7 +133,7 @@ public class ClientAudioManager implements AudioManager {
 	
 	public boolean isPlayingMusic() {
 		for(String music : this.music.keySet()) {
-			if(this.system.playing(music)) return true;
+			if(this.isPlaying(music)) return true;
 		}
 		
 		return false;
@@ -147,11 +146,12 @@ public class ClientAudioManager implements AudioManager {
 	}
 	
 	public boolean isPlaying(String music) {
-		return this.system.playing(music);
+		return this.system.playing(music) || this.system.playing(music + "_loop");
 	}
 	
 	public void stop(String music) {
 		this.system.stop(music);
+		this.system.stop(music + "_loop");
 	}
 	
 }

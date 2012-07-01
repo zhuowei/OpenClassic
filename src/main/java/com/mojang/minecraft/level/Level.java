@@ -247,24 +247,24 @@ public class Level implements Serializable {
 		}
 	}
 
-	public boolean setTileNoNeighborChange(int var1, int var2, int var3, int var4) {
-		return this.networkMode ? false : this.netSetTileNoNeighborChange(var1, var2, var3, var4);
+	public boolean setTileNoNeighborChange(int x, int y, int z, int type) {
+		return this.networkMode ? false : this.netSetTileNoNeighborChange(x, y, z, type);
 	}
 
-	public boolean netSetTileNoNeighborChange(int var1, int var2, int var3, int var4) {
-		if (var1 >= 0 && var2 >= 0 && var3 >= 0 && var1 < this.width && var2 < this.depth && var3 < this.height) {
-			if (var4 == this.blocks[(var2 * this.height + var3) * this.width + var1]) {
+	public boolean netSetTileNoNeighborChange(int x, int y, int z, int type) {
+		if (x >= 0 && y >= 0 && z >= 0 && x < this.width && y < this.depth && z < this.height) {
+			if (type == this.blocks[(y * this.height + z) * this.width + x]) {
 				return false;
 			} else {
-				if (var4 == 0 && (var1 == 0 || var3 == 0 || var1 == this.width - 1 || var3 == this.height - 1) && var2 >= this.getGroundLevel() && var2 < this.getWaterLevel()) {
-					var4 = VanillaBlock.WATER.getId();
+				if (type == 0 && (x == 0 || z == 0 || x == this.width - 1 || z == this.height - 1) && y >= this.getGroundLevel() && y < this.getWaterLevel()) {
+					type = VanillaBlock.WATER.getId();
 				}
 
-				this.blocks[(var2 * this.height + var3) * this.width + var1] = (byte) var4;
-				this.calcLightDepths(var1, var3, 1, 1);
+				this.blocks[(y * this.height + z) * this.width + x] = (byte) type;
+				this.calcLightDepths(x, z, 1, 1);
 
-				for (var4 = 0; var4 < this.renderers.size(); ++var4) {
-					this.renderers.get(var4).addChunks(var1 - 1, var2 - 1, var3 - 1, var1 + 1, var2 + 1, var3 + 1);
+				for (type = 0; type < this.renderers.size(); ++type) {
+					this.renderers.get(type).addChunks(x - 1, y - 1, z - 1, x + 1, y + 1, z + 1);
 				}
 
 				return true;
@@ -274,11 +274,11 @@ public class Level implements Serializable {
 		}
 	}
 
-	public boolean setTile(int var1, int var2, int var3, int var4) {
+	public boolean setTile(int x, int y, int z, int type) {
 		if (this.networkMode) {
 			return false;
-		} else if (this.setTileNoNeighborChange(var1, var2, var3, var4)) {
-			this.updateNeighborsAt(var1, var2, var3, var4);
+		} else if (this.setTileNoNeighborChange(x, y, z, type)) {
+			this.updateNeighborsAt(x, y, z, type);
 			return true;
 		} else {
 			return false;

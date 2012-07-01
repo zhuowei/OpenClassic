@@ -9,11 +9,18 @@ import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 
+import com.mojang.minecraft.Minecraft.OS;
 import com.mojang.minecraft.render.TextureManager;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import javax.swing.JCheckBox;
 
 public class Login extends JFrame {
 
@@ -58,10 +65,62 @@ public class Login extends JFrame {
 		passwordField.setBounds(88, 26, 131, 25);
 		contentPane.add(passwordField);
 		
+		BufferedReader reader = null;
+		
+		try {
+			reader = new BufferedReader(new FileReader(this.getLoginFile()));
+			String line = "";
+			while((line = reader.readLine()) != null) {
+				if(this.textField.getText().equals("")) {
+					this.textField.setText(line);
+				} else if(String.valueOf(this.passwordField.getPassword()).equals("")) {
+					this.passwordField.setText(line);
+					break;
+				}
+			}
+		} catch(IOException e) {
+			System.out.println("Failed to check login file.");
+			e.printStackTrace();
+		} finally {
+			if(reader != null) {
+				try {
+					reader.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		final JCheckBox chckbxRemember = new JCheckBox("Remember");
+		chckbxRemember.setBounds(16, 58, 115, 18);
+		contentPane.add(chckbxRemember);
+		
 		JButton btnLogin = new JButton("Login");
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
+				if(chckbxRemember.isSelected()) {
+					BufferedWriter writer = null;
+					
+					try {
+						writer = new BufferedWriter(new FileWriter(getLoginFile()));
+						writer.write(textField.getText());
+						writer.newLine();
+						writer.write(String.valueOf(passwordField.getPassword()));
+					} catch (IOException e1) {
+						System.out.println("Failed to create login remember file.");
+						e1.printStackTrace();
+					} finally {
+						if(writer != null) {
+							try {
+								writer.close();
+							} catch(IOException e1) {
+								e1.printStackTrace();
+							}
+						}
+					}
+				}
+				
 				MinecraftStandalone.init(textField.getText(), String.valueOf(passwordField.getPassword()));
 				dispose();
 			}
@@ -71,5 +130,42 @@ public class Login extends JFrame {
 		contentPane.add(btnLogin);
 		getRootPane().setDefaultButton(btnLogin);
 	}
+	
+	private File getLoginFile() {
+		File dir = null;
+		switch (OS.lookup(System.getProperty("os.name").toLowerCase())) {
+		case linux:
+		case solaris:
+			dir = new File(System.getProperty("user.home", "."), ".minecraft_classic/");
+			break;
+		case windows:
+			if (System.getenv("APPDATA") != null) {
+				dir = new File(System.getenv("APPDATA"), ".minecraft_classic/");
+			} else {
+				dir = new File(System.getProperty("user.home", "."), ".minecraft_classic/");
+			}
+			break;
+		case macos:
+			dir = new File(System.getProperty("user.home", "."), "Library/Application Support/minecraft_classic");
+			break;
+		default:
+			dir = new File(System.getProperty("user.home", "."), "minecraft_classic/");
+		}
 
+		if (!dir.exists() && !dir.mkdirs()) {
+			throw new RuntimeException("The working directory could not be created: " + dir);
+		}
+		
+		File file = new File(dir, ".login");
+		if(!file.exists()) {
+			try {
+				file.createNewFile();
+			} catch (IOException e1) {
+				System.out.println("Failed to create login remember file.");
+				e1.printStackTrace();
+			}
+		}
+		
+		return file;
+	}
 }

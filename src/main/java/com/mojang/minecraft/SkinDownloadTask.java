@@ -8,15 +8,16 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import javax.imageio.ImageIO;
 
-public final class SkinDownloadThread extends Thread {
+public final class SkinDownloadTask implements Runnable {
 
 	private Minecraft mc;
 
-	public SkinDownloadThread(Minecraft mc) {
+	public SkinDownloadTask(Minecraft mc) {
 		this.mc = mc;
 	}
 
-	public final void run() {
+	@Override
+	public void run() {
 		if (this.mc.data != null) {
 			HttpURLConnection conn = null;
 

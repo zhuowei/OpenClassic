@@ -87,7 +87,7 @@ public class ServerListScreen extends GuiScreen {
 			mc.data.haspaid = Boolean.valueOf(HTTPUtil.getParameterOffPage(page, "haspaid"));
 			mc.server = HTTPUtil.getParameterOffPage(page, "server");
 			mc.port = Integer.parseInt(HTTPUtil.getParameterOffPage(page, "port"));
-			
+
 			mc.initGame();
 			mc.setCurrentScreen(null);
 		}

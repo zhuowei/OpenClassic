@@ -68,7 +68,6 @@ public class Player extends Mob {
 			this.level.player = this;
 		}
 
-		this.health = MAX_HEALTH;
 		this.deathTime = 0;
 	}
 

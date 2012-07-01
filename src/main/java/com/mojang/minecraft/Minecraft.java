@@ -323,7 +323,6 @@ public final class Minecraft implements Runnable {
 	public void initGame(Generator gen) {
 		this.audio.stopMusic();
 		this.audio.lastBGM = System.currentTimeMillis();
-
 		if (this.server != null && this.data != null) {
 			Level level = new Level();
 			level.setData(8, 8, 8, new byte[512]);
@@ -361,14 +360,14 @@ public final class Minecraft implements Runnable {
 		}
 		
 		this.hud = new HUDScreen(this, this.width, this.height);
-		(new SkinDownloadThread(this)).start();
+		
+		OpenClassic.getGame().getScheduler().scheduleTask(this, new SkinDownloadTask(this));
 		if (this.server != null && this.data != null) {
 			this.netManager = new NetworkManager(this, this.server, this.port, this.data.username, this.data.key);
 			this.hacks = false;
 		}
-
+		
 		this.mode = this.settings.survival && this.netManager == null ? new SurvivalGameMode(this) : new CreativeGameMode(this);
-
 		if(this.level != null) {
 			this.mode.apply(this.level);
 		}
@@ -1246,8 +1245,6 @@ public final class Minecraft implements Runnable {
 			}
 
 			return;
-		} catch (StopGameException e) {
-			System.exit(0);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

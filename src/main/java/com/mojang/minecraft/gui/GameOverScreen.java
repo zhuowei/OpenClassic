@@ -7,6 +7,7 @@ import ch.spacebase.openclassic.api.render.RenderHelper;
 import ch.spacebase.openclassic.client.util.GeneralUtils;
 
 import com.mojang.minecraft.Minecraft;
+import com.mojang.minecraft.player.Player;
 
 import org.lwjgl.opengl.GL11;
 
@@ -28,6 +29,7 @@ public final class GameOverScreen extends GuiScreen {
 			mc.player.airSupply = 20;
 			mc.player.arrows = 20;
 			mc.player.deathTime = 0;
+			mc.player.health = Player.MAX_HEALTH;
 			mc.player.resetPos();
 			
 			OpenClassic.getClient().setCurrentScreen(null);

@@ -4,7 +4,6 @@ import ch.spacebase.openclassic.api.ProgressBar;
 import ch.spacebase.openclassic.client.render.ClientRenderHelper;
 
 import com.mojang.minecraft.Minecraft;
-import com.mojang.minecraft.StopGameException;
 import com.mojang.minecraft.render.ShapeRenderer;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
@@ -23,7 +22,7 @@ public final class ProgressBarDisplay implements ProgressBar {
 
 	public final void setTitle(String title) {
 		if (!this.mc.running) {
-			throw new StopGameException();
+			return;
 		} else {
 			this.title = title;
 			int x = this.mc.width * 240 / this.mc.height;
@@ -45,7 +44,7 @@ public final class ProgressBarDisplay implements ProgressBar {
 	
 	public final void setText(String text, boolean update) {
 		if (!this.mc.running) {
-			throw new StopGameException();
+			return;
 		} else {
 			this.text = text;
 			if(update) this.setProgress(-1);
@@ -54,7 +53,7 @@ public final class ProgressBarDisplay implements ProgressBar {
 
 	public final void setProgress(int progress) {
 		if (!this.mc.running) {
-			throw new StopGameException();
+			return;
 		} else {
 			if (System.currentTimeMillis() - this.start < 0 || System.currentTimeMillis() - this.start >= 20) {
 				this.start = System.currentTimeMillis();
