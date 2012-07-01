@@ -117,7 +117,6 @@ public final class Minecraft implements Runnable {
 	private static final Random rand = new Random();
 
 	public GameMode mode;
-	private boolean fullscreen = false;
 	public int width;
 	public int height;
 	private Timer timer = new Timer(20);
@@ -126,9 +125,7 @@ public final class Minecraft implements Runnable {
 	public Player player;
 	public ParticleManager particleManager;
 	public SessionData data = null;
-	public String host;
 	public Canvas canvas;
-	public boolean noLevel = false;
 	public volatile boolean stopping = false;
 	private Cursor cursor;
 	public TextureManager textureManager;
@@ -147,7 +144,6 @@ public final class Minecraft implements Runnable {
 	public NetworkManager netManager;
 	public MovingObjectPosition selected;
 	public GameSettings settings;
-	private MinecraftApplet applet;
 	public String server;
 	public int port;
 	public volatile boolean running;
@@ -173,7 +169,7 @@ public final class Minecraft implements Runnable {
 		BlockType type = VanillaBlock.AIR;
 	}
 
-	public Minecraft(Canvas canvas, MinecraftApplet applet, int width, int height, boolean fullscreen) {
+	public Minecraft(Canvas canvas, int width, int height) {
 		this.levelIo = new LevelIO(this.progressBar);
 		this.ticks = 0;
 		this.blockHitTime = 0;
@@ -198,11 +194,9 @@ public final class Minecraft implements Runnable {
 			e.printStackTrace();
 		}
 
-		this.applet = applet;
 		this.canvas = canvas;
 		this.width = width;
 		this.height = height;
-		this.fullscreen = fullscreen;
 		if (canvas != null) {
 			try {
 				this.robot = new Robot();
@@ -226,20 +220,14 @@ public final class Minecraft implements Runnable {
 			if (this.hasMouse) {
 				this.player.releaseAllKeys();
 				this.hasMouse = false;
-				if (this.noLevel) {
-					try {
-						Mouse.setNativeCursor(null);
-					} catch (LWJGLException e) {
-						e.printStackTrace();
-					}
-				} else {
-					Mouse.setGrabbed(false);
+				try {
+					Mouse.setNativeCursor(null);
+				} catch (LWJGLException e) {
+					e.printStackTrace();
 				}
 			}
 
-			int width = this.width * 240 / this.height;
-			int height = this.height * 240 / this.height;
-			screen.open(width, height);
+			screen.open(this.width, this.height);
 			this.online = false;
 		} else {
 			this.grabMouse();
@@ -280,15 +268,6 @@ public final class Minecraft implements Runnable {
 		this.audio.stopMusic();
 
 		if(menu) this.setCurrentScreen(new MainMenuScreen());
-
-		if(!this.noLevel && this.level != null) {
-			try {
-				this.levelIo.save(this.level);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
 		if(this.data != null) this.data.key = "";
 
 		this.level = null;
@@ -328,17 +307,6 @@ public final class Minecraft implements Runnable {
 			level.setData(8, 8, 8, new byte[512]);
 			this.setLevel(level);
 		} else {
-			try {
-				if (!this.noLevel) {
-					Level level = this.levelIo.load("level");
-					if (level != null) {
-						this.setLevel(level);
-					}
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
 			if (this.level == null) {
 				this.progressBar.setTitle("Generating...");
 				this.progressBar.setText("");
@@ -349,14 +317,12 @@ public final class Minecraft implements Runnable {
 		}
 
 		this.particleManager = new ParticleManager(this.level, this.textureManager);
-		if (this.noLevel) {
-			try {
-				IntBuffer buffer = BufferUtils.createIntBuffer(256);
-				buffer.clear().limit(256);
-				this.cursor = new Cursor(16, 16, 0, 0, 1, buffer, null);
-			} catch (LWJGLException e) {
-				e.printStackTrace();
-			}
+		try {
+			IntBuffer buffer = BufferUtils.createIntBuffer(256);
+			buffer.clear().limit(256);
+			this.cursor = new Cursor(16, 16, 0, 0, 1, buffer, null);
+		} catch (LWJGLException e) {
+			e.printStackTrace();
 		}
 		
 		this.hud = new HUDScreen(this, this.width, this.height);
@@ -437,10 +403,6 @@ public final class Minecraft implements Runnable {
 
 			if (this.canvas != null) {
 				Display.setParent(this.canvas);
-			} else if (this.fullscreen) {
-				Display.setFullscreen(true);
-				this.width = Display.getDisplayMode().getWidth();
-				this.height = Display.getDisplayMode().getHeight();
 			} else {
 				if(MinecraftStandalone.frame != null) {
 					this.width = MinecraftStandalone.frame.getWidth();
@@ -545,6 +507,12 @@ public final class Minecraft implements Runnable {
 				} else {
 					if (this.canvas == null && Display.isCloseRequested()) {
 						this.running = false;
+						continue;
+					}
+					
+					if(!Display.isFullscreen() && (this.canvas.getWidth() != Display.getDisplayMode().getWidth() || this.canvas.getHeight() != Display.getDisplayMode().getHeight())) {
+						Display.setDisplayMode(new DisplayMode(this.canvas.getWidth(), this.canvas.getHeight()));
+						this.resize();
 					}
 
 					if(!this.started) {
@@ -617,43 +585,34 @@ public final class Minecraft implements Runnable {
 							}
 
 							var66.displayActive = Display.isActive();
-							int var68;
-							int var70;
-							int var86;
-							int var81;
 							if (this.hasMouse) {
-								var81 = 0;
-								var86 = 0;
-								if (this.noLevel) {
-									if (this.canvas != null) {
-										Point var90 = this.canvas.getLocationOnScreen();
-										var70 = var90.x + this.width / 2;
-										var68 = var90.y + this.height / 2;
-										Point var75 = MouseInfo.getPointerInfo().getLocation();
-										var81 = var75.x - var70;
-										var86 = -(var75.y - var68);
-										this.robot.mouseMove(var70, var68);
-									} else {
-										Mouse.setCursorPosition(this.width / 2, this.height / 2);
-									}
+								int x = 0;
+								int y = 0;
+								if (this.canvas != null) {
+									Point canvas = this.canvas.getLocationOnScreen();
+									int canvasCenterX = canvas.x + this.width / 2;
+									int canvasCenterY = canvas.y + this.height / 2;
+									Point mouse = MouseInfo.getPointerInfo().getLocation();
+									x = mouse.x - canvasCenterX;
+									y = -(mouse.y - canvasCenterY);
+									this.robot.mouseMove(canvasCenterX, canvasCenterY);
 								} else {
-									var81 = Mouse.getDX();
-									var86 = Mouse.getDY();
+									Mouse.setCursorPosition(this.width / 2, this.height / 2);
 								}
 
-								byte var91 = 1;
+								byte direction = 1;
 								if (this.settings.invertMouse) {
-									var91 = -1;
+									direction = -1;
 								}
 
-								this.player.turn(var81, (var86 * var91));
+								this.player.turn(x, (y * direction));
 							}
 
 							if (!this.online) {
-								var81 = this.width * 240 / this.height;
-								var86 = this.height * 240 / this.height;
-								int var94 = Mouse.getX() * var81 / this.width;
-								var70 = var86 - Mouse.getY() * var86 / this.height - 1;
+								int width = this.width * 240 / this.height;
+								int height = this.height * 240 / this.height;
+								int var94 = Mouse.getX() * width / this.width;
+								int var70 = height - Mouse.getY() * height / this.height - 1;
 								if (this.level != null) {
 									float var80 = var65;
 									com.mojang.minecraft.render.Renderer var82 = var66;
@@ -687,8 +646,8 @@ public final class Minecraft implements Runnable {
 									List<Entity> var37 = this.level.blockMap.getEntities(this.player, this.player.bb.expand(var34 * var36, var33 * var36, var87 * var36));
 									float var35 = 0.0F;
 
-									for (var81 = 0; var81 < var37.size(); ++var81) {
-										Entity var88 = var37.get(var81);
+									for (int count = 0; count < var37.size(); ++count) {
+										Entity var88 = var37.get(count);
 										if (var88.isPickable()) {
 											var74 = 0.1F;
 											MovingObjectPosition var78;
@@ -922,7 +881,7 @@ public final class Minecraft implements Runnable {
 										var115.begin();
 										var115.color(var107, var29, var30);
 
-										for (var86 = -2048; var86 < this.levelRenderer.level.width + 2048; var86 += 512) {
+										for (int var86 = -2048; var86 < this.levelRenderer.level.width + 2048; var86 += 512) {
 											for (var125 = -2048; var125 < this.levelRenderer.level.height + 2048; var125 += 512) {
 												var115.vertexUV(var86, var74, (var125 + 512), var86 * var33 + var34, (var125 + 512) * var33);
 												var115.vertexUV((var86 + 512), var74, (var125 + 512), (var86 + 512) * var33 + var34, (var125 + 512) * var33);
@@ -954,7 +913,7 @@ public final class Minecraft implements Runnable {
 										var74 = (this.levelRenderer.level.depth + 10);
 
 										for (var125 = -2048; var125 < this.levelRenderer.level.width + 2048; var125 += 512) {
-											for (var68 = -2048; var68 < this.levelRenderer.level.height + 2048; var68 += 512) {
+											for (int var68 = -2048; var68 < this.levelRenderer.level.height + 2048; var68 += 512) {
 												var115.vertex(var125, var74, var68);
 												var115.vertex((var125 + 512), var74, var68);
 												var115.vertex((var125 + 512), var74, (var68 + 512));
@@ -998,7 +957,7 @@ public final class Minecraft implements Runnable {
 													var73 = VanillaBlock.STONE;
 												}
 
-												for (var86 = 0; var86 < var73.getModel().getQuads().size(); ++var86) {
+												for (int var86 = 0; var86 < var73.getModel().getQuads().size(); ++var86) {
 													ClientRenderHelper.getHelper().drawCracks(var73.getModel().getQuad(var86), var102.x, var102.y, var102.z, 240 + (int) (this.levelRenderer.cracks * 10.0F));
 												}
 
@@ -1099,7 +1058,7 @@ public final class Minecraft implements Runnable {
 											for (var110 = var104 - 5; var110 <= var104 + 5; ++var110) {
 												for (var122 = var114 - 5; var122 <= var114 + 5; ++var122) {
 													var120 = var109.getHighestTile(var110, var122);
-													var86 = var108 - 5;
+													int var86 = var108 - 5;
 													var125 = var108 + 5;
 													if (var86 < var120) {
 														var86 = var120;
@@ -1256,19 +1215,11 @@ public final class Minecraft implements Runnable {
 	public final void grabMouse() {
 		if (!this.hasMouse) {
 			this.hasMouse = true;
-			if (this.noLevel) {
-				try {
-					Mouse.setNativeCursor(this.cursor);
-					Mouse.setCursorPosition(this.width / 2, this.height / 2);
-				} catch (LWJGLException e) {
-					e.printStackTrace();
-				}
-
-				if (this.canvas == null) {
-					this.canvas.requestFocus();
-				}
-			} else {
-				Mouse.setGrabbed(true);
+			try {
+				Mouse.setNativeCursor(this.cursor);
+				Mouse.setCursorPosition(this.width / 2, this.height / 2);
+			} catch (LWJGLException e) {
+				e.printStackTrace();
 			}
 
 			this.setCurrentScreen(null);
@@ -1796,6 +1747,124 @@ public final class Minecraft implements Runnable {
 			this.setCurrentScreen(null);
 		}
 
+		while (Keyboard.next()) {
+			this.player.setKey(Keyboard.getEventKey(), Keyboard.getEventKeyState());
+			if (Keyboard.getEventKeyState()) {
+				if (this.currentScreen != null) {
+					if (Keyboard.getEventKeyState()) {
+						this.currentScreen.onKeyPress(Keyboard.getEventCharacter(), Keyboard.getEventKey());
+					}
+				}
+				
+				if(Keyboard.getEventKey() == Keyboard.KEY_F6) {
+					if(Display.isFullscreen()) {
+						try {
+							Display.setFullscreen(false);
+							Display.setDisplayMode(new DisplayMode(854, 480));
+						} catch (LWJGLException e) {
+							e.printStackTrace();
+						}
+					} else {
+						try {
+							Display.setDisplayMode(Display.getDesktopDisplayMode());
+							Display.setFullscreen(true);
+						} catch (LWJGLException e) {
+							e.printStackTrace();
+						}
+					}
+					
+					this.resize();
+				}
+
+				if (this.ingame && (this.netManager == null || this.netManager.isConnected() && this.netManager.levelLoaded)) {					
+					if(Keyboard.getEventKey() == Keyboard.KEY_F2) {
+						GL11.glReadBuffer(GL11.GL_FRONT);
+
+						int width = Display.getWidth();
+						int height = Display.getHeight();
+						ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4);
+						GL11.glReadPixels(0, 0, width, height, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+
+						File file = new File(this.dir, "screenshots/" + (new Date(System.currentTimeMillis()).toString().replaceAll(" ", "-").replaceAll(":", "-")) + ".png");
+						BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
+						for(int x = 0; x < width; x++) {
+							for(int y = 0; y < height; y++)
+							{
+								int i = (x + (width * y)) * 4;
+								int r = buffer.get(i) & 0xFF;
+								int g = buffer.get(i + 1) & 0xFF;
+								int b = buffer.get(i + 2) & 0xFF;
+								image.setRGB(x, height - (y + 1), (0xFF << 24) | (r << 16) | (g << 8) | b);
+							}
+						}
+
+						try {
+							ImageIO.write(image, "PNG", file);
+							if(this.hud != null) this.hud.addChat(Color.GREEN + "Saved screenshot \"" + file.getName() + "\"!");
+						} catch (IOException e) {
+							e.printStackTrace();
+							if(this.hud != null) this.hud.addChat(Color.RED + "Error saving screenshot: " + e.getMessage() + "!");
+						}
+					}
+
+					if(this.currentScreen == null || !this.currentScreen.grabsInput()) {
+						if (Keyboard.getEventKey() == Keyboard.KEY_ESCAPE) {
+							this.displayMenu();
+						}
+
+						if (this.mode instanceof CreativeGameMode) {
+							if (Keyboard.getEventKey() == this.settings.loadLocKey.key && !this.ctf) {
+								PlayerRespawnEvent event = new PlayerRespawnEvent(OpenClassic.getClient().getPlayer(), new Position(OpenClassic.getClient().getLevel(), this.level.xSpawn + 0.5F, this.level.ySpawn, this.level.zSpawn + 0.5F, (byte) this.level.rotSpawn, (byte) 0));
+								if(!event.isCancelled()) {
+									this.player.resetPos(event.getPosition());
+								}
+							}
+
+							if (Keyboard.getEventKey() == this.settings.saveLocKey.key && !this.ctf) {
+								this.level.setSpawnPos((int) this.player.x, (int) this.player.y, (int) this.player.z, this.player.yRot);
+								this.player.resetPos();
+							}
+						}
+
+						Keyboard.getEventKey();
+						if (Keyboard.getEventKey() == Keyboard.KEY_F5) {
+							this.raining = !this.raining;
+						}
+
+						if (Keyboard.getEventKey() == Keyboard.KEY_TAB && this.mode instanceof SurvivalGameMode && this.player.arrows > 0) {
+							this.level.addEntity(new Arrow(this.level, this.player, this.player.x, this.player.y, this.player.z, this.player.yRot, this.player.xRot, 1.2F));
+							--this.player.arrows;
+						}
+
+						if (Keyboard.getEventKey() == this.settings.buildKey.key) {
+							this.mode.openInventory();
+						}
+
+						if (Keyboard.getEventKey() == this.settings.chatKey.key) {
+							this.player.releaseAllKeys();
+							this.setCurrentScreen(new ChatInputScreen());
+						}
+					}
+				}
+
+				for (int selection = 0; selection < 9; ++selection) {
+					if (Keyboard.getEventKey() == selection + 2) {
+						this.player.inventory.selected = selection;
+					}
+				}
+
+				if (Keyboard.getEventKey() == this.settings.fogKey.key) {
+					this.settings.toggleSetting(4, !Keyboard.isKeyDown(42) && !Keyboard.isKeyDown(54) ? 1 : -1);
+				}
+				
+				EventFactory.callEvent(new PlayerKeyChangeEvent(OpenClassic.getClient().getPlayer(), Keyboard.getEventKey(), Keyboard.isKeyDown(Keyboard.getEventKey())));
+				if(this.netManager != null && this.netManager.isConnected() && this.openclassicServer) {
+					this.netManager.netHandler.send(PacketType.KEY_CHANGE, Keyboard.getEventKey(), Keyboard.isKeyDown(Keyboard.getEventKey()) ? (byte) 1 : (byte) 0);
+				}
+			}
+		}
+		
 		if (this.currentScreen == null || !this.currentScreen.grabsInput()) {
 			while (Mouse.next()) {
 				if (Mouse.getEventDWheel() != 0) {
@@ -1848,104 +1917,6 @@ public final class Minecraft implements Runnable {
 
 			if (this.blockHitTime > 0) {
 				this.blockHitTime--;
-			}
-
-			while (Keyboard.next()) {
-				this.player.setKey(Keyboard.getEventKey(), Keyboard.getEventKeyState());
-				if (Keyboard.getEventKeyState()) {
-					if (this.currentScreen != null) {
-						if (Keyboard.getEventKeyState()) {
-							this.currentScreen.onKeyPress(Keyboard.getEventCharacter(), Keyboard.getEventKey());
-						}
-					}
-
-					if (this.ingame && (this.netManager == null || this.netManager.isConnected() && this.netManager.levelLoaded)) {
-						if(Keyboard.getEventKey() == Keyboard.KEY_F2) {
-							GL11.glReadBuffer(GL11.GL_FRONT);
-
-							int width = Display.getWidth();
-							int height = Display.getHeight();
-							ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4);
-							GL11.glReadPixels(0, 0, width, height, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
-
-							File file = new File(this.dir, "screenshots/" + (new Date(System.currentTimeMillis()).toString().replaceAll(" ", "-").replaceAll(":", "-")) + ".png");
-							BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-
-							for(int x = 0; x < width; x++) {
-								for(int y = 0; y < height; y++)
-								{
-									int i = (x + (width * y)) * 4;
-									int r = buffer.get(i) & 0xFF;
-									int g = buffer.get(i + 1) & 0xFF;
-									int b = buffer.get(i + 2) & 0xFF;
-									image.setRGB(x, height - (y + 1), (0xFF << 24) | (r << 16) | (g << 8) | b);
-								}
-							}
-
-							try {
-								ImageIO.write(image, "PNG", file);
-								if(this.hud != null) this.hud.addChat(Color.GREEN + "Saved screenshot \"" + file.getName() + "\"!");
-							} catch (IOException e) {
-								e.printStackTrace();
-								if(this.hud != null) this.hud.addChat(Color.RED + "Error saving screenshot: " + e.getMessage() + "!");
-							}
-						}
-
-						if(this.currentScreen == null) {
-							if (Keyboard.getEventKey() == Keyboard.KEY_ESCAPE) {
-								this.displayMenu();
-							}
-
-							if (this.mode instanceof CreativeGameMode) {
-								if (Keyboard.getEventKey() == this.settings.loadLocKey.key && !this.ctf) {
-									PlayerRespawnEvent event = new PlayerRespawnEvent(OpenClassic.getClient().getPlayer(), new Position(OpenClassic.getClient().getLevel(), this.level.xSpawn + 0.5F, this.level.ySpawn, this.level.zSpawn + 0.5F, (byte) this.level.rotSpawn, (byte) 0));
-									if(!event.isCancelled()) {
-										this.player.resetPos(event.getPosition());
-									}
-								}
-
-								if (Keyboard.getEventKey() == this.settings.saveLocKey.key && !this.ctf) {
-									this.level.setSpawnPos((int) this.player.x, (int) this.player.y, (int) this.player.z, this.player.yRot);
-									this.player.resetPos();
-								}
-							}
-
-							Keyboard.getEventKey();
-							if (Keyboard.getEventKey() == Keyboard.KEY_F5) {
-								this.raining = !this.raining;
-							}
-
-							if (Keyboard.getEventKey() == Keyboard.KEY_TAB && this.mode instanceof SurvivalGameMode && this.player.arrows > 0) {
-								this.level.addEntity(new Arrow(this.level, this.player, this.player.x, this.player.y, this.player.z, this.player.yRot, this.player.xRot, 1.2F));
-								--this.player.arrows;
-							}
-
-							if (Keyboard.getEventKey() == this.settings.buildKey.key) {
-								this.mode.openInventory();
-							}
-
-							if (Keyboard.getEventKey() == this.settings.chatKey.key) {
-								this.player.releaseAllKeys();
-								this.setCurrentScreen(new ChatInputScreen());
-							}
-						}
-					}
-
-					for (int selection = 0; selection < 9; ++selection) {
-						if (Keyboard.getEventKey() == selection + 2) {
-							this.player.inventory.selected = selection;
-						}
-					}
-
-					if (Keyboard.getEventKey() == this.settings.fogKey.key) {
-						this.settings.toggleSetting(4, !Keyboard.isKeyDown(42) && !Keyboard.isKeyDown(54) ? 1 : -1);
-					}
-					
-					EventFactory.callEvent(new PlayerKeyChangeEvent(OpenClassic.getClient().getPlayer(), Keyboard.getEventKey(), Keyboard.isKeyDown(Keyboard.getEventKey())));
-					if(this.netManager != null && this.netManager.isConnected() && this.openclassicServer) {
-						this.netManager.netHandler.send(PacketType.KEY_CHANGE, Keyboard.getEventKey(), Keyboard.isKeyDown(Keyboard.getEventKey()) ? (byte) 1 : (byte) 0);
-					}
-				}
 			}
 
 			if (this.currentScreen == null) {
@@ -2029,15 +2000,25 @@ public final class Minecraft implements Runnable {
 		}
 	}
 
-	public final boolean isConnected() {
+	private void resize() {
+		this.width = Display.getDisplayMode().getWidth();
+		this.height = Display.getDisplayMode().getHeight();
+		
+		if(this.hud != null) {
+			this.hud.width = this.width * 240 / this.height;
+			this.hud.height = this.height * 240 / this.height;
+		}
+		
+		if(this.currentScreen != null) {
+			this.currentScreen.setSize(this.width, this.height);
+		}
+	}
+
+	public boolean isConnected() {
 		return this.netManager != null;
 	}
 
-	public final void setLevel(Level level) {
-		if (this.applet == null || !this.applet.getDocumentBase().getHost().equalsIgnoreCase("minecraft.net") && !this.applet.getDocumentBase().getHost().equalsIgnoreCase("www.minecraft.net") || !this.applet.getCodeBase().getHost().equalsIgnoreCase("minecraft.net") && !this.applet.getCodeBase().getHost().equalsIgnoreCase("www.minecraft.net")) {
-			level = null;
-		}
-
+	public void setLevel(Level level) {
 		this.level = level;
 		if (level != null) {
 			level.initTransient();

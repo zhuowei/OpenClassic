@@ -1,5 +1,6 @@
 package ch.spacebase.openclassic.client;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GraphicsDevice;
@@ -10,8 +11,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.CookieHandler;
 import java.net.URLEncoder;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 import javax.imageio.ImageIO;
@@ -25,7 +24,8 @@ import ch.spacebase.openclassic.client.cookie.CookieList;
 import ch.spacebase.openclassic.client.util.HTTPUtil;
 import ch.spacebase.openclassic.client.util.Server;
 
-import com.mojang.minecraft.MinecraftApplet;
+import com.mojang.minecraft.Minecraft;
+import com.mojang.minecraft.MinecraftCanvas;
 import com.mojang.minecraft.SessionData;
 import com.mojang.minecraft.render.TextureManager;
 
@@ -34,11 +34,10 @@ import com.mojang.minecraft.render.TextureManager;
  */
 public class MinecraftStandalone {
 
-	private static String username = "";
-	private static String haspaid = "";
-
 	public static boolean debug;
 	public static JFrame frame;
+	
+	private static Minecraft minecraft;
 	
 	public static void main(String[] args) {
 		if (Arrays.asList(args).contains("debug"))
@@ -84,7 +83,6 @@ public class MinecraftStandalone {
 	}
 
 	public static void init(String user, String pass) {
-		final MinecraftApplet applet = new MinecraftApplet();
 		frame = new JFrame("Loading...");
 
 		try {
@@ -93,9 +91,7 @@ public class MinecraftStandalone {
 		}
 
 		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-		frame.setMinimumSize(new Dimension(854, 510));
-		frame.setMaximumSize(new Dimension(854, 510));
-		frame.setResizable(false);
+		frame.setMinimumSize(new Dimension(854, 480));
 		frame.setLocation((gd.getDisplayMode().getWidth() - frame.getWidth()) / 2, (gd.getDisplayMode().getHeight() - frame.getHeight()) / 2);
 
 		frame.addWindowListener(new WindowListener() {
@@ -110,7 +106,7 @@ public class MinecraftStandalone {
 
 			@Override
 			public void windowClosed(WindowEvent e) {
-				applet.getMinecraft().running = false;
+				minecraft.running = false;
 			}
 
 			@Override
@@ -130,19 +126,20 @@ public class MinecraftStandalone {
 			}
 		});
 
+		MinecraftCanvas canvas = new MinecraftCanvas();
+		minecraft = new Minecraft(canvas, frame.getWidth(), frame.getHeight());
+		canvas.setMinecraft(minecraft);
+		canvas.setSize(frame.getWidth(), frame.getHeight());
+		
 		if (user != null && pass != null && !user.equals("") && !pass.equals("")) {
 			if (!auth(user, pass)) {
 				JOptionPane.showMessageDialog(null, "Login Failed! You will not be able to play multiplayer.");
 			}
 		}
 
-		applet.addParameter("username", username);
-		applet.addParameter("sessionid", "-1");
-		applet.addParameter("haspaid", haspaid);
-		applet.setSize(854, 480);
-		applet.init(true);
-
-		frame.add(applet);
+		frame.setLayout(new BorderLayout());
+		frame.add(canvas, "Center");
+		canvas.setFocusable(true);
 		frame.pack();
 		frame.setVisible(true);
 	}
@@ -152,19 +149,6 @@ public class MinecraftStandalone {
 		CookieHandler.setDefault(cookies);
 
 		System.out.println("Authing...");
-		String hash = "";
-
-		try {
-			MessageDigest digest = MessageDigest.getInstance("SHA-1");
-			digest.update(username.toLowerCase().getBytes());
-			digest.update(password.getBytes());
-
-			hash = toHex(digest.digest());
-		} catch (NoSuchAlgorithmException e) {
-			System.out.println("SHA-1 not supported!");
-			return false;
-		}
-
 		String result = "";
 
 		HTTPUtil.fetchUrl("https://www.minecraft.net/login", "", "https://www.minecraft.net");
@@ -181,47 +165,15 @@ public class MinecraftStandalone {
 			result = HTTPUtil.fetchUrl("http://www.minecraft.net", "", "https://www.minecraft.net/login");
 
 		if (result.contains("Logged in as")) {
-			String server = HTTPUtil.fetchUrl("http://direct.worldofminecraft.com/server.txt", "");
-			if (server.length() > 0) {
-				server = server.trim();
-				System.out.println("Getting server data for: " + server);
-
-				try {
-					String play = HTTPUtil.fetchUrl("http://www.minecraft.net/classic/play/" + URLEncoder.encode(server, "UTF-8"), "", "http://www.minecraft.net/classic/list");
-					String mppass = HTTPUtil.getParameterOffPage(play, "mppass");
-
-					if (mppass.length() > 0) {
-						String user = HTTPUtil.getParameterOffPage(play, "username");
-						System.out.println("Got user details: " + user);
-
-						MinecraftStandalone.username = user;
-
-						try {
-							haspaid = HTTPUtil.fetchUrl("http://www.minecraft.net/haspaid.jsp", "user=" + URLEncoder.encode(user, "UTF-8"));
-						} catch (UnsupportedEncodingException e) {
-						}
-
-						String validate = HTTPUtil.fetchUrl("https://direct.worldofminecraft.com/validate.php", "username=" + URLEncoder.encode(user, "UTF-8") + "&passHash=" + URLEncoder.encode(hash, "UTF-8") + "&server=" + URLEncoder.encode(server, "UTF-8") + "&mppass=" + URLEncoder.encode(mppass, "UTF-8"));
-						int index = validate.indexOf('\n');
-
-						if (index > 0) {
-							String returnCode = validate.substring(0, index);
-							if (returnCode.startsWith("Validated")) {
-								System.out.println("Successfully validated with WOM direct.");
-								parseServers(HTTPUtil.rawFetchUrl("http://www.minecraft.net/classic/list", "", "http://www.minecraft.net"));
-								return true;
-							}
-						}
-
-						System.out.println("Unable to validate with WOM: " + validate);
-						return true;
-					}
-				} catch (UnsupportedEncodingException e) {
-					System.out.println("UTF-8 not supported!");
-					return false;
-				}
+			minecraft.data = new SessionData(result.substring(result.indexOf("Logged in as ") + 13, result.indexOf(" | ")), "-1");
+			
+			try {
+				minecraft.data.haspaid = HTTPUtil.fetchUrl("http://www.minecraft.net/haspaid.jsp", "user=" + URLEncoder.encode(minecraft.data.username, "UTF-8")).equals("true");
+			} catch (UnsupportedEncodingException e) {
 			}
 
+			System.out.println("Success! You are " + minecraft.data.username + " and you " + (minecraft.data.haspaid ? "have not" : "have") + " paid!");
+			parseServers(HTTPUtil.rawFetchUrl("http://www.minecraft.net/classic/list", "", "http://www.minecraft.net"));
 			return true;
 		}
 
@@ -237,13 +189,10 @@ public class MinecraftStandalone {
 			}
 			
 			String id = data.substring(index + 13, data.indexOf("\"", index));
-			
 			index = data.indexOf(">", index) + 1;
 			String name = data.substring(index, data.indexOf("</a>", index)).replaceAll("&amp;", "&").replaceAll("&hellip;", "...");
-
 			index = data.indexOf("<td>", index) + 4;
 			String users = data.substring(index, data.indexOf("</td>", index));
-
 			index = data.indexOf("<td>", index) + 4;
 			String max = data.substring(index, data.indexOf("</td>", index));
 
