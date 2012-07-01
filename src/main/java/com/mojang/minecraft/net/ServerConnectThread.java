@@ -32,7 +32,7 @@ public final class ServerConnectThread extends Thread {
 
 	public final void run() {
 		try {
-			this.netManager.netHandler = new NetworkHandler(this.server, this.port);
+			this.netManager.netHandler = new NetworkHandler(this.server, this.port, this.netManager.mc);
 			this.netManager.netHandler.netManager = this.netManager;
 			PlayerConnectEvent event = EventFactory.callEvent(new PlayerConnectEvent(this.mc.data.username, InetSocketAddress.createUnresolved(this.server, this.port)));
 			if(event.getResult() != Result.ALLOWED) {
@@ -49,6 +49,7 @@ public final class ServerConnectThread extends Thread {
 			this.mc.online = false;
 			this.mc.netManager = null;
 			this.mc.setCurrentScreen(new ErrorScreen("Failed to connect", "You failed to connect to the server. It\'s probably down!"));
+			e.printStackTrace();
 			this.netManager.successful = false;
 		}
 	}

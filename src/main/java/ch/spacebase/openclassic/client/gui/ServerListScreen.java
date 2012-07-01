@@ -1,8 +1,5 @@
 package ch.spacebase.openclassic.client.gui;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
 import ch.spacebase.openclassic.api.Color;
 import ch.spacebase.openclassic.api.OpenClassic;
 import ch.spacebase.openclassic.api.gui.GuiScreen;
@@ -84,17 +81,13 @@ public class ServerListScreen extends GuiScreen {
 			OpenClassic.getClient().getProgressBar().setText("Getting server info...");
 			OpenClassic.getClient().getProgressBar().setProgress(0);
 
-			mc.data = new SessionData(server.username, "-1");
-			mc.data.key = server.mppass;
-
-			try {
-				mc.data.haspaid = Boolean.valueOf(HTTPUtil.fetchUrl("http://www.minecraft.net/haspaid.jsp", "user=" + URLEncoder.encode(server.username, "UTF-8")));
-			} catch(UnsupportedEncodingException e) {
-			}
-
-			mc.server = server.ip;
-			mc.port = server.port;
-
+			String page = HTTPUtil.fetchUrl(server.getUrl(), "", "http://www.minecraft.net/classic/list/");
+			mc.data = new SessionData(HTTPUtil.getParameterOffPage(page, "username"), "-1");
+			mc.data.key = HTTPUtil.getParameterOffPage(page, "mppass");
+			mc.data.haspaid = Boolean.valueOf(HTTPUtil.getParameterOffPage(page, "haspaid"));
+			mc.server = HTTPUtil.getParameterOffPage(page, "server");
+			mc.port = Integer.parseInt(HTTPUtil.getParameterOffPage(page, "port"));
+			
 			mc.initGame();
 			mc.setCurrentScreen(null);
 		}

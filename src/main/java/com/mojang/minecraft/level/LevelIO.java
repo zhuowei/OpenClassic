@@ -28,26 +28,7 @@ public final class LevelIO {
 		this.progress = progress;
 	}
 
-	public final boolean save(Level level) {
-		/* try {
-			FileOutputStream out = new FileOutputStream(file);
-			save(level, out);
-			out.close();
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (this.progress != null) {
-				this.progress.setText("Failed!");
-			}
-
-			try {
-				Thread.sleep(1000L);
-			} catch (InterruptedException e1) {
-			}
-
-			return false;
-		} */
-		
+	public final boolean save(Level level) {	
 		if(EventFactory.callEvent(new LevelSaveEvent(level.openclassic)).isCancelled()) {
 			return true;
 		}
@@ -72,26 +53,7 @@ public final class LevelIO {
 		}
 	}
 
-	public final Level load(String name) {
-		/* try {
-			FileInputStream in = new FileInputStream(file);
-			Level level = this.load(in);
-			in.close();
-			return level;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (this.progress != null) {
-				this.progress.setText("Failed!");
-			}
-
-			try {
-				Thread.sleep(1000L);
-			} catch (InterruptedException e1) {
-			}
-
-			return null;
-		} */
-		
+	public final Level load(String name) {		
 		if (this.progress != null) {
 			this.progress.setTitle("Loading level");
 			this.progress.setText("Reading..");
@@ -118,174 +80,7 @@ public final class LevelIO {
 			return null;
 		}
 	}
-
-	/* public final boolean saveOnline(Level level, String host, String username, String sessionid, String levelName, int id) {
-		if (sessionid == null) {
-			sessionid = "";
-		}
-
-		if (this.progress != null && this.progress != null) {
-			this.progress.setTitle("Saving level");
-		}
-
-		try {
-			if (this.progress != null && this.progress != null) {
-				this.progress.setText("Compressing..");
-			}
-
-			ByteArrayOutputStream levelData = new ByteArrayOutputStream();
-			save(level, levelData);
-			levelData.close();
-			byte[] data = levelData.toByteArray();
-			if (this.progress != null && this.progress != null) {
-				this.progress.setText("Connecting..");
-			}
-
-			HttpURLConnection conn = (HttpURLConnection) (new URL("http://" + host + "/level/save.html")).openConnection();
-			conn.setDoInput(true);
-			conn.setDoOutput(true);
-			conn.setRequestMethod("POST");
-			DataOutputStream out = new DataOutputStream(conn.getOutputStream());
-			out.writeUTF(username);
-			out.writeUTF(sessionid);
-			out.writeUTF(levelName);
-			out.writeByte(id);
-			out.writeInt(data.length);
-			if (this.progress != null) {
-				this.progress.setText("Saving..");
-			}
-
-			out.write(data);
-			out.close();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-			if (!reader.readLine().equalsIgnoreCase("ok")) {
-				if (this.progress != null) {
-					this.progress.setText("Failed: " + reader.readLine());
-				}
-
-				reader.close();
-				Thread.sleep(1000L);
-				return false;
-			} else {
-				reader.close();
-				return true;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (this.progress != null) {
-				this.progress.setText("Failed!");
-			}
-
-			try {
-				Thread.sleep(1000L);
-			} catch (InterruptedException e1) {
-			}
-
-			return false;
-		}
-	} */
-
-	/* public final Level loadOnline(String host, String username, int id) {
-		if (this.progress != null) {
-			this.progress.setTitle("Loading level");
-		}
-
-		try {
-			if (this.progress != null) {
-				this.progress.setText("Connecting..");
-			}
-
-			HttpURLConnection conn = (HttpURLConnection) (new URL("http://" + host + "/level/load.html?id=" + id + "&user=" + username)).openConnection();
-			conn.setDoInput(true);
-			
-			if (this.progress != null) {
-				this.progress.setText("Loading..");
-			}
-
-			DataInputStream in = new DataInputStream(conn.getInputStream());
-			if (in.readUTF().equalsIgnoreCase("ok")) {
-				return this.load(in);
-			} else {
-				if (this.progress != null) {
-					this.progress.setText("Failed: " + in.readUTF());
-				}
-
-				in.close();
-				Thread.sleep(1000L);
-				return null;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (this.progress != null) {
-				this.progress.setText("Failed!");
-			}
-
-			try {
-				Thread.sleep(3000L);
-			} catch (InterruptedException e1) {
-			}
-
-			return null;
-		}
-	} */
-
-	/* public final Level load(InputStream in) {
-		if (this.progress != null) {
-			this.progress.setTitle("Loading level");
-		}
-
-		if (this.progress != null) {
-			this.progress.setText("Reading..");
-		}
-
-		try {
-			DataInputStream data = new DataInputStream(new GZIPInputStream(in));
-			if (data.readInt() != 656127880) {
-				return null;
-			} else {
-				byte var12 = data.readByte();
-				if (var12 > 2) {
-					return null;
-				} else if (var12 <= 1) {
-					String name = data.readUTF();
-					String creator = data.readUTF();
-					long createtime = data.readLong();
-					short width = data.readShort();
-					short height = data.readShort();
-					short depth = data.readShort();
-					byte[] blocks = new byte[width * height * depth];
-					data.readFully(blocks);
-					data.close();
-					Level level = new Level();
-					level.setData(width, depth, height, blocks);
-					level.name = name;
-					level.creator = creator;
-					level.createTime = createtime;
-					if(level.openclassic == null) level.openclassic = new ClientLevel(level);
-					return level;
-				} else {
-					LevelObjectStream obj = new LevelObjectStream(data);
-					Level level = (Level) obj.readObject();
-					if(level.openclassic == null) level.openclassic = new ClientLevel(level);
-					level.initTransient();
-					obj.close();
-					return level;
-				}
-			}
-		} catch (Exception e) {
-			System.out.println("Failed to load level: " + e.toString());
-			e.printStackTrace();
-			return null;
-		}
-		
-		try {
-			return OpenClassicLevelFormat.load(in);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-	} */
-
+	
 	public static void saveOld(Level level) {
 		if(EventFactory.callEvent(new LevelSaveEvent(level.openclassic)).isCancelled()) {
 			return;

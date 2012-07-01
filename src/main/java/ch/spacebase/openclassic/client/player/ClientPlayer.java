@@ -25,6 +25,7 @@ public class ClientPlayer implements Player {
 	public ClientPlayer(com.mojang.minecraft.player.Player handle) {
 		this.handle = handle;
 		this.session = new ClientSession(this);
+		
 		this.data.load(OpenClassic.getClient().getDirectory().getPath() + "/player.nbt");
 	}
 	

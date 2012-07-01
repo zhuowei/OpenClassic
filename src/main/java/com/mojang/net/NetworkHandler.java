@@ -4,6 +4,7 @@ import ch.spacebase.openclassic.api.block.BlockType;
 import ch.spacebase.openclassic.api.block.Blocks;
 import ch.spacebase.openclassic.api.block.custom.CustomBlock;
 
+import com.mojang.minecraft.Minecraft;
 import com.mojang.minecraft.net.NetworkManager;
 import com.mojang.minecraft.net.PacketType;
 
@@ -23,14 +24,14 @@ public final class NetworkHandler {
 	public NetworkManager netManager;
 	private Socket sock;
 
-	public NetworkHandler(String server, int port) {
+	public NetworkHandler(String server, int port, Minecraft mc) {
 		try {
 			this.channel = SocketChannel.open();
 			this.channel.connect(new InetSocketAddress(server, port));
 			this.channel.configureBlocking(false);
 			this.sock = this.channel.socket();
 		} catch(IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException("Failed to connect!", e);
 		}
 		
 		this.connected = true;
@@ -45,11 +46,9 @@ public final class NetworkHandler {
 				this.sock.setReuseAddress(false);
 				this.sock.setSoTimeout(100);
 			} catch(IOException e) {
-				e.printStackTrace();
+				throw new RuntimeException("Failed to connect!", e);
 			}
 		}
-		
-		this.sock.getInetAddress().toString();
 	}
 
 	public final void close() {
