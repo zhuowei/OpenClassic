@@ -442,6 +442,11 @@ public final class Minecraft implements Runnable {
 				this.width = Display.getDisplayMode().getWidth();
 				this.height = Display.getDisplayMode().getHeight();
 			} else {
+				if(MinecraftStandalone.frame != null) {
+					this.width = MinecraftStandalone.frame.getWidth();
+					this.height = MinecraftStandalone.frame.getHeight();
+				}
+				
 				Display.setDisplayMode(new DisplayMode(this.width, this.height));
 			}
 

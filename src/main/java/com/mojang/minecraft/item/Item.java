@@ -23,6 +23,7 @@ public class Item extends Entity {
 	private int resource;
 	private int tickCount;
 	private int age = 0;
+	private transient int count = 0;
 
 	public static void initModels() {
 		for (int id = 0; id < 256; ++id) {
@@ -34,12 +35,17 @@ public class Item extends Entity {
 
 	}
 
-	public Item(Level var1, float var2, float var3, float var4, int var5) {
-		super(var1);
+	public Item(Level level, float x, float y, float z, int block) {
+		this(level, x, y, z, block, 1);
+	}
+	
+	public Item(Level level, float x, float y, float z, int block, int count) {
+		super(level);
 		this.setSize(0.25F, 0.25F);
 		this.heightOffset = this.bbHeight / 2.0F;
-		this.setPos(var2, var3, var4);
-		this.resource = var5;
+		this.setPos(x, y, z);
+		this.resource = block;
+		this.count = count;
 		this.rot = (float) (Math.random() * 360.0D);
 		this.xd = (float) (Math.random() * 0.20000000298023224D - 0.10000000149011612D);
 		this.yd = 0.2F;
@@ -103,7 +109,7 @@ public class Item extends Entity {
 	}
 
 	public void playerTouch(Entity entity) {
-		if (((Player) entity).addResource(this.resource)) {
+		if (((Player) entity).addResource(this.resource, this.count)) {
 			this.level.addEntity(new TakeEntityAnim(this.level, this, entity));
 			this.remove();
 		}

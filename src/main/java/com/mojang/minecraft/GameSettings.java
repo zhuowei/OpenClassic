@@ -17,7 +17,7 @@ public final class GameSettings {
 	public boolean music = true;
 	public boolean sound = true;
 	public boolean invertMouse = false;
-	public boolean showFPS = false;
+	public boolean showInfo = false;
 	public int viewDistance = 0;
 	public boolean viewBobbing = true;
 	public boolean anaglyph = false;
@@ -75,7 +75,7 @@ public final class GameSettings {
 		}
 
 		if (setting == 3) {
-			this.showFPS = !this.showFPS;
+			this.showInfo = !this.showInfo;
 		}
 
 		if (setting == 4) {
@@ -117,7 +117,7 @@ public final class GameSettings {
 	}
 
 	public final String getSetting(int id) {
-		return id == 0 ? "Music: " + (this.music ? "ON" : "OFF") : (id == 1 ? "Sound: " + (this.sound ? "ON" : "OFF") : (id == 2 ? "Invert mouse: " + (this.invertMouse ? "ON" : "OFF") : (id == 3 ? "Show FPS: " + (this.showFPS ? "ON" : "OFF") : (id == 4 ? "Render distance: " + fog[this.viewDistance] : (id == 5 ? "View bobbing: " + (this.viewBobbing ? "ON" : "OFF") : (id == 6 ? "3d anaglyph: " + (this.anaglyph ? "ON" : "OFF") : (id == 7 ? "Limit framerate: " + (this.limitFPS ? "ON" : "OFF") : (id == 8 ? "Survival Mode: " + (this.survival ? "ON" : "OFF") : id == 9 ? "Smoothing: " + (this.smoothing ? "ON" : "OFF") : ""))))))));
+		return id == 0 ? "Music: " + (this.music ? "ON" : "OFF") : (id == 1 ? "Sound: " + (this.sound ? "ON" : "OFF") : (id == 2 ? "Invert mouse: " + (this.invertMouse ? "ON" : "OFF") : (id == 3 ? "Show Info: " + (this.showInfo ? "ON" : "OFF") : (id == 4 ? "Render distance: " + fog[this.viewDistance] : (id == 5 ? "View bobbing: " + (this.viewBobbing ? "ON" : "OFF") : (id == 6 ? "3d anaglyph: " + (this.anaglyph ? "ON" : "OFF") : (id == 7 ? "Limit framerate: " + (this.limitFPS ? "ON" : "OFF") : (id == 8 ? "Survival Mode: " + (this.survival ? "ON" : "OFF") : id == 9 ? "Smoothing: " + (this.smoothing ? "ON" : "OFF") : ""))))))));
 	}
 	
 	public final String getHack(int id) {
@@ -157,7 +157,7 @@ public final class GameSettings {
 					}
 
 					if (setting[0].equals("showFrameRate")) {
-						this.showFPS = setting[1].equals("true");
+						this.showInfo = setting[1].equals("true");
 					}
 
 					if (setting[0].equals("viewDistance")) {
@@ -209,7 +209,7 @@ public final class GameSettings {
 			writer.println("music:" + this.music);
 			writer.println("sound:" + this.sound);
 			writer.println("invertYMouse:" + this.invertMouse);
-			writer.println("showFrameRate:" + this.showFPS);
+			writer.println("showFrameRate:" + this.showInfo);
 			writer.println("viewDistance:" + this.viewDistance);
 			writer.println("bobView:" + this.viewBobbing);
 			writer.println("anaglyph3d:" + this.anaglyph);

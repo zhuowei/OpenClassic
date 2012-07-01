@@ -7,6 +7,7 @@ import ch.spacebase.openclassic.client.player.ClientPlayer;
 import ch.spacebase.openclassic.client.util.GeneralUtils;
 
 import com.mojang.minecraft.Entity;
+import com.mojang.minecraft.item.Item;
 import com.mojang.minecraft.level.Level;
 import com.mojang.minecraft.mob.Mob;
 import com.mojang.minecraft.mob.ai.BasicAI;
@@ -115,6 +116,15 @@ public class Player extends Mob {
 	public boolean addResource(int block) {
 		return this.inventory.addResource(block);
 	}
+	
+	public boolean addResource(int block, int count) {
+		boolean result = false;
+		for(int cnt = 0; cnt < count; cnt++) {
+			if(this.addResource(block)) result = true;
+		}
+		
+		return result;
+	}
 
 	public int getScore() {
 		return this.score;
@@ -134,6 +144,14 @@ public class Player extends Mob {
 			this.zd = -MathHelper.sin((this.hurtDir + this.yRot) * 3.1415927F / 180.0F) * 0.1F;
 		} else {
 			this.xd = this.zd = 0.0F;
+		}
+		
+		for(int slot = 0; slot < this.inventory.slots.length; slot++) {
+			//for(int count = 0; count < this.inventory.count[slot]; count++) {
+			if(this.inventory.slots[slot] != -1) {
+				this.level.addEntity(new Item(this.level, this.x, this.y, this.z, this.inventory.slots[slot], this.inventory.count[slot]));
+			}
+			//}
 		}
 
 		this.heightOffset = 0.1F;

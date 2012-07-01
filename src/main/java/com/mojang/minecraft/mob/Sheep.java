@@ -62,7 +62,7 @@ public class Sheep extends QuadrupedMob {
 		int drops = (int) (Math.random() + Math.random() + 1.0D);
 
 		for (int count = 0; count < drops; ++count) {
-			this.level.addEntity(new Item(this.level, this.x, this.y, this.z, VanillaBlock.BROWN_MUSHROOM.getId()));
+			this.level.addEntity(new Item(this.level, this.x, this.y, this.z, VanillaBlock.WHITE_CLOTH.getId()));
 		}
 
 		super.die(cause);

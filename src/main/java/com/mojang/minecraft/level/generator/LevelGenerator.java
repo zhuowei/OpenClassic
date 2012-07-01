@@ -204,7 +204,7 @@ public final class LevelGenerator extends Generator {
 		this.a(VanillaBlock.IRON_ORE.getId(), 70, 2, 4, data);
 		this.a(VanillaBlock.GOLD_ORE.getId(), 50, 3, 4, data);
 		this.progress.setText("Watering..");
-		var51 = VanillaBlock.STATIONARY_WATER.getId();
+		var51 = VanillaBlock.WATER.getId();
 		this.setProgress(0);
 
 		for (var54 = 0; var54 < this.width; ++var54) {
@@ -245,7 +245,7 @@ public final class LevelGenerator extends Generator {
 			var54 = (int) (this.rand.nextFloat() * this.rand.nextFloat() * (this.g - 3));
 			var24 = this.rand.nextInt(this.depth);
 			if (data[(var54 * this.depth + var24) * this.width + var51] == 0) {
-				this.a(var51, var54, var24, 0, VanillaBlock.STATIONARY_LAVA.getId(), data);
+				this.a(var51, var54, var24, 0, VanillaBlock.LAVA.getId(), data);
 			}
 		}
 
