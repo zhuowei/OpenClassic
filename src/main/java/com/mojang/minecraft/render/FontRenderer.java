@@ -28,7 +28,7 @@ public final class FontRenderer {
 		int[] fontData = new int[width * height];
 		font.getRGB(0, 0, width, height, fontData, 0, width);
 
-		for (int character = 0; character < 128; ++character) {
+		for (int character = 0; character < 256 /* 128 */; ++character) {
 			int var6 = character % 16;
 			int var7 = character / 16;
 			int chWidth = 0;
@@ -103,15 +103,15 @@ public final class FontRenderer {
 					count += 2;
 				}
 
-				color = chars[count] % 16 << 3;
-				int var9 = chars[count] / 16 << 3;
+				color = (chars[count] == '£' ? 156 : chars[count]) % 16 << 3;
+				int var9 = (chars[count] == '£' ? 156 : chars[count]) / 16 << 3;
 				float var13 = 7.99F;
 				ShapeRenderer.instance.vertexUV((x + var7), y + var13, 0.0F, color / 128.0F, (var9 + var13) / 128.0F);
 				ShapeRenderer.instance.vertexUV((x + var7) + var13, y + var13, 0.0F, (color + var13) / 128.0F, (var9 + var13) / 128.0F);
 				ShapeRenderer.instance.vertexUV((x + var7) + var13, y, 0.0F, (color + var13) / 128.0F, var9 / 128.0F);
 				ShapeRenderer.instance.vertexUV((x + var7), y, 0.0F, color / 128.0F, var9 / 128.0F);
 				if (chars[count] < this.font.length) {
-					var7 += this.font[chars[count]];
+					var7 += chars[count] == '£' ? this.font[156] : this.font[chars[count]];
 				}
 			}
 
@@ -129,6 +129,8 @@ public final class FontRenderer {
 			for (int index = 0; index < chars.length; index++) {
 				if (chars[index] == '&') {
 					index++;
+				} else if (chars[index] == '£') {
+					width += this.font[156];
 				} else if (chars[index] < this.font.length) {
 					width += this.font[chars[index]];
 				}
