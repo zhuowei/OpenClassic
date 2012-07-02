@@ -180,16 +180,13 @@ public class ClassicClient implements Client {
 
 	@Override
 	public void processCommand(Sender sender, String command) {
-		String split[] = command.split(" ");
-		if(split.length == 0) return;
-		
+		if(command.length() == 0) return;
 		PreCommandEvent event = EventFactory.callEvent(new PreCommandEvent(sender, command));
 		if(event.isCancelled()) {
 			return;
 		}
 		
-		command = event.getCommand();
-		
+		String split[] = event.getCommand().split(" ");
 		for(CommandExecutor executor : this.executors.keySet()) {
 			if(executor.getCommand(split[0]) != null) {
 				try {
@@ -429,8 +426,21 @@ public class ClassicClient implements Client {
 	public ProgressBar getProgressBar() {
 		return this.mc.progressBar;
 	}
+
+	@Override
+	public void reload() {
+		OpenClassic.getLogger().info("Reloading OpenClassic...");
+		this.config.save();
+		this.config.load();
+		
+		for(Plugin plugin : this.pluginManager.getPlugins()) {
+			plugin.reload();
+		}
+		
+		OpenClassic.getLogger().info("Reload complete.");
+	}
 	
-	private class DateOutputFormatter extends Formatter {
+	private static class DateOutputFormatter extends Formatter {
 		private final SimpleDateFormat date;
 
 		public DateOutputFormatter(SimpleDateFormat date) {
@@ -456,19 +466,6 @@ public class ClassicClient implements Client {
 
 			return builder.toString();
 		}
-	}
-
-	@Override
-	public void reload() {
-		OpenClassic.getLogger().info("Reloading OpenClassic...");
-		this.config.save();
-		this.config.load();
-		
-		for(Plugin plugin : this.pluginManager.getPlugins()) {
-			plugin.reload();
-		}
-		
-		OpenClassic.getLogger().info("Reload complete.");
 	}
 
 }

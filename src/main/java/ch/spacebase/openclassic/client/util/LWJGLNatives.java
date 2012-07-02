@@ -74,10 +74,18 @@ public class LWJGLNatives {
 	private static void copy(InputStream in, File to) throws IOException {
 		if(!to.exists()) {
 			if(!to.getParentFile().exists()) {
-				to.getParentFile().mkdirs();
+				try {
+					to.getParentFile().mkdirs();
+				} catch(SecurityException e) {
+					e.printStackTrace();
+				}
 			}
 			
-			to.createNewFile();
+			try {
+				to.createNewFile();
+			} catch(SecurityException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		DataOutputStream out = new DataOutputStream(new FileOutputStream(to));

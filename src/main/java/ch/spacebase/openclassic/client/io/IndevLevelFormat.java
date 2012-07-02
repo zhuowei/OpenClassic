@@ -37,9 +37,9 @@ public class IndevLevelFormat {
 			blocks[index] = convert(blocks[index]);
 		}
 		
-		double x = spawn.get(0).getValue() / 32;
-		double y = spawn.get(1).getValue() / 32;
-		double z = spawn.get(2).getValue() / 32;
+		double x = spawn.get(0).getValue() / 32d;
+		double y = spawn.get(1).getValue() / 32d;
+		double z = spawn.get(2).getValue() / 32d;
 		
 		String name = ((StringTag) about.get("Name")).getValue();
 		String author = ((StringTag) about.get("Author")).getValue();
@@ -55,7 +55,13 @@ public class IndevLevelFormat {
 		level.zSpawn = (short) z;
 		
 		in.close();
-		f.delete();
+		
+		try {
+			f.delete();
+		} catch(SecurityException e) {
+			e.printStackTrace();
+		}
+		
 		return level.openclassic;
 	}
 	

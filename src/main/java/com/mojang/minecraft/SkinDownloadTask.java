@@ -39,7 +39,9 @@ public final class SkinDownloadTask implements Runnable {
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {
-				conn.disconnect();
+				if(conn != null) {
+					conn.disconnect();
+				}
 			}
 		}
 	}

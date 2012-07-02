@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import org.lwjgl.input.Keyboard;
 
@@ -197,7 +198,7 @@ public final class GameSettings {
 
 				reader.close();
 			}
-		} catch (Exception e) {
+		} catch (IOException e) {
 			System.out.println("Failed to load options");
 			e.printStackTrace();
 		}

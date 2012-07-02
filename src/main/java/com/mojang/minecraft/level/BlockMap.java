@@ -52,7 +52,7 @@ public class BlockMap implements Serializable {
 
 	public void insert(Entity var1) {
 		this.all.add(var1);
-		this.slot.init(var1.x, var1.y, var1.z).add(var1);
+		this.slot.init(this, var1.x, var1.y, var1.z).add(var1);
 		var1.xOld = var1.x;
 		var1.yOld = var1.y;
 		var1.zOld = var1.z;
@@ -60,13 +60,13 @@ public class BlockMap implements Serializable {
 	}
 
 	public void remove(Entity var1) {
-		this.slot.init(var1.xOld, var1.yOld, var1.zOld).remove(var1);
+		this.slot.init(this, var1.xOld, var1.yOld, var1.zOld).remove(var1);
 		this.all.remove(var1);
 	}
 
 	public void moved(Entity var1) {
-		Slot var2 = this.slot.init(var1.xOld, var1.yOld, var1.zOld);
-		Slot var3 = this.slot2.init(var1.x, var1.y, var1.z);
+		Slot var2 = this.slot.init(this, var1.xOld, var1.yOld, var1.zOld);
+		Slot var3 = this.slot2.init(this, var1.x, var1.y, var1.z);
 		if (!var2.equals(var3)) {
 			var2.remove(var1);
 			var3.add(var1);
@@ -82,8 +82,8 @@ public class BlockMap implements Serializable {
 	}
 
 	public List<Entity> getEntities(Entity exclude, float x, float y, float z, float x2, float y2, float z2, List<Entity> result) {
-		Slot slot = this.slot.init(x, y, z);
-		Slot slot2 = this.slot2.init(x2, y2, z2);
+		Slot slot = this.slot.init(this, x, y, z);
+		Slot slot2 = this.slot2.init(this, x2, y2, z2);
 
 		for (int var11 = slot.xSlot - 1; var11 <= slot2.xSlot + 1; ++var11) {
 			for (int var12 = slot.ySlot - 1; var12 <= slot2.ySlot + 1; ++var12) {
@@ -158,7 +158,7 @@ public class BlockMap implements Serializable {
 			(var2 = this.all.get(var1)).tick();
 			if (var2.removed) {
 				this.all.remove(var1--);
-				this.slot.init(var2.xOld, var2.yOld, var2.zOld).remove(var2);
+				this.slot.init(this, var2.xOld, var2.yOld, var2.zOld).remove(var2);
 			} else {
 				int var3 = (int) (var2.xOld / 16.0F);
 				int var4 = (int) (var2.yOld / 16.0F);
@@ -271,13 +271,16 @@ public class BlockMap implements Serializable {
 
 	}
 	
-	public class Slot implements Serializable {
+	public static class Slot implements Serializable {
 		public static final long serialVersionUID = 0L;
+		
+		private BlockMap parent;
 		private int xSlot;
 		private int ySlot;
 		private int zSlot;
 
-		public Slot init(float x, float y, float z) {
+		public Slot init(BlockMap parent, float x, float y, float z) {
+			this.parent = parent;
 			this.xSlot = (int) (x / 16);
 			this.ySlot = (int) (y / 16);
 			this.zSlot = (int) (z / 16);
@@ -293,16 +296,16 @@ public class BlockMap implements Serializable {
 				this.zSlot = 0;
 			}
 
-			if (this.xSlot >= BlockMap.this.width) {
-				this.xSlot = BlockMap.this.width - 1;
+			if (this.xSlot >= parent.width) {
+				this.xSlot = parent.width - 1;
 			}
 
-			if (this.ySlot >= BlockMap.this.depth) {
-				this.ySlot = BlockMap.this.depth - 1;
+			if (this.ySlot >= parent.depth) {
+				this.ySlot = parent.depth - 1;
 			}
 
-			if (this.zSlot >= BlockMap.this.height) {
-				this.zSlot = BlockMap.this.height - 1;
+			if (this.zSlot >= parent.height) {
+				this.zSlot = parent.height - 1;
 			}
 
 			return this;
@@ -310,14 +313,14 @@ public class BlockMap implements Serializable {
 
 		public void add(Entity entity) {
 			if (this.xSlot >= 0 && this.ySlot >= 0 && this.zSlot >= 0) {
-				BlockMap.this.entityGrid[(this.zSlot * BlockMap.this.depth + this.ySlot) * BlockMap.this.width + this.xSlot].add(entity);
+				parent.entityGrid[(this.zSlot * parent.depth + this.ySlot) * parent.width + this.xSlot].add(entity);
 			}
 
 		}
 
 		public void remove(Entity entity) {
 			if (this.xSlot >= 0 && this.ySlot >= 0 && this.zSlot >= 0) {
-				BlockMap.this.entityGrid[(this.zSlot * BlockMap.this.depth + this.ySlot) * BlockMap.this.width + this.xSlot].remove(entity);
+				parent.entityGrid[(this.zSlot * parent.depth + this.ySlot) * parent.width + this.xSlot].remove(entity);
 			}
 		}
 	}

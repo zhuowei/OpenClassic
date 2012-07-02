@@ -54,7 +54,7 @@ public class Player extends Mob {
 		this.health = 20;
 		this.modelName = "humanoid";
 		this.rotOffs = 180.0F;
-		this.ai = new PlayerAI();
+		this.ai = new PlayerAI(this);
 	}
 
 	public void resetPos() {
@@ -212,14 +212,20 @@ public class Player extends Mob {
 		super.moveTo((float) event.getTo().getX(), (float) event.getTo().getY(), (float) event.getTo().getZ(), event.getTo().getYaw(), event.getTo().getPitch());
 	}
 	
-	public class PlayerAI extends BasicAI implements Serializable {
+	public static class PlayerAI extends BasicAI implements Serializable {
 		public static final long serialVersionUID = 0L;
 
+		private Player parent;
+		
+		public PlayerAI(Player parent) {
+			this.parent = parent;
+		}
+		
 		public void update() {
-			this.jumping = Player.this.input.jumping;
-			Player.this.speedHack = Player.this.input.speed;
-			this.xxa = Player.this.input.xxa;
-			this.yya = Player.this.input.yya;
+			this.jumping = parent.input.jumping;
+			parent.speedHack = parent.input.speed;
+			this.xxa = parent.input.xxa;
+			this.yya = parent.input.yya;
 		}
 	}
 

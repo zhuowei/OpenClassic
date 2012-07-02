@@ -34,7 +34,7 @@ import com.mojang.minecraft.render.TextureManager;
  */
 public class MinecraftStandalone {
 
-	public static boolean debug;
+	protected static boolean debug;
 	public static JFrame frame;
 	
 	private static Minecraft minecraft;
@@ -165,7 +165,7 @@ public class MinecraftStandalone {
 			result = HTTPUtil.fetchUrl("http://www.minecraft.net", "", "https://www.minecraft.net/login");
 
 		if (result.contains("Logged in as")) {
-			minecraft.data = new SessionData(result.substring(result.indexOf("Logged in as ") + 13, result.indexOf(" | ")), "-1");
+			minecraft.data = new SessionData(result.substring(result.indexOf("Logged in as ") + 13, result.indexOf(" | ")));
 			
 			try {
 				minecraft.data.haspaid = HTTPUtil.fetchUrl("http://www.minecraft.net/haspaid.jsp", "user=" + URLEncoder.encode(minecraft.data.username, "UTF-8")).equals("true");

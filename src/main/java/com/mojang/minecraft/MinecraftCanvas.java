@@ -8,11 +8,11 @@ public class MinecraftCanvas extends Canvas {
 	private Thread thread;
 	private Minecraft mc;
 	
-	public void setMinecraft(Minecraft mc) {
+	public synchronized void setMinecraft(Minecraft mc) {
 		this.mc = mc;
 	}
 	
-	public final synchronized void addNotify() {
+	public synchronized void addNotify() {
 		super.addNotify();
 		
 		if (this.thread == null) {
@@ -21,12 +21,12 @@ public class MinecraftCanvas extends Canvas {
 		}
 	}
 
-	public final synchronized void removeNotify() {
+	public synchronized void removeNotify() {
 		this.stopThread();
 		super.removeNotify();
 	}
 	
-	public void stopThread() {
+	public synchronized void stopThread() {
 		if (this.thread != null) {
 			this.mc.running = false;
 

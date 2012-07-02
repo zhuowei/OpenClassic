@@ -31,9 +31,9 @@ public final class ItemModel {
 		float var10 = 0.25F;
 		float var11 = 0.25F;
 		float var12 = ((var2 % 16) + (1.0F - var10)) / 16.0F;
-		float var13 = ((var2 / 16) + (1.0F - var11)) / 16.0F;
+		float var13 = ((var2 / 16f) + (1.0F - var11)) / 16.0F;
 		var10 = ((var2 % 16) + var10) / 16.0F;
-		float var18 = ((var2 / 16) + var11) / 16.0F;
+		float var18 = ((var2 / 16f) + var11) / 16.0F;
 		this.renderer.quads[0] = new Quad(new Vertex[] { var20, var6, var7, var9 }, var12, var13, var10, var18);
 		this.renderer.quads[1] = new Quad(new Vertex[] { var5, var8, var17, var19 }, var12, var13, var10, var18);
 		this.renderer.quads[2] = new Quad(new Vertex[] { var20, var8, var5, var6 }, var12, var13, var10, var18);

@@ -24,14 +24,13 @@ public class TexturePackScreen extends GuiScreen {
 		this.attachWidget(new ButtonList(0, this.getWidth(), this.getHeight(), this, true));
 		this.attachWidget(new Button(1, this.getWidth() / 2 - 75, this.getHeight() / 6 + 156, 150, 20, this, true, "Back to Menu"));
 	
-		String textures = "Default";
+		StringBuilder textures = new StringBuilder("Default");
 		for(String file : (new File(OpenClassic.getClient().getDirectory(), "texturepacks").list())) {
 			if(!file.endsWith(".zip")) continue;
-			textures += ";";
-			textures += file.substring(0, file.indexOf("."));
+			textures.append(";").append(file.substring(0, file.indexOf(".")));
 		}
 		
-		this.textures = textures.split(";");
+		this.textures = textures.toString().split(";");
 		this.getWidget(0, ButtonList.class).setContents(Arrays.asList(this.textures));
 	}
 

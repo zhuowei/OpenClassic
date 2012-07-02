@@ -129,7 +129,6 @@ public class Level implements Serializable {
 		this.tickNextTicks.clear();
 		this.findSpawn();
 		this.initTransient();
-		System.gc();
 	}
 
 	public void findSpawn() {
@@ -183,9 +182,6 @@ public class Level implements Serializable {
 
 	public void addListener(LevelRenderer var1) {
 		this.renderers.add(var1);
-	}
-
-	public void finalize() {
 	}
 
 	public void removeListener(LevelRenderer var1) {

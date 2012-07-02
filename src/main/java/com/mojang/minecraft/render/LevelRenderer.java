@@ -1,6 +1,5 @@
 package com.mojang.minecraft.render;
 
-import com.mojang.minecraft.Minecraft;
 import com.mojang.minecraft.level.Level;
 import com.mojang.minecraft.player.Player;
 import com.mojang.minecraft.render.TextureManager;
@@ -17,7 +16,7 @@ import org.lwjgl.opengl.GL11;
 public final class LevelRenderer {
 
 	public Level level;
-	public TextureManager textureManager;
+	public TextureManager textures;
 	public int listId;
 	public IntBuffer buffer = BufferUtils.createIntBuffer(65536);
 	public List<Chunk> chunks = new ArrayList<Chunk>();
@@ -27,7 +26,6 @@ public final class LevelRenderer {
 	private int zChunks;
 	private int yChunks;
 	private int baseListId;
-	public Minecraft mc;
 	private int[] chunkDataCache = new int['\uc350'];
 	public int ticks = 0;
 	private float lastLoadX = -9999.0F;
@@ -35,9 +33,8 @@ public final class LevelRenderer {
 	private float lastLoadZ = -9999.0F;
 	public float cracks;
 
-	public LevelRenderer(Minecraft mc, TextureManager textureManager) {
-		this.mc = mc;
-		this.textureManager = textureManager;
+	public LevelRenderer(TextureManager textures) {
+		this.textures = textures;
 		this.listId = GL11.glGenLists(2);
 		this.baseListId = GL11.glGenLists(524288);
 	}
@@ -194,7 +191,7 @@ public final class LevelRenderer {
 		this.buffer.put(this.chunkDataCache, 0, length);
 		this.buffer.flip();
 		if (this.buffer.remaining() > 0) {
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.textureManager.bindTexture("/terrain.png"));
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.textures.bindTexture("/terrain.png"));
 			GL11.glCallLists(this.buffer);
 		}
 

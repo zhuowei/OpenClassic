@@ -18,7 +18,7 @@ public final class ShapeRenderer {
 	private int vertexSize = 3;
 	private int length = 0;
 	private boolean noColor = false;
-	public static ShapeRenderer instance = new ShapeRenderer();
+	public static final ShapeRenderer instance = new ShapeRenderer();
 
 	public final void end() {
 		if (this.vertices > 0) {

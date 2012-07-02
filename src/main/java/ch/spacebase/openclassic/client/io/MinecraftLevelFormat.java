@@ -48,7 +48,13 @@ public class MinecraftLevelFormat {
 		
 		level.initTransient();
 		obj.close();
-		f.delete();
+		
+		try {
+			f.delete();
+		} catch(SecurityException e) {
+			e.printStackTrace();
+		}
+		
 		return level.openclassic;
 	}
 	

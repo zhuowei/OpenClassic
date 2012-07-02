@@ -22,13 +22,11 @@ public final class SessionData {
 	public static File favoriteStore;
 	
 	public String username;
-	public String sessionid;
 	public String key;
 	public boolean haspaid;
 
-	public SessionData(String username, String sessionid) {
+	public SessionData(String username) {
 		this.username = username;
-		this.sessionid = sessionid;
 	}
 	
 	public static void loadFavorites(File dir) {

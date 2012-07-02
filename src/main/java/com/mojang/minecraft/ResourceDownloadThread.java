@@ -58,7 +58,12 @@ public final class ResourceDownloadThread extends Thread {
 					File file = new File(this.resource, split[0]);
 
 					if (!file.exists() || file.length() != size) {
-						file.getParentFile().mkdirs();
+						try {
+							file.getParentFile().mkdirs();
+						} catch(SecurityException e) {
+							e.printStackTrace();
+						}
+						
 						this.download(new URL(base, split[0].replaceAll(" ", "%20")), file, size);
 					} else {
 						int index = split[0].indexOf("/");

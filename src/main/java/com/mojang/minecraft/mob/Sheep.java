@@ -32,7 +32,7 @@ public class Sheep extends QuadrupedMob {
 		this.heightOffset = 1.72F;
 		this.modelName = "sheep";
 		this.textureName = "/mob/sheep.png";
-		this.ai = new SheepAI();
+		this.ai = new SheepAI(this);
 	}
 
 	public void aiStep() {
@@ -115,34 +115,40 @@ public class Sheep extends QuadrupedMob {
 		model.b.z = var10;
 	}
 	
-	public class SheepAI extends BasicAI implements Serializable {
+	public static class SheepAI extends BasicAI implements Serializable {
 		private static final long serialVersionUID = 1L;
 
+		private Sheep parent;
+		
+		public SheepAI(Sheep parent) {
+			this.parent = parent;
+		}
+		
 		public final void update() {
-			float xDiff = -0.7F * MathHelper.sin(Sheep.this.yRot * (float) Math.PI / 180.0F);
-			float zDiff = 0.7F * MathHelper.cos(Sheep.this.yRot * (float) Math.PI / 180.0F);
+			float xDiff = -0.7F * MathHelper.sin(parent.yRot * (float) Math.PI / 180.0F);
+			float zDiff = 0.7F * MathHelper.cos(parent.yRot * (float) Math.PI / 180.0F);
 			int x = (int) (this.mob.x + xDiff);
 			int y = (int) (this.mob.y - 2.0F);
 			int z = (int) (this.mob.z + zDiff);
-			if (Sheep.this.grazing) {
+			if (parent.grazing) {
 				if (this.level.getTile(x, y, z) != VanillaBlock.GRASS.getId()) {
-					Sheep.this.grazing = false;
+					parent.grazing = false;
 				} else {
-					if (Sheep.this.grazingTime++ == 60) {
+					if (parent.grazingTime++ == 60) {
 						this.level.setTile(x, y, z, VanillaBlock.DIRT.getId());
 						if (this.random.nextInt(5) == 0) {
-							Sheep.this.hasFur = true;
+							parent.hasFur = true;
 						}
 					}
 
 					this.xxa = 0.0F;
 					this.yya = 0.0F;
-					this.mob.xRot = 40 + Sheep.this.grazingTime / 2 % 2 * 10;
+					this.mob.xRot = 40 + parent.grazingTime / 2 % 2 * 10;
 				}
 			} else {
 				if (this.level.getTile(x, y, z) == VanillaBlock.GRASS.getId()) {
-					Sheep.this.grazing = true;
-					Sheep.this.grazingTime = 0;
+					parent.grazing = true;
+					parent.grazingTime = 0;
 				}
 
 				super.update();

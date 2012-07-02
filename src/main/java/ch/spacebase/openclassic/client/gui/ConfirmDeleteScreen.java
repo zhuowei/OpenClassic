@@ -28,7 +28,11 @@ public class ConfirmDeleteScreen extends GuiScreen {
 
 	public void onButtonClick(Button button) {
 		if (button.getId() == 0) {
-			this.file.delete();
+			try {
+				this.file.delete();
+			} catch(SecurityException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		OpenClassic.getClient().setCurrentScreen(this.parent);

@@ -14,7 +14,7 @@ public class Mob extends Entity {
 	public static final long serialVersionUID = 0L;
 	public static final int ATTACK_DURATION = 5;
 	public static final int TOTAL_AIR_SUPPLY = 300;
-	public static ModelManager modelCache;
+	public static final ModelManager modelCache = new ModelManager();
 	public int invulnerableDuration = 20;
 	public float rot;
 	public float timeOffs;

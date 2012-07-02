@@ -52,8 +52,6 @@ import com.mojang.minecraft.item.Arrow;
 import com.mojang.minecraft.item.Item;
 import com.mojang.minecraft.level.Level;
 import com.mojang.minecraft.level.LevelIO;
-import com.mojang.minecraft.mob.Mob;
-import com.mojang.minecraft.model.ModelManager;
 import com.mojang.minecraft.model.ModelRenderer;
 import com.mojang.minecraft.net.NetworkManager;
 import com.mojang.minecraft.net.NetworkPlayer;
@@ -287,7 +285,6 @@ public final class Minecraft implements Runnable {
 		this.openclassicServer = false;
 		this.server = null;
 		this.port = 0;
-		this.data.key = "";
 		this.online = false;
 		this.ingame = false;
 		this.hacks = true;
@@ -378,7 +375,11 @@ public final class Minecraft implements Runnable {
 
 			File lib = new File(this.dir, "lib");
 			if(!lib.exists()) {
-				lib.mkdirs();
+				try {
+					lib.mkdirs();
+				} catch(SecurityException e) {
+					e.printStackTrace();
+				}
 			}
 
 			LWJGLNatives.load(os, lib);
@@ -386,29 +387,36 @@ public final class Minecraft implements Runnable {
 				MinecraftStandalone.frame.setTitle("Minecraft " + Constants.CLIENT_VERSION);
 			}
 
-			File file = new File(this.dir, "levels");
-			if(!file.exists()) {
-				file.mkdirs();
+			File levels = new File(this.dir, "levels");
+			if(!levels.exists()) {
+				try {
+					levels.mkdirs();
+				} catch(SecurityException e) {
+					e.printStackTrace();
+				}
 			}
 
-			File f = new File(this.dir, "screenshots");
-			if(!f.exists()) {
-				f.mkdirs();
+			File screenshots = new File(this.dir, "screenshots");
+			if(!screenshots.exists()) {
+				try {
+					screenshots.mkdirs();
+				} catch(SecurityException e) {
+					e.printStackTrace();
+				}
 			}
 			
-			File fl = new File(this.dir, "texturepacks");
-			if(!fl.exists()) {
-				fl.mkdirs();
+			File texturepacks = new File(this.dir, "texturepacks");
+			if(!texturepacks.exists()) {
+				try {
+					texturepacks.mkdirs();
+				} catch(SecurityException e) {
+					e.printStackTrace();
+				}
 			}
 
 			if (this.canvas != null) {
 				Display.setParent(this.canvas);
 			} else {
-				if(MinecraftStandalone.frame != null) {
-					this.width = MinecraftStandalone.frame.getWidth();
-					this.height = MinecraftStandalone.frame.getHeight();
-				}
-				
 				Display.setDisplayMode(new DisplayMode(this.width, this.height));
 			}
 
@@ -474,9 +482,8 @@ public final class Minecraft implements Runnable {
 			this.textureManager.addAnimatedTexture((new com.mojang.minecraft.render.animation.LavaTexture()));
 			this.textureManager.addAnimatedTexture((new com.mojang.minecraft.render.animation.WaterTexture()));
 			this.fontRenderer = new FontRenderer(this.settings, "/default.png", this.textureManager);
-			this.levelRenderer = new LevelRenderer(this, this.textureManager);
+			this.levelRenderer = new LevelRenderer(this.textureManager);
 			Item.initModels();
-			Mob.modelCache = new ModelManager();
 			GL11.glViewport(0, 0, this.width, this.height);
 			checkGLError("Post Startup");
 			
@@ -491,7 +498,7 @@ public final class Minecraft implements Runnable {
 
 			this.progressBar.setTitle("Downloading Resources...");
 			this.progressBar.setProgress(0);
-		} catch (Exception e) {
+		} catch (LWJGLException e) {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, e.toString(), "Failed to start Minecraft", 0);
 			return;
@@ -822,7 +829,7 @@ public final class Minecraft implements Runnable {
 
 										var82.setLighting(true);
 										com.mojang.minecraft.model.Vector var103 = var82.a(var80);
-										this.levelRenderer.level.blockMap.render(var103, var76, this.levelRenderer.textureManager, var80);
+										this.levelRenderer.level.blockMap.render(var103, var76, this.levelRenderer.textures, var80);
 										var82.setLighting(false);
 										var82.renderFog();
 										float var107 = var80;
@@ -937,7 +944,7 @@ public final class Minecraft implements Runnable {
 											GL11.glColor4f(1.0F, 1.0F, 1.0F, (MathHelper.sin(System.currentTimeMillis() / 100.0F) * 0.2F + 0.4F) * 0.5F);
 											if (this.levelRenderer.cracks > 0) {
 												GL11.glBlendFunc(GL11.GL_DST_COLOR, GL11.GL_SRC_COLOR);
-												var108 = this.levelRenderer.textureManager.bindTexture("/terrain.png");
+												var108 = this.levelRenderer.textures.bindTexture("/terrain.png");
 												GL11.glBindTexture(GL11.GL_TEXTURE_2D, var108);
 												GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.5F);
 												GL11.glPushMatrix();
@@ -1017,7 +1024,7 @@ public final class Minecraft implements Runnable {
 										var82.renderFog();
 										GL11.glEnable(GL11.GL_TEXTURE_2D);
 										GL11.glEnable(GL11.GL_BLEND);
-										GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.levelRenderer.textureManager.bindTexture("/water.png"));
+										GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.levelRenderer.textures.bindTexture("/water.png"));
 										GL11.glCallList(this.levelRenderer.listId + 1);
 										GL11.glDisable(GL11.GL_BLEND);
 										GL11.glEnable(GL11.GL_BLEND);
@@ -1512,8 +1519,8 @@ public final class Minecraft implements Runnable {
 											this.netManager.players.put(playerId, player);
 											this.level.addEntity(player);
 										} else {
-											this.level.setSpawnPos(x / 32, y / 32, z / 32, (yaw * 320 / 256));
-											this.player.moveTo(x / 32, y / 32, z / 32, (yaw * 360) / 256, (pitch * 360) / 256);
+											this.level.setSpawnPos(x / 32, y / 32, z / 32, (yaw * 320 / 256f));
+											this.player.moveTo(x / 32f, y / 32f, z / 32f, (yaw * 360) / 256f, (pitch * 360) / 256f);
 										}
 									} else if (type == PacketType.POSITION_ROTATION) {
 										byte playerId = (Byte) params[0];
@@ -1650,10 +1657,18 @@ public final class Minecraft implements Runnable {
 											File file = new File(this.dir, "cache/" + this.server + "/" + block + ".png");
 											if(!file.exists()) {
 												if(!file.getParentFile().exists()) {
-													file.getParentFile().mkdirs();
+													try {
+														file.getParentFile().mkdirs();
+													} catch(SecurityException e) {
+														e.printStackTrace();
+													}
 												}
 
-												file.createNewFile();
+												try {
+													file.createNewFile();
+												} catch(SecurityException e) {
+													e.printStackTrace();
+												}
 
 												System.out.println("Downloading " + file.getName());
 
@@ -1714,7 +1729,7 @@ public final class Minecraft implements Runnable {
 
 								this.netManager.netHandler.out.compact();
 							}
-						} catch (Exception e) {
+						} catch (IOException e) {
 							this.setCurrentScreen(new ErrorScreen("Disconnected!", "You\'ve lost connection to the server!"));
 							e.printStackTrace();
 							this.online = false;
@@ -2071,8 +2086,6 @@ public final class Minecraft implements Runnable {
 				this.particleManager.particles[particle].clear();
 			}
 		}
-
-		System.gc();
 	}
 
 	public enum OS {

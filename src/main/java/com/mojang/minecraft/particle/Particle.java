@@ -8,9 +8,6 @@ import com.mojang.util.MathHelper;
 public class Particle extends Entity {
 
 	private static final long serialVersionUID = 1L;
-	protected float xd;
-	protected float yd;
-	protected float zd;
 	protected int tex;
 	protected float uo;
 	protected float vo;
@@ -80,7 +77,7 @@ public class Particle extends Entity {
 		float var8;
 		float var9 = (var8 = (this.tex % 16) / 16.0F) + 0.0624375F;
 		float var10;
-		float var11 = (var10 = (this.tex / 16) / 16.0F) + 0.0624375F;
+		float var11 = (var10 = (this.tex / 16f) / 16.0F) + 0.0624375F;
 		float var12 = 0.1F * this.size;
 		float var13 = this.xo + (this.x - this.xo) * var2;
 		float var14 = this.yo + (this.y - this.yo) * var2;

@@ -40,7 +40,9 @@ final class SkinDownloadThread extends Thread {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			conn.disconnect();
+			if(conn != null) {
+				conn.disconnect();
+			}
 		}
 	}
 }

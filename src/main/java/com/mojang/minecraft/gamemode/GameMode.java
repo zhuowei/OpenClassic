@@ -4,7 +4,6 @@ import ch.spacebase.openclassic.api.OpenClassic;
 import ch.spacebase.openclassic.api.block.Block;
 import ch.spacebase.openclassic.api.block.BlockType;
 import ch.spacebase.openclassic.api.block.StepSound;
-import ch.spacebase.openclassic.api.block.VanillaBlock;
 import ch.spacebase.openclassic.api.entity.BlockEntity.BlockRemoveCause;
 import ch.spacebase.openclassic.api.event.EventFactory;
 import ch.spacebase.openclassic.api.event.block.BlockBreakEvent;
@@ -42,8 +41,9 @@ public class GameMode {
 
 	public void breakBlock(int x, int y, int z) {
 		Block block = this.mc.level.openclassic.getBlockAt(x, y, z);
+		if(block == null) return;
 		
-		if (block != null && block.isEntity() && (EventFactory.callEvent(new EntityBlockRemoveEvent(block.getBlockEntity(), BlockRemoveCause.PLAYER, block)).isCancelled() || !block.getBlockEntity().getController().onBlockRemoval(BlockRemoveCause.PLAYER, block))) {
+		if (block.isEntity() && (EventFactory.callEvent(new EntityBlockRemoveEvent(block.getBlockEntity(), BlockRemoveCause.PLAYER, block)).isCancelled() || !block.getBlockEntity().getController().onBlockRemoval(BlockRemoveCause.PLAYER, block))) {
 			return;
 		}
 		
@@ -51,7 +51,7 @@ public class GameMode {
 			return;
 		}
 		
-		BlockType old = block != null ? block.getType() : VanillaBlock.STONE;
+		BlockType old = block.getType();
 		boolean success = this.mc.level.netSetTile(x, y, z, 0);
 		if (old != null && success) {
 			if (this.mc.isConnected()) {

@@ -28,7 +28,7 @@ public class TerrainParticle extends Particle {
 		float var8;
 		float var9 = (var8 = ((this.tex % 16) + this.uo / 4.0F) / 16.0F) + 0.015609375F;
 		float var10;
-		float var11 = (var10 = ((this.tex / 16) + this.vo / 4.0F) / 16.0F) + 0.015609375F;
+		float var11 = (var10 = ((this.tex / 16f) + this.vo / 4.0F) / 16.0F) + 0.015609375F;
 		float var12 = 0.1F * this.size;
 		float var13 = this.xo + (this.x - this.xo) * var2;
 		float var14 = this.yo + (this.y - this.yo) * var2;

@@ -31,7 +31,7 @@ public class Creeper extends Mob {
 		return ((MathHelper.sin(this.tickCount + additionalTicks) * 0.5F + 0.5F) * brightness * 0.5F + 0.25F + brightness * 0.25F) * super.getBrightness(additionalTicks);
 	}
 	
-	public class CreeperAI extends BasicAttackAI implements Serializable {
+	public static class CreeperAI extends BasicAttackAI implements Serializable {
 		public static final long serialVersionUID = 0L;
 
 		public final boolean attack(Entity entity) {

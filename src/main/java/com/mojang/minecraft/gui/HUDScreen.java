@@ -45,8 +45,8 @@ public final class HUDScreen implements MainScreen {
 		RenderHelper.getHelper().bindTexture("/gui/icons.png", true);
 		RenderHelper.getHelper().drawImage(this.width / 2 - 7, this.height / 2 - 7, -90, 0, 0, 16, 16);
 		
-		boolean glow = this.mc.player.invulnerableTime / 3 % 2 == 1 && this.mc.player.invulnerableTime >= 10;
-		this.rand.setSeed((this.ticks * 312871));
+		boolean glow = this.mc.player.invulnerableTime / 3 % 2 != 0 && this.mc.player.invulnerableTime >= 10;
+		this.rand.setSeed((this.ticks * 312871L));
 		if (this.mc.mode.isSurvival()) {
 			for (int heart = 0; heart < 10; heart++) {
 				int heartX = this.width / 2 - 91 + (heart << 3);

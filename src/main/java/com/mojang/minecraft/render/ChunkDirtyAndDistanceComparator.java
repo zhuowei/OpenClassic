@@ -1,10 +1,14 @@
 package com.mojang.minecraft.render;
 
 import com.mojang.minecraft.player.Player;
+
+import java.io.Serializable;
 import java.util.Comparator;
 
-public final class ChunkDirtyAndDistanceComparator implements Comparator<com.mojang.minecraft.render.Chunk> {
+public final class ChunkDirtyAndDistanceComparator implements Comparator<com.mojang.minecraft.render.Chunk>, Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
 	private Player player;
 
 	public ChunkDirtyAndDistanceComparator(Player player) {

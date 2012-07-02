@@ -54,7 +54,13 @@ public class MCSharpLevelFormat {
 		level.setData(width, height, depth, blocks);
 		
 		data.close();
-		f.delete();
+		
+		try {
+			f.delete();
+		} catch(SecurityException e) {
+			e.printStackTrace();
+		}
+		
 		return level.openclassic;
 	}
 	

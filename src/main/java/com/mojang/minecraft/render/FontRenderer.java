@@ -140,16 +140,16 @@ public final class FontRenderer {
 
 	public static String removeBadCharacters(String string) {
 		char[] chars = string.toCharArray();
-		String result = "";
+		StringBuilder result = new StringBuilder();
 
 		for (int index = 0; index < chars.length; ++index) {
 			if (chars[index] == '&') {
 				index++;
 			} else {
-				result = result + chars[index];
+				result.append(chars[index]);
 			}
 		}
 
-		return result;
+		return result.toString();
 	}
 }
