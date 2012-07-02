@@ -6,7 +6,10 @@ import org.lwjgl.opengl.GL11;
 
 public final class ShapeRenderer {
 
+	public static final ShapeRenderer instance = new ShapeRenderer();
+	
 	private float[] data = new float[524288];
+	private FloatBuffer buffer = BufferUtils.createFloatBuffer(524288);
 	private int vertices = 0;
 	private float u;
 	private float v;
@@ -17,22 +20,21 @@ public final class ShapeRenderer {
 	private boolean textures = false;
 	private int length = 0;
 	private boolean noColor = false;
-	public static final ShapeRenderer instance = new ShapeRenderer();
 
 	public final void end() {
 		if (this.vertices > 0) {
-			FloatBuffer buffer = BufferUtils.createFloatBuffer(this.length);
-			buffer.put(this.data, 0, this.length);
-			buffer.flip();
+			this.buffer.clear();
+			this.buffer.put(this.data, 0, this.length);
+			this.buffer.flip();
 			
 			if (this.textures && this.colors) {
-				GL11.glInterleavedArrays(GL11.GL_T2F_C3F_V3F, 0, buffer);
+				GL11.glInterleavedArrays(GL11.GL_T2F_C3F_V3F, 0, this.buffer);
 			} else if (this.textures) {
-				GL11.glInterleavedArrays(GL11.GL_T2F_V3F, 0, buffer);
+				GL11.glInterleavedArrays(GL11.GL_T2F_V3F, 0, this.buffer);
 			} else if (this.colors) {
-				GL11.glInterleavedArrays(GL11.GL_C3F_V3F, 0, buffer);
+				GL11.glInterleavedArrays(GL11.GL_C3F_V3F, 0, this.buffer);
 			} else {
-				GL11.glInterleavedArrays(GL11.GL_V3F, 0, buffer);
+				GL11.glInterleavedArrays(GL11.GL_V3F, 0, this.buffer);
 			}
 
 			GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);

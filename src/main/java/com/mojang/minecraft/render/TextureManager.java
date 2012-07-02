@@ -88,6 +88,8 @@ public class TextureManager {
 	}
 
 	public void bindTexture(BufferedImage image, int textureId) {
+		if(image == null) return;
+		
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureId);
 		if(this.settings.smoothing && GeneralUtils.getMinecraft().mipmapMode > 0) {
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL12.GL_TEXTURE_MAX_LEVEL, 2);

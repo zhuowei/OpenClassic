@@ -345,32 +345,22 @@ public class Level implements Serializable {
 
 	public void tick() {
 		this.tickCount++;
-		int var1 = 1;
+		int var1 = 6;
+		int var2 = 6;
+		
+		for (var1 = 1; 1 << var1 < this.width; var1++);
+		for (var2 = 1; 1 << var2 < this.height; var2++);
 
-		int var2;
-		for (var2 = 1; 1 << var1 < this.width; ++var1) {
-			;
-		}
-
-		while (1 << var2 < this.height) {
-			++var2;
-		}
-
-		int var3 = this.height - 1;
-		int var4 = this.width - 1;
-		int var5 = this.depth - 1;
-		int var6;
-		int var7;
 		if (this.tickCount % 5 == 0) {
-			var6 = this.tickNextTicks.size();
+			int ticks = this.tickNextTicks.size();
 
-			for (var7 = 0; var7 < var6; ++var7) {
+			for (int tick = 0; tick < ticks; ++tick) {
 				TickNextTick next = this.tickNextTicks.remove(0);
 				if (next.ticks > 0) {
 					next.ticks--;
 					this.tickNextTicks.add(next);
 				} else {
-					if (this.a(next.x, next.y, next.z)) {
+					if (this.isInBounds(next.x, next.y, next.z)) {
 						byte block = this.blocks[(next.y * this.height + next.z) * this.width + next.x];
 						if(block == next.block && block > 0) {
 							if(Blocks.fromId(block).getPhysics() != null && this.openclassic.getPhysicsEnabled()) {
@@ -383,39 +373,39 @@ public class Level implements Serializable {
 		}
 
 		this.unprocessed += this.width * this.height * this.depth;
-		var6 = this.unprocessed / 200;
-		this.unprocessed -= var6 * 200;
+		int ticks = this.unprocessed / 200;
+		this.unprocessed = 0;
 
-		for (var7 = 0; var7 < var6; ++var7) {
+		for (int count = 0; count < ticks; ++count) {
 			this.c = this.c * 3 + 1013904223;
 			int y = this.c >> 2;
-			int x = (y) & var4;
-			int z = y >> var1 & var3;
-			y = y >> var1 + var2 & var5;
-			byte var11 = this.blocks[(y * this.height + z) * this.width + x];
-			if(Blocks.fromId(var11).getPhysics() != null && this.openclassic.getPhysicsEnabled() && !EventFactory.callEvent(new BlockPhysicsEvent(this.openclassic.getBlockAt(x, y, z))).isCancelled()) {
-				Blocks.fromId(var11).getPhysics().update(this.openclassic.getBlockAt(x, y, z));
+			int x = (y) & (this.width - 1);
+			int z = y >> var1 & (this.height - 1);
+			y = y >> var1 + var2 & (this.depth - 1);
+			BlockType block = Blocks.fromId(this.blocks[(y * this.height + z) * this.width + x]);
+			if(block.getPhysics() != null && this.openclassic.getPhysicsEnabled() && !EventFactory.callEvent(new BlockPhysicsEvent(this.openclassic.getBlockAt(x, y, z))).isCancelled()) {
+				block.getPhysics().update(this.openclassic.getBlockAt(x, y, z));
 			}
 		}
 		
 		this.openclassic.tick();
 	}
 
-	public int countInstanceOf(Class<? extends Entity> var1) {
-		int var2 = 0;
+	public int countInstanceOf(Class<? extends Entity> clazz) {
+		int instances = 0;
 
-		for (int var3 = 0; var3 < this.blockMap.all.size(); ++var3) {
-			Entity var4 = this.blockMap.all.get(var3);
-			if (var1.isAssignableFrom(var4.getClass())) {
-				++var2;
+		for (int count = 0; count < this.blockMap.all.size(); ++count) {
+			Entity entity = this.blockMap.all.get(count);
+			if (clazz.isAssignableFrom(entity.getClass())) {
+				instances++;
 			}
 		}
 
-		return var2;
+		return instances;
 	}
 
-	private boolean a(int var1, int var2, int var3) {
-		return var1 >= 0 && var2 >= 0 && var3 >= 0 && var1 < this.width && var2 < this.depth && var3 < this.height;
+	private boolean isInBounds(int x, int y, int z) {
+		return x >= 0 && y >= 0 && z >= 0 && x < this.width && y < this.depth && z < this.height;
 	}
 
 	public float getGroundLevel() {
@@ -607,7 +597,7 @@ public class Level implements Serializable {
 
 		for (int var9 = var5 - 6; var9 <= var5 + 6; ++var9) {
 			for (int var10 = var6 - 6; var10 <= var6 + 6; ++var10) {
-				if (this.a(var9, var14, var10) && !this.isSolidTile(var9, var14, var10)) {
+				if (this.isInBounds(var9, var14, var10) && !this.isSolidTile(var9, var14, var10)) {
 					float var11 = var9 + 0.5F - var1;
 
 					float var12;
