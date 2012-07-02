@@ -57,7 +57,7 @@ public class GameMode {
 			if (this.mc.isConnected()) {
 				this.mc.netManager.sendBlockChange(x, y, z, 0, this.mc.player.inventory.getSelected());
 			} else if(old.getPhysics() != null) {
-				old.getPhysics().onBreak(this.mc.level.openclassic.getBlockAt(x, y, z));
+				old.getPhysics().onBreak(block);
 			}
 
 			if (old.getStepSound() != StepSound.NONE) {

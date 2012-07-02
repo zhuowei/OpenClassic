@@ -316,10 +316,10 @@ public class Level implements Serializable {
 
 	private void a(int var1, int var2, int var3, int nx, int nz, int ny, int var4) {
 		if (var1 >= 0 && var2 >= 0 && var3 >= 0 && var1 < this.width && var2 < this.depth && var3 < this.height) {
-			BlockType var5;
-			if ((var5 = Blocks.fromId(this.blocks[(var2 * this.height + var3) * this.width + var1])) != null) {
-				if(var5.getPhysics() != null) {
-					var5.getPhysics().onNeighborChange(this.openclassic.getBlockAt(var1, var2, var3), this.openclassic.getBlockAt(nx, ny, nz));
+			BlockType type = Blocks.fromId(this.blocks[(var2 * this.height + var3) * this.width + var1]);
+			if (type != null) {
+				if(type.getPhysics() != null) {
+					type.getPhysics().onNeighborChange(this.openclassic.getBlockAt(var1, var2, var3), this.openclassic.getBlockAt(nx, ny, nz));
 				}
 			}
 

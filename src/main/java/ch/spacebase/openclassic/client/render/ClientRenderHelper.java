@@ -6,7 +6,6 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import ch.spacebase.openclassic.api.OpenClassic;
-import ch.spacebase.openclassic.api.block.Block;
 import ch.spacebase.openclassic.api.block.BlockFace;
 import ch.spacebase.openclassic.api.block.BlockType;
 import ch.spacebase.openclassic.api.block.Blocks;
@@ -250,48 +249,46 @@ public class ClientRenderHelper extends RenderHelper {
 	}
 	
 	@Override
-	public boolean canRenderSide(Block block, BlockFace face) {
+	public boolean canRenderSide(BlockType block, int x, int y, int z, BlockFace face) {
 		if(block == null) return false;
-		BlockType type = block.getType();
-		
-		if(type instanceof CustomBlock) {
-			type = ((CustomBlock) type).getFallback();
+		if(block instanceof CustomBlock) {
+			block = ((CustomBlock) block).getFallback();
 		}
 		
-		if(type instanceof VanillaBlock) {
-			switch((VanillaBlock) type) {
+		BlockType relative = OpenClassic.getClient().getLevel().getBlockTypeAt(x + face.getModX(), y + face.getModY(), z + face.getModZ());
+		if(block instanceof VanillaBlock) {
+			switch((VanillaBlock) block) {
 			case GLASS: {
-				return block.getRelative(face) == null || (block.getRelative(face).getType() != type && !this.isSolidTile(block.getRelative(face)));
+				return relative == null || (relative != block && !this.isSolidTile(relative));
 			}
 			case WATER:
 			case LAVA:
 			case STATIONARY_WATER:
 			case STATIONARY_LAVA: {
-				Block relative = block.getRelative(face);
 				if(relative == null) {
 					return false;
 				}
 				
-				if(Level.toMoving(relative.getType()) == Level.toMoving(type)) {
+				if(Level.toMoving(relative) == Level.toMoving(block)) {
 					return false;
 				}
 				
 				return !this.isSolidTile(relative);
 			}
 			case SLAB: {
-				return block.getRelative(face) == null || face == BlockFace.UP || (!this.isSolidTile(block.getRelative(face)) && (face == BlockFace.DOWN || block.getRelative(face).getType() != VanillaBlock.SLAB));
+				return relative == null || face == BlockFace.UP || (!this.isSolidTile(relative) && (face == BlockFace.DOWN || relative != VanillaBlock.SLAB));
 			}
 			default:
-				return block.getRelative(face) == null || !this.isSolidTile(block.getRelative(face));
+				return relative == null || !this.isSolidTile(relative);
 			}
 		}
 		
 		return true;
 	}
 	
-	private boolean isSolidTile(Block block) {
+	private boolean isSolidTile(BlockType block) {
 		if(block == null) return true;
-		return ((ClientLevel) block.getLevel()).getHandle().isSolidTile(block.getPosition().getBlockX(), block.getPosition().getBlockY(), block.getPosition().getBlockZ());
+		return block.isSolid();
 	}
 	
 	@Override

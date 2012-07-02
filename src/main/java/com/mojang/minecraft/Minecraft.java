@@ -1,6 +1,5 @@
 package com.mojang.minecraft;
 
-import ch.spacebase.openclassic.api.block.Block;
 import ch.spacebase.openclassic.api.block.BlockType;
 import ch.spacebase.openclassic.api.block.Blocks;
 import ch.spacebase.openclassic.api.block.StepSound;
@@ -1306,9 +1305,9 @@ public final class Minecraft implements Runnable {
 							id = this.player.openclassic.getPlaceMode();
 						}
 
-						Block block = this.level.openclassic.getBlockAt(x, y, z);
+						BlockType block = this.level.openclassic.getBlockTypeAt(x, y, z);
 						AABB collision = BlockUtils.getCollisionBox(id, x, y, z);
-						if ((block == null || block.getType() == null || block.getType() == VanillaBlock.AIR || block.getType() == VanillaBlock.WATER || block.getType() == VanillaBlock.STATIONARY_WATER || block.getType() == VanillaBlock.LAVA || block.getType() == VanillaBlock.STATIONARY_LAVA) && (collision == null || (!this.player.bb.intersects(collision) && this.level.isFree(collision)))) {
+						if ((block == null || block == VanillaBlock.AIR || block == VanillaBlock.WATER || block == VanillaBlock.STATIONARY_WATER || block == VanillaBlock.LAVA || block == VanillaBlock.STATIONARY_LAVA) && (collision == null || (!this.player.bb.intersects(collision) && this.level.isFree(collision)))) {
 							if (!this.mode.canPlace(id)) {
 								return;
 							}

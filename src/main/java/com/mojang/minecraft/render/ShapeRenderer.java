@@ -15,7 +15,6 @@ public final class ShapeRenderer {
 	private float b;
 	private boolean colors = false;
 	private boolean textures = false;
-	private int vertexSize = 3;
 	private int length = 0;
 	private boolean noColor = false;
 	public static final ShapeRenderer instance = new ShapeRenderer();
@@ -73,10 +72,6 @@ public final class ShapeRenderer {
 
 	public final void color(float r, float g, float b) {
 		if (!this.noColor) {
-			if (!this.colors) {
-				this.vertexSize += 3;
-			}
-
 			this.colors = true;
 			this.r = r;
 			this.g = g;
@@ -85,10 +80,6 @@ public final class ShapeRenderer {
 	}
 
 	public final void vertexUV(float x, float y, float z, float u, float v) {
-		if (!this.textures) {
-			this.vertexSize += 2;
-		}
-
 		this.textures = true;
 		this.u = u;
 		this.v = v;
@@ -111,9 +102,6 @@ public final class ShapeRenderer {
 		this.data[this.length++] = y;
 		this.data[this.length++] = z;
 		this.vertices++;
-		if (this.vertices % 4 == 0 && this.length >= 524288 - (this.vertexSize << 2)) {
-			this.end();
-		}
 	}
 
 	public final void color(int color) {
