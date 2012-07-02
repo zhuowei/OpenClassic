@@ -1710,6 +1710,14 @@ public final class Minecraft implements Runnable {
 
 										Blocks.fromId(block).getModel().addQuad(quad);
 										System.out.println("Got quad!");
+									} else if (type == PacketType.LEVEL_COLOR) {
+										if (params[0].equals("sky")) {
+											this.level.skyColor = (Integer) params[1];
+										} else if (params[0].equals("fog")) {
+											this.level.fogColor = (Integer) params[1];
+										} else if (params[0].equals("cloud")) {
+											this.level.cloudColor = (Integer) params[1];
+										}
 									}
 								}
 

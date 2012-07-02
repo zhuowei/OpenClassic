@@ -57,9 +57,7 @@ public class BasicAI extends AI {
 		boolean water = mob.isInWater();
 		boolean lava = mob.isInLava();
 		if (this.jumping) {
-			if (water) {
-				mob.yd += 0.04F;
-			} else if (lava) {
+			if (water || lava) {
 				mob.yd += 0.04F;
 			} else if (mob.onGround) {
 				this.jumpFromGround();

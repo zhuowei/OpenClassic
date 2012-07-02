@@ -26,6 +26,7 @@ public final class PacketType {
 	public static final PacketType BLOCK_MODEL;
 	public static final PacketType QUAD;
 	public static final PacketType KEY_CHANGE;
+	public static final PacketType LEVEL_COLOR;
 	
 	private static int lastOpcode;
 	
@@ -86,6 +87,7 @@ public final class PacketType {
 		BLOCK_MODEL = new PacketType(new Class[] { Byte.TYPE, String.class, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE });
 		QUAD = new PacketType(new Class[] { Byte.TYPE, Integer.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, String.class, Byte.TYPE, Integer.TYPE, Integer.TYPE, Integer.TYPE, Integer.TYPE, Integer.TYPE });
 		KEY_CHANGE = new PacketType(new Class[] { Integer.TYPE, Byte.TYPE });
+		LEVEL_COLOR = new PacketType(new Class[] { String.class, Integer.TYPE });
 		
 		lastOpcode = 0;
 	}

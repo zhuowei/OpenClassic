@@ -293,4 +293,34 @@ public class ClientLevel implements Level {
 		return this.data;
 	}
 
+	@Override
+	public int getSkyColor() {
+		return this.handle.skyColor;
+	}
+
+	@Override
+	public void setSkyColor(int color) {
+		this.handle.skyColor = color;
+	}
+
+	@Override
+	public int getFogColor() {
+		return this.handle.fogColor;
+	}
+
+	@Override
+	public void setFogColor(int color) {
+		this.handle.fogColor = color;
+	}
+
+	@Override
+	public int getCloudColor() {
+		return this.handle.cloudColor;
+	}
+
+	@Override
+	public void setCloudColor(int color) {
+		this.handle.cloudColor = color;
+	}
+
 }
