@@ -43,11 +43,11 @@ public class MinecraftApplet extends Applet {
 	}
 
 	public void start() {
-		this.minecraft.stopping = false;
+		this.minecraft.waiting = false;
 	}
 
 	public void stop() {
-		this.minecraft.stopping = true;
+		this.minecraft.waiting = true;
 	}
 
 	public void destroy() {

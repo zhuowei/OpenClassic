@@ -7,27 +7,24 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import com.mojang.minecraft.Minecraft;
-import com.mojang.minecraft.Minecraft.OS;
 
 public class LWJGLNatives {
 
-	public static void load(OS os, File dir) {
-		switch (os) {
-		case linux:
+	public static void load(File dir) {
+	    String os = System.getProperty("os.name").toLowerCase();
+		if(os.contains("linux")) {
 			load(dir.getPath(), "libjinput-linux.so", "86");
 			load(dir.getPath(), "libjinput-linux64.so", "64");
 			load(dir.getPath(), "liblwjgl.so", "86");
 			load(dir.getPath(), "liblwjgl64.so", "64");
 			load(dir.getPath(), "libopenal.so", "86");
 			load(dir.getPath(), "libopenal64.so", "64");
-			break;
-		case solaris:
+		} else if(os.contains("solaris")) {
 			load(dir.getPath(), "liblwjgl.so", "86");
 			load(dir.getPath(), "liblwjgl64.so", "64");
 			load(dir.getPath(), "libopenal.so", "86");
 			load(dir.getPath(), "libopenal64.so", "64");
-			break;
-		case windows:
+		} else if(os.contains("win")) {
 			load(dir.getPath(), "OpenAL64.dll", "64");
 			load(dir.getPath(), "OpenAL32.dll", "86");
 			load(dir.getPath(), "lwjgl64.dll", "64");
@@ -36,12 +33,12 @@ public class LWJGLNatives {
 			load(dir.getPath(), "jinput-raw.dll", "86");
 			load(dir.getPath(), "jinput-dx8_64.dll", "64");
 			load(dir.getPath(), "jinput-dx8.dll", "86");
-			break;
-		case macos:
+		} else if(os.contains("macos")) {
 			load(dir.getPath(), "openal.dylib", "both");
 			load(dir.getPath(), "liblwjgl.jnilib", "both");
 			load(dir.getPath(), "libjinput-osx.jnilib", "both");
-			break;
+		} else {
+			throw new RuntimeException("Your system does not support LWJGL.");
 		}
 		
 		System.setProperty("java.library.path", System.getProperty("java.library.path") + ":" + dir.getPath());

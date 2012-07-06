@@ -31,7 +31,7 @@ public class MinecraftCanvas extends Canvas {
 			this.mc.running = false;
 
 			try {
-				this.thread.join(1000L);
+				this.thread.join(1000);
 			} catch (InterruptedException e) {
 				try {
 					this.mc.shutdown();

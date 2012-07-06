@@ -9,7 +9,8 @@ import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 
-import com.mojang.minecraft.Minecraft.OS;
+import ch.spacebase.openclassic.client.util.GeneralUtils;
+
 import com.mojang.minecraft.render.TextureManager;
 
 import java.awt.event.ActionListener;
@@ -132,31 +133,7 @@ public class Login extends JFrame {
 	}
 	
 	private File getLoginFile() {
-		File dir = null;
-		switch (OS.lookup(System.getProperty("os.name").toLowerCase())) {
-		case linux:
-		case solaris:
-			dir = new File(System.getProperty("user.home", "."), ".minecraft_classic/");
-			break;
-		case windows:
-			if (System.getenv("APPDATA") != null) {
-				dir = new File(System.getenv("APPDATA"), ".minecraft_classic/");
-			} else {
-				dir = new File(System.getProperty("user.home", "."), ".minecraft_classic/");
-			}
-			break;
-		case macos:
-			dir = new File(System.getProperty("user.home", "."), "Library/Application Support/minecraft_classic");
-			break;
-		default:
-			dir = new File(System.getProperty("user.home", "."), "minecraft_classic/");
-		}
-
-		if (!dir.exists() && !dir.mkdirs()) {
-			throw new RuntimeException("The working directory could not be created: " + dir);
-		}
-		
-		File file = new File(dir, ".login");
+		File file = new File(GeneralUtils.getMinecraftDirectory(), ".login");
 		if(!file.exists()) {
 			try {
 				file.createNewFile();
