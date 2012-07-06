@@ -87,7 +87,7 @@ public final class SurvivalGameMode extends GameMode {
 		}
 	}
 
-	public final float d() {
+	public final float getReachDistance() {
 		return 4.0F;
 	}
 

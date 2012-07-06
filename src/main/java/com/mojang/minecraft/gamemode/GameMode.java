@@ -81,7 +81,7 @@ public class GameMode {
 	public void applyBlockCracks(float time) {
 	}
 
-	public float d() {
+	public float getReachDistance() {
 		return 5.0F;
 	}
 
