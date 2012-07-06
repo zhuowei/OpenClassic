@@ -27,6 +27,9 @@ public final class PacketType {
 	public static final PacketType QUAD;
 	public static final PacketType KEY_CHANGE;
 	public static final PacketType LEVEL_COLOR;
+	public static final PacketType AUDIO_REGISTER;
+	public static final PacketType AUDIO_PLAY;
+	public static final PacketType MUSIC_STOP;
 	
 	private static int lastOpcode;
 	
@@ -88,6 +91,9 @@ public final class PacketType {
 		QUAD = new PacketType(new Class[] { Byte.TYPE, Integer.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, String.class, Byte.TYPE, Integer.TYPE, Integer.TYPE, Integer.TYPE, Integer.TYPE, Integer.TYPE });
 		KEY_CHANGE = new PacketType(new Class[] { Integer.TYPE, Byte.TYPE });
 		LEVEL_COLOR = new PacketType(new Class[] { String.class, Integer.TYPE });
+		AUDIO_REGISTER = new PacketType(new Class[] { String.class, String.class, Byte.TYPE, Byte.TYPE });
+		AUDIO_PLAY = new PacketType(new Class[] { String.class, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Byte.TYPE, Byte.TYPE });
+		MUSIC_STOP = new PacketType(new Class[] { String.class });
 		
 		lastOpcode = 0;
 	}

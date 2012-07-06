@@ -1,5 +1,10 @@
 package ch.spacebase.openclassic.client.sound;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,9 +14,9 @@ import java.util.Random;
 
 import ch.spacebase.openclassic.api.OpenClassic;
 import ch.spacebase.openclassic.api.sound.AudioManager;
+import ch.spacebase.openclassic.api.player.Player;
 
 import com.mojang.minecraft.Minecraft;
-import com.mojang.minecraft.player.Player;
 
 import paulscode.sound.Library;
 import paulscode.sound.SoundSystem;
@@ -54,7 +59,7 @@ public class ClientAudioManager implements AudioManager {
 		}
 	}
 	
-	public void update(Player player) {
+	public void update(com.mojang.minecraft.player.Player player) {
 		if(player != null && OpenClassic.getClient().isInGame()) {
 			this.system.setListenerPosition(player.x, player.y, player.z);
 			this.system.setListenerOrientation(0, 0, -1, (float) Math.sin(Math.toRadians(player.xRot)), (float) Math.sin(Math.toRadians(player.yRot)), 1);
@@ -68,16 +73,77 @@ public class ClientAudioManager implements AudioManager {
 		this.system.cleanup();
 	}
 	
-	public void registerSound(String sound, URL file) {
+	public void registerSound(String sound, URL file, boolean included) {
+		if(!included) {
+			this.download(file);
+		}
+		
 		if(!this.sounds.containsKey(sound)) this.sounds.put(sound, new ArrayList<URL>());
 		this.sounds.get(sound).add(file);
 	}
 	
-	public void registerMusic(String music, URL file) {
+	public void registerMusic(String music, URL file, boolean included) {
+		if(!included) {
+			this.download(file);
+		}
+		
 		if(!this.music.containsKey(music)) this.music.put(music, new ArrayList<URL>());
 		this.music.get(music).add(file);
 		this.system.backgroundMusic(music, file, file.getFile(), false);
 		this.system.backgroundMusic(music + "_loop", file, file.getFile(), true);
+		// TODO: Included
+	}
+	
+	private void download(URL url) {
+		File file = new File(this.mc.dir, "cache/" + (this.mc.server != null && !this.mc.server.equals("") ? this.mc.server : "local") + "/" + url.getFile());
+		if(!file.exists()) {
+			if(!file.getParentFile().exists()) {
+				try {
+					file.getParentFile().mkdirs();
+				} catch(SecurityException e) {
+					e.printStackTrace();
+				}
+			}
+
+			try {
+				file.createNewFile();
+			} catch(SecurityException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			System.out.println("Downloading " + file.getName());
+
+			byte[] data = new byte[4096];
+			DataInputStream in = null;
+			DataOutputStream out = null;
+
+			try {
+				in = new DataInputStream(url.openStream());
+				out = new DataOutputStream(new FileOutputStream(file));
+
+				int length = 0;
+				while (this.mc.running) {
+					length = in.read(data);
+					if (length < 0) break;
+					out.write(data, 0, length);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					if (in != null)
+						in.close();
+					if (out != null)
+						out.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+
+			System.out.println("Downloaded " + file.getName());
+		}
 	}
 	
 	public boolean playSound(String sound, float x, float y, float z, float volume, float pitch) {
@@ -152,6 +218,36 @@ public class ClientAudioManager implements AudioManager {
 	public void stop(String music) {
 		this.system.stop(music);
 		this.system.stop(music + "_loop");
+	}
+
+	@Override
+	public boolean playSound(Player player, String sound, float volume, float pitch) {
+		return this.playSound(sound, volume, pitch);
+	}
+
+	@Override
+	public boolean playSound(Player player, String sound, float x, float y, float z, float volume, float pitch) {
+		return this.playSound(sound, x, y, z, volume, pitch);
+	}
+
+	@Override
+	public boolean playMusic(Player player, String music) {
+		return this.playMusic(music);
+	}
+
+	@Override
+	public boolean playMusic(Player player, String music, boolean loop) {
+		return this.playMusic(music, loop);
+	}
+
+	@Override
+	public void stopMusic(Player player) {
+		this.stopMusic();
+	}
+
+	@Override
+	public void stop(Player player, String music) {
+		this.stop(music);
 	}
 	
 }

@@ -68,13 +68,13 @@ public final class ResourceDownloadThread extends Thread {
 					} else {
 						int index = split[0].indexOf("/");
 						if (split[0].substring(0, index).equalsIgnoreCase("sound")) {
-							this.mc.audio.registerSound(split[0].substring(index + 1, split[0].length() - 4).replaceAll("[1-9]", "").replaceAll("/", "."), file.toURI().toURL());
+							this.mc.audio.registerSound(split[0].substring(index + 1, split[0].length() - 4).replaceAll("[1-9]", "").replaceAll("/", "."), file.toURI().toURL(), true);
 						} else if (split[0].substring(0, index).equalsIgnoreCase("music")) {
 							if(split[0].contains("sweden"))  {
-								this.mc.audio.registerMusic("menu", file.toURI().toURL());
+								this.mc.audio.registerMusic("menu", file.toURI().toURL(), true);
 							}
 							
-							this.mc.audio.registerMusic("bg", file.toURI().toURL());
+							this.mc.audio.registerMusic("bg", file.toURI().toURL(), true);
 						}
 					}
 				} catch (Exception e) {

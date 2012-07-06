@@ -1717,6 +1717,24 @@ public final class Minecraft implements Runnable {
 										} else if (params[0].equals("cloud")) {
 											this.level.cloudColor = (Integer) params[1];
 										}
+									} else if (type == PacketType.AUDIO_REGISTER) {
+										if(((Byte) params[3]) == 1) {
+											this.audio.registerMusic((String) params[0], new URL((String) params[1]), ((Byte) params[2]) == 1);
+										} else {
+											this.audio.registerSound((String) params[0], new URL((String) params[1]), ((Byte) params[2]) == 1);
+										}
+									} else if (type == PacketType.AUDIO_PLAY) {
+										if(((Byte) params[6]) == 1) {
+											this.audio.playMusic((String) params[0], ((Byte) params[7]) == 1);
+										} else {
+											this.audio.playSound((String) params[0], (Float) params[1], (Float) params[2], (Float) params[3], (Float) params[4], (Float) params[5]);
+										}
+									} else if (type == PacketType.MUSIC_STOP) {
+										if(((String) params[0]).equals("all_music")) {
+											this.audio.stopMusic();
+										} else {
+											this.audio.stop((String) params[0]);
+										}
 									}
 								}
 

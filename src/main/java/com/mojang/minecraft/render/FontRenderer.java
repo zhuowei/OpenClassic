@@ -28,7 +28,7 @@ public final class FontRenderer {
 		int[] fontData = new int[width * height];
 		font.getRGB(0, 0, width, height, fontData, 0, width);
 
-		for (int character = 0; character < 256 /* 128 */; ++character) {
+		for (int character = 0; character < 256; ++character) {
 			int var6 = character % 16;
 			int var7 = character / 16;
 			int chWidth = 0;
