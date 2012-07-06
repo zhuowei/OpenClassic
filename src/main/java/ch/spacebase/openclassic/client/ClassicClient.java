@@ -468,4 +468,9 @@ public class ClassicClient implements Client {
 		}
 	}
 
+	@Override
+	public String getServerVersion() {
+		return this.mc.openclassicVersion;
+	}
+
 }

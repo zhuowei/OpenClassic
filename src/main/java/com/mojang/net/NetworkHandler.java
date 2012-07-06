@@ -3,6 +3,7 @@ package com.mojang.net;
 import ch.spacebase.openclassic.api.block.BlockType;
 import ch.spacebase.openclassic.api.block.Blocks;
 import ch.spacebase.openclassic.api.block.custom.CustomBlock;
+import ch.spacebase.openclassic.client.util.GeneralUtils;
 
 import com.mojang.minecraft.Minecraft;
 import com.mojang.minecraft.net.NetworkManager;
@@ -59,6 +60,8 @@ public final class NetworkHandler {
 				}
 			}
 		}
+		
+		GeneralUtils.getMinecraft().serverPlugins.clear();
 		
 		try {
 			if (this.out.position() > 0) {

@@ -1,6 +1,7 @@
 package ch.spacebase.openclassic.client.player;
 
 import java.net.SocketAddress;
+import java.util.List;
 
 import ch.spacebase.openclassic.api.OpenClassic;
 import ch.spacebase.openclassic.api.Position;
@@ -11,6 +12,7 @@ import ch.spacebase.openclassic.api.level.Level;
 import ch.spacebase.openclassic.api.permissions.Group;
 import ch.spacebase.openclassic.api.player.Player;
 import ch.spacebase.openclassic.api.player.Session;
+import ch.spacebase.openclassic.api.plugin.RemotePluginInfo;
 import ch.spacebase.openclassic.api.util.Constants;
 import ch.spacebase.openclassic.client.level.ClientLevel;
 import ch.spacebase.openclassic.client.util.GeneralUtils;
@@ -162,6 +164,11 @@ public class ClientPlayer implements Player {
 	@Override
 	public NBTData getData() {
 		return this.data;
+	}
+
+	@Override
+	public List<RemotePluginInfo> getPlugins() {
+		return GeneralUtils.getMinecraft().serverPlugins;
 	}
 
 }

@@ -21,7 +21,7 @@ public final class PacketType {
 	public static final PacketType UPDATE_PLAYER_TYPE;
 	
 	// Custom
-	public static final PacketType CLIENT_INFO;
+	public static final PacketType GAME_INFO;
 	public static final PacketType CUSTOM_BLOCK;
 	public static final PacketType BLOCK_MODEL;
 	public static final PacketType QUAD;
@@ -30,6 +30,7 @@ public final class PacketType {
 	public static final PacketType AUDIO_REGISTER;
 	public static final PacketType AUDIO_PLAY;
 	public static final PacketType MUSIC_STOP;
+	public static final PacketType PLUGIN;
 	
 	private static int lastOpcode;
 	
@@ -85,7 +86,7 @@ public final class PacketType {
 		UPDATE_PLAYER_TYPE = new PacketType(new Class[] { Byte.TYPE });
 		
 		// Custom
-		CLIENT_INFO = new PacketType(new Class[] { String.class });
+		GAME_INFO = new PacketType(new Class[] { String.class });
 		CUSTOM_BLOCK = new PacketType(new Class[] { Byte.TYPE, Byte.TYPE, Byte.TYPE, String.class, Byte.TYPE, Integer.TYPE, Byte.TYPE, Byte.TYPE });
 		BLOCK_MODEL = new PacketType(new Class[] { Byte.TYPE, String.class, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE });
 		QUAD = new PacketType(new Class[] { Byte.TYPE, Integer.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, String.class, Byte.TYPE, Integer.TYPE, Integer.TYPE, Integer.TYPE, Integer.TYPE, Integer.TYPE });
@@ -94,6 +95,7 @@ public final class PacketType {
 		AUDIO_REGISTER = new PacketType(new Class[] { String.class, String.class, Byte.TYPE, Byte.TYPE });
 		AUDIO_PLAY = new PacketType(new Class[] { String.class, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Byte.TYPE, Byte.TYPE });
 		MUSIC_STOP = new PacketType(new Class[] { String.class });
+		PLUGIN = new PacketType(new Class[] { String.class, String.class });
 		
 		lastOpcode = 0;
 	}

@@ -29,6 +29,7 @@ import ch.spacebase.openclassic.api.gui.GuiScreen;
 import ch.spacebase.openclassic.api.level.LevelInfo;
 import ch.spacebase.openclassic.api.level.generator.Generator;
 import ch.spacebase.openclassic.api.plugin.Plugin;
+import ch.spacebase.openclassic.api.plugin.RemotePluginInfo;
 import ch.spacebase.openclassic.api.util.Constants;
 import ch.spacebase.openclassic.client.ClassicClient;
 import ch.spacebase.openclassic.client.MinecraftStandalone;
@@ -160,8 +161,10 @@ public final class Minecraft implements Runnable {
 	public int levelSize = 0;
 
 	public boolean openclassicServer = false;
+	public String openclassicVersion = "";
 	public boolean hacks = true;
 	private List<CustomBlock> clientCache = new ArrayList<CustomBlock>();
+	public List<RemotePluginInfo> serverPlugins = new ArrayList<RemotePluginInfo>();
 	private boolean ctf;
 	public int mipmapMode = 0;
 
@@ -1107,7 +1110,7 @@ public final class Minecraft implements Runnable {
 									GL11.glRotatef(-var33 * 20.0F, 1.0F, 0.0F, 0.0F);
 								}
 
-								GL11.glColor4f(var1000 = this.level.getBrightness((int) this.player.x, (int) this.player.y, (int) this.player.z), var1000, var1000, 1.0F);
+								GL11.glColor4f(this.level.getBrightness((int) this.player.x, (int) this.player.y, (int) this.player.z), var1000, var1000, 1.0F);
 								com.mojang.minecraft.render.ShapeRenderer var123 = com.mojang.minecraft.render.ShapeRenderer.instance;
 								if (this.renderer.heldBlock.block != null) {
 									var34 = 0.4F;
@@ -1460,7 +1463,10 @@ public final class Minecraft implements Runnable {
 									} else if (type == PacketType.CLIENT_SET_BLOCK) {
 										// Server is OpenClassic
 										this.openclassicServer = (Byte) params[4] == 1;
-										this.netManager.netHandler.send(PacketType.CLIENT_INFO, Constants.CLIENT_VERSION);
+										this.netManager.netHandler.send(PacketType.GAME_INFO, Constants.CLIENT_VERSION);
+										for(Plugin plugin : OpenClassic.getClient().getPluginManager().getPlugins()) {
+											this.netManager.netHandler.send(PacketType.PLUGIN, plugin.getDescription().getName(), plugin.getDescription().getVersion());
+										}
 									} else if (type == PacketType.SET_BLOCK) {
 										if (this.level != null) {
 											this.level.netSetTile((Short) params[0], (Short) params[1], (Short) params[2], (Byte) params[3]);
@@ -1551,6 +1557,9 @@ public final class Minecraft implements Runnable {
 									} else if (type == PacketType.UPDATE_PLAYER_TYPE) {
 										this.player.userType = (Byte) params[0];
 										// Custom begins
+									} else if (type == PacketType.GAME_INFO) {
+										OpenClassic.getLogger().info("Connected to OpenClassic v" + (String) params[0] + "!");
+										this.openclassicVersion = (String) params[0];
 									} else if (type == PacketType.CUSTOM_BLOCK) {
 										byte id = (Byte) params[0];
 										boolean opaque = (Byte) params[1] == 1;
@@ -1696,6 +1705,8 @@ public final class Minecraft implements Runnable {
 										} else {
 											this.audio.stop((String) params[0]);
 										}
+									} else if (type == PacketType.PLUGIN) {
+										this.serverPlugins .add(new RemotePluginInfo((String) params[0], (String) params[1]));
 									}
 								}
 
