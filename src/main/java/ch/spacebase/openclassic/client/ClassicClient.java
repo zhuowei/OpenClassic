@@ -62,7 +62,7 @@ import ch.spacebase.openclassic.client.input.ClientInputHelper;
 import ch.spacebase.openclassic.client.render.ClientRenderHelper;
 import ch.spacebase.openclassic.client.scheduler.ClientScheduler;
 
-// TODO: Fix images not 256x256. Custom data packet (int opcode, byte[] data)
+// TODO: Fix images not 256x256.
 public class ClassicClient implements Client {
 
 	private boolean debug = false;
