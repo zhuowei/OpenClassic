@@ -18,6 +18,7 @@ import ch.spacebase.openclassic.api.OpenClassic;
 import ch.spacebase.openclassic.api.Position;
 import ch.spacebase.openclassic.api.event.EventFactory;
 import ch.spacebase.openclassic.api.event.block.BlockPlaceEvent;
+import ch.spacebase.openclassic.api.event.player.CustomMessageEvent;
 import ch.spacebase.openclassic.api.event.player.PlayerJoinEvent;
 import ch.spacebase.openclassic.api.event.player.PlayerKeyChangeEvent;
 import ch.spacebase.openclassic.api.event.player.PlayerKickEvent;
@@ -28,6 +29,7 @@ import ch.spacebase.openclassic.api.event.player.PlayerRespawnEvent;
 import ch.spacebase.openclassic.api.gui.GuiScreen;
 import ch.spacebase.openclassic.api.level.LevelInfo;
 import ch.spacebase.openclassic.api.level.generator.Generator;
+import ch.spacebase.openclassic.api.network.msg.custom.CustomMessage;
 import ch.spacebase.openclassic.api.plugin.Plugin;
 import ch.spacebase.openclassic.api.plugin.RemotePluginInfo;
 import ch.spacebase.openclassic.api.util.Constants;
@@ -1707,6 +1709,8 @@ public final class Minecraft implements Runnable {
 										}
 									} else if (type == PacketType.PLUGIN) {
 										this.serverPlugins .add(new RemotePluginInfo((String) params[0], (String) params[1]));
+									} else if (type == PacketType.CUSTOM) {
+										EventFactory.callEvent(new CustomMessageEvent(this.player.openclassic, new CustomMessage((String) params[0], (byte[]) params[1])));
 									}
 								}
 

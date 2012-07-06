@@ -31,6 +31,7 @@ public final class PacketType {
 	public static final PacketType AUDIO_PLAY;
 	public static final PacketType MUSIC_STOP;
 	public static final PacketType PLUGIN;
+	public static final PacketType CUSTOM;
 	
 	private static int lastOpcode;
 	
@@ -96,6 +97,7 @@ public final class PacketType {
 		AUDIO_PLAY = new PacketType(new Class[] { String.class, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Byte.TYPE, Byte.TYPE });
 		MUSIC_STOP = new PacketType(new Class[] { String.class });
 		PLUGIN = new PacketType(new Class[] { String.class, String.class });
+		CUSTOM = new PacketType(new Class[] { String.class, byte[].class, Integer.TYPE });
 		
 		lastOpcode = 0;
 	}
