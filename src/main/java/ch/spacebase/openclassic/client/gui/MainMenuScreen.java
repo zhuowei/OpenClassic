@@ -15,7 +15,7 @@ import com.mojang.minecraft.gui.OptionsScreen;
  */
 public class MainMenuScreen extends GuiScreen {
 
-	private static final Texture logo = new Texture("/logo.png", true, 256, 256);
+	private static final Texture logo = new Texture("/logo.png", true, 251, 48);
 	
 	public void onOpen() {
 		this.clearWidgets();

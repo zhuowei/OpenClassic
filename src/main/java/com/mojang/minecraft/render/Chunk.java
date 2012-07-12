@@ -59,7 +59,6 @@ public final class Chunk {
 								continuing = true;
 							} else {
 								cleaned |= block.getModel().render(x, y, z, block.getId() == VanillaBlock.LAVA.getId() || block.getId() == VanillaBlock.STATIONARY_LAVA.getId() ? 100 : level.getBrightness(x, y, z));
-								//cleaned |= block.render(this.level, x, y, z, ShapeRenderer.instance);
 							}
 						}
 					}

@@ -32,7 +32,7 @@ public final class CreativeGameMode extends GameMode {
 		int slot = 0;
 		for (BlockType block : Blocks.getBlocks()) {
 			if(slot >= 9) break;
-			if(block.isSelectable()) {
+			if(block != null && block.isSelectable()) {
 				player.inventory.count[slot] = 1;
 				player.inventory.slots[slot] = block.getId();
 				

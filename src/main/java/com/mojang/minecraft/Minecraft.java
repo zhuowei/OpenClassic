@@ -763,21 +763,15 @@ public final class Minecraft implements Runnable {
 									var105 = 3;
 								}
 
-								for (int var104 = 0; var104 < var105; ++var104) {
-									Chunk var118 = this.levelRenderer.chunks.remove(var98 - var104);
-									var118.update();
-									var118.loaded = false;
+								for (int count = 0; count < var105; ++count) {
+									Chunk chunk = this.levelRenderer.chunks.remove(var98 - count);
+									chunk.update();
+									chunk.loaded = false;
 								}
 
 								this.renderer.renderFog();
 								GL11.glEnable(GL11.GL_FOG);
 								this.levelRenderer.sortChunks(this.player, 0);
-								//int var83;
-								//int var110;
-								//int var114;
-								//int var125;
-								//int var122;
-								//int var120;
 								if (this.level.isSolid(this.player.x, this.player.y, this.player.z, 0.1F)) {
 
 									for (int var122 = (int) this.player.x - 1; var122 <= (int) this.player.x + 1; ++var122) {
@@ -1118,7 +1112,7 @@ public final class Minecraft implements Runnable {
 									var34 = 0.4F;
 									GL11.glScalef(0.4F, var34, var34);
 									GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-									GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.textureManager.bindTexture("/terrain.png"));
+									//GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.textureManager.bindTexture("/terrain.png"));
 									this.renderer.heldBlock.block.getModel().renderPreview(1);
 								} else {
 									this.player.bindTexture(this.textureManager);
@@ -1428,7 +1422,7 @@ public final class Minecraft implements Runnable {
 											}
 
 											for(BlockType block : Blocks.getBlocks()) {
-												if(block instanceof CustomBlock) {
+												if(block != null && block instanceof CustomBlock) {
 													this.clientCache.add((CustomBlock) block);
 													Blocks.unregister(block.getId());
 												}

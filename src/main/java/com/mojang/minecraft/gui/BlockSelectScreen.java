@@ -19,7 +19,7 @@ public final class BlockSelectScreen extends GuiScreen {
 	private int getBlockOnScreen(int x, int y) {
 		int count = 0;
 		for (BlockType block : Blocks.getBlocks()) {
-			if(block.isSelectable()) {
+			if(block != null && block.isSelectable()) {
 				int blockX = this.getWidth() / 2 + count % 9 * 24 + -108 - 3;
 				int blockZ = this.getHeight() / 2 + count / 9 * 24 + -60 + 3;
 				if (x >= blockX && x <= blockX + 24 && y >= blockZ - 12 && y <= blockZ + 12) {
@@ -46,11 +46,11 @@ public final class BlockSelectScreen extends GuiScreen {
 		}
 
 		RenderHelper.getHelper().renderText("Select block", this.getWidth() / 2, 40);
-		RenderHelper.getHelper().bindTexture("/terrain.png", true);
+		//RenderHelper.getHelper().bindTexture("/terrain.png", true);
 
 		int count = 0;
 		for (BlockType b : Blocks.getBlocks()) {
-			if(b.isSelectable()) {
+			if(b != null && b.isSelectable()) {
 				GL11.glPushMatrix();
 				int var5 = this.getWidth() / 2 + count % 9 * 24 + -108;
 				int var6 = this.getHeight() / 2 + count / 9 * 24 + -60;

@@ -77,7 +77,7 @@ public class Inventory implements Serializable {
 		int count = 0;
 		if (block >= 0) {
 			for(BlockType b : Blocks.getBlocks()) {
-				if(b.isSelectable()) {
+				if(b != null && b.isSelectable()) {
 					if(count == block) this.replaceSlot(b);
 					count++;
 				}

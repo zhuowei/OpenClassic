@@ -55,7 +55,7 @@ public final class NetworkHandler {
 	public final void close() {
 		if(this.netManager.identified) {
 			for(BlockType block : Blocks.getBlocks()) {
-				if(block instanceof CustomBlock) {
+				if(block != null && block instanceof CustomBlock) {
 					Blocks.unregister(block.getId());
 				}
 			}
