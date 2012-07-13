@@ -30,7 +30,7 @@ public final class Renderer {
 
 	public Renderer(Minecraft mc) {
 		this.mc = mc;
-		this.heldBlock = new HeldBlock(mc);
+		this.heldBlock = new HeldBlock();
 	}
 
 	public Vector a(float var1) {

@@ -71,9 +71,9 @@ public abstract class Entity implements Serializable {
 			pos = pos.clone();
 			while(pos.getY() > 0 && this.level.getCubes(this.bb).size() != 0) {
 				pos.setY(pos.getY() + 1);
-				this.setPos((float) pos.getX(), (float) pos.getY(), (float) pos.getZ());
 			}
 			
+			this.setPos((float) pos.getX(), (float) pos.getY(), (float) pos.getZ());
 			this.xd = 0;
 			this.yd = 0;
 			this.zd = 0;
@@ -319,9 +319,11 @@ public abstract class Entity implements Serializable {
 				int id = this.level.getTile((int) this.x, (int) (this.y - 0.2F - this.heightOffset), (int) this.z);
 				if (this.walkDist > this.nextStep && id > 0) {
 					this.nextStep++;
-					StepSound step = Blocks.fromId(id).getStepSound();
-					if (step != StepSound.NONE) {
-						this.playSound(step.getSound(), step.getVolume() * 0.75F, step.getPitch());
+					if(Blocks.fromId(id) != null) {
+						StepSound step = Blocks.fromId(id).getStepSound();
+						if (step != StepSound.NONE) {
+							this.playSound(step.getSound(), step.getVolume() * 0.75F, step.getPitch());
+						}
 					}
 				}
 			}

@@ -363,7 +363,7 @@ public class Level implements Serializable {
 					if (this.isInBounds(next.x, next.y, next.z)) {
 						byte block = this.blocks[(next.y * this.height + next.z) * this.width + next.x];
 						if(block == next.block && block > 0) {
-							if(Blocks.fromId(block).getPhysics() != null && this.openclassic.getPhysicsEnabled()) {
+							if(Blocks.fromId(block) != null && Blocks.fromId(block).getPhysics() != null && this.openclassic.getPhysicsEnabled()) {
 								Blocks.fromId(block).getPhysics().update(this.openclassic.getBlockAt(next.x, next.y, next.z));
 							}
 						}
@@ -383,7 +383,7 @@ public class Level implements Serializable {
 			int z = y >> var1 & (this.height - 1);
 			y = y >> var1 + var2 & (this.depth - 1);
 			BlockType block = Blocks.fromId(this.blocks[(y * this.height + z) * this.width + x]);
-			if(block.getPhysics() != null && this.openclassic.getPhysicsEnabled() && !EventFactory.callEvent(new BlockPhysicsEvent(this.openclassic.getBlockAt(x, y, z))).isCancelled()) {
+			if(block != null && block.getPhysics() != null && this.openclassic.getPhysicsEnabled() && !EventFactory.callEvent(new BlockPhysicsEvent(this.openclassic.getBlockAt(x, y, z))).isCancelled()) {
 				block.getPhysics().update(this.openclassic.getBlockAt(x, y, z));
 			}
 		}
@@ -542,7 +542,7 @@ public class Level implements Serializable {
 	public void addToTickNextTick(int x, int y, int z, int block) {
 		if (!this.networkMode) {
 			TickNextTick next = new TickNextTick(x, y, z, block);
-			if (block > 0) {
+			if (block > 0 && Blocks.fromId(block) != null) {
 				next.ticks = Blocks.fromId(block).getTickDelay();
 			}
 
@@ -564,7 +564,7 @@ public class Level implements Serializable {
 
 	private boolean a(float var1, float var2, float var3) {
 		int var4;
-		return (var4 = this.getTile((int) var1, (int) var2, (int) var3)) > 0 && Blocks.fromId(var4).isSolid();
+		return (var4 = this.getTile((int) var1, (int) var2, (int) var3)) > 0 && Blocks.fromId(var4) != null && Blocks.fromId(var4).isSolid();
 	}
 
 	public int getHighestTile(int var1, int var2) {

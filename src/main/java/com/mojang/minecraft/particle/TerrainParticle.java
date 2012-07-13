@@ -12,12 +12,15 @@ public class TerrainParticle extends Particle {
 
 	private static final long serialVersionUID = 1L;
 
+	private BlockType block;
+	
 	public TerrainParticle(Level level, float x, float y, float z, float var5, float var6, float var7, BlockType block) {
 		super(level, x, y, z, var5, var6, var7);
 		Quad quad = block.getModel().getQuads().size() >= 3 ? block.getModel().getQuad(2) : block.getModel().getQuad(block.getModel().getQuads().size() - 1);
 		this.tex = quad.getTexture().getId();
 		this.gravity = block == VanillaBlock.LEAVES ? 0.4F : (block == VanillaBlock.SPONGE ? 0.9F : 1);
 		this.rCol = this.gCol = this.bCol = 0.6F;
+		this.block = block;
 	}
 
 	public int getParticleTexture() {
@@ -25,10 +28,14 @@ public class TerrainParticle extends Particle {
 	}
 
 	public void render(ShapeRenderer var1, float var2, float var3, float var4, float var5, float var6, float var7) {
-		float var8;
-		float var9 = (var8 = ((this.tex % 16) + this.uo / 4.0F) / 16.0F) + 0.015609375F;
-		float var10;
-		float var11 = (var10 = ((this.tex / 16f) + this.vo / 4.0F) / 16.0F) + 0.015609375F;
+		float var8 = (this.tex % 16) / 16.0F + 0.02f;
+		float var9 = var8 + 0.015609375F;
+		float var10 = (this.tex / 16f) / 16.0F;
+		if(this.block == VanillaBlock.GRAY_CLOTH || this.block == VanillaBlock.BLACK_CLOTH || this.block == VanillaBlock.WHITE_CLOTH) {
+			var10 -= 0.01f;
+		}
+		
+		float var11 = var10 + 0.015609375F;
 		float var12 = 0.1F * this.size;
 		float var13 = this.xo + (this.x - this.xo) * var2;
 		float var14 = this.yo + (this.y - this.yo) * var2;

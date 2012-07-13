@@ -20,7 +20,7 @@ final class SkinDownloadThread extends Thread {
 		this.player = player;
 	}
 
-	public final void run() {
+	public void run() {
 		try {
 			if(!Boolean.valueOf(HTTPUtil.fetchUrl("http://www.minecraft.net/haspaid.jsp", "user=" + URLEncoder.encode(this.player.name, "UTF-8"))))
 				return;

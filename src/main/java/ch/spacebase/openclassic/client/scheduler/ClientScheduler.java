@@ -8,13 +8,9 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
-import ch.spacebase.openclassic.api.OpenClassic;
 import ch.spacebase.openclassic.api.scheduler.Scheduler;
 import ch.spacebase.openclassic.api.scheduler.Task;
 import ch.spacebase.openclassic.api.scheduler.Worker;
-import ch.spacebase.openclassic.api.util.Constants;
 
 public class ClientScheduler implements Scheduler {
 
@@ -27,7 +23,7 @@ public class ClientScheduler implements Scheduler {
     private final List<ClientWorker> activeWorkers = Collections.synchronizedList(new ArrayList<ClientWorker>());
 	
 	public ClientScheduler() {
-        this.executor.scheduleAtFixedRate(new Runnable() {
+        /* this.executor.scheduleAtFixedRate(new Runnable() {
             public void run() {
                 try {
                     tick();
@@ -36,7 +32,7 @@ public class ClientScheduler implements Scheduler {
                     e.printStackTrace();
                 }
             }
-        }, 0, Constants.TICK_MILLISECONDS, TimeUnit.MILLISECONDS);
+        }, 0, Constants.TICK_MILLISECONDS, TimeUnit.MILLISECONDS); */
 	}
 	
 	public void stop() {
@@ -52,7 +48,7 @@ public class ClientScheduler implements Scheduler {
 		return task.getTaskId();
 	}
 	
-	private void tick() {
+	public void tick() {
 		synchronized(this.newTasks) {
 			for(ClientTask task : this.newTasks) {
 				this.tasks.add(task);

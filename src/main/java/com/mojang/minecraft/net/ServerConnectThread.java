@@ -10,7 +10,6 @@ import com.mojang.minecraft.Minecraft;
 import com.mojang.minecraft.gui.ErrorScreen;
 import com.mojang.minecraft.net.NetworkManager;
 import com.mojang.minecraft.net.PacketType;
-import com.mojang.net.NetworkHandler;
 
 public final class ServerConnectThread extends Thread {
 
@@ -30,7 +29,7 @@ public final class ServerConnectThread extends Thread {
 		this.mc = mc;
 	}
 
-	public final void run() {
+	public void run() {
 		try {
 			this.netManager.netHandler = new NetworkHandler(this.server, this.port, this.netManager.mc);
 			this.netManager.netHandler.netManager = this.netManager;

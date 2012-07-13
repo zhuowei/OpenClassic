@@ -33,7 +33,7 @@ public final class MobSpawner {
 			int var7 = this.level.random.nextInt(this.level.width);
 			int var8 = (int) (Math.min(this.level.random.nextFloat(), this.level.random.nextFloat()) * this.level.depth);
 			int var9 = this.level.random.nextInt(this.level.height);
-			if (!this.level.isSolidTile(var7, var8, var9) && !Blocks.fromId(this.level.getTile(var7, var8, var9)).isLiquid() && (!this.level.isLit(var7, var8, var9) || this.level.random.nextInt(5) == 0)) {
+			if (!this.level.isSolidTile(var7, var8, var9) && !(Blocks.fromId(this.level.getTile(var7, var8, var9)) != null && Blocks.fromId(this.level.getTile(var7, var8, var9)).isLiquid()) && (!this.level.isLit(var7, var8, var9) || this.level.random.nextInt(5) == 0)) {
 				for (int var10 = 0; var10 < 3; ++var10) {
 					int var11 = var7;
 					int var12 = var8;

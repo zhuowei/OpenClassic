@@ -38,6 +38,7 @@ import ch.spacebase.openclassic.client.MinecraftStandalone;
 import ch.spacebase.openclassic.client.gui.MainMenuScreen;
 import ch.spacebase.openclassic.client.player.ClientPlayer;
 import ch.spacebase.openclassic.client.render.ClientRenderHelper;
+import ch.spacebase.openclassic.client.scheduler.ClientScheduler;
 import ch.spacebase.openclassic.client.sound.ClientAudioManager;
 import ch.spacebase.openclassic.client.util.BlockUtils;
 import ch.spacebase.openclassic.client.util.GeneralUtils;
@@ -780,7 +781,7 @@ public final class Minecraft implements Runnable {
 												var105 = var38;
 												var98 = var125;
 												int var99 = this.levelRenderer.level.getTile(var122, var125, var38);
-												if (var99 != 0 && Blocks.fromId(var99).isSolid()) {
+												if (var99 != 0 && Blocks.fromId(var99) != null && Blocks.fromId(var99).isSolid()) {
 													GL11.glColor4f(0.2F, 0.2F, 0.2F, 1.0F);
 													GL11.glDepthFunc(GL11.GL_LESS);
 													ShapeRenderer.instance.begin();
@@ -1084,11 +1085,10 @@ public final class Minecraft implements Runnable {
 								}
 
 								var117 = this.renderer.heldBlock.lastPosition + (this.renderer.heldBlock.heldPosition - this.renderer.heldBlock.lastPosition) * this.timer.time;
-								this.player = this.renderer.heldBlock.mc.player;
 								GL11.glPushMatrix();
 								GL11.glRotatef(this.player.xRotO + (this.player.xRot - this.player.xRotO) * this.timer.time, 1.0F, 0.0F, 0.0F);
 								GL11.glRotatef(this.player.yRotO + (this.player.yRot - this.player.yRotO) * this.timer.time, 0.0F, 1.0F, 0.0F);
-								this.renderer.heldBlock.mc.renderer.setLighting(true);
+								this.renderer.setLighting(true);
 								GL11.glPopMatrix();
 								GL11.glPushMatrix();
 								var69 = 0.8F;
@@ -1131,7 +1131,7 @@ public final class Minecraft implements Runnable {
 
 								GL11.glDisable(GL11.GL_NORMALIZE);
 								GL11.glPopMatrix();
-								this.renderer.heldBlock.mc.renderer.setLighting(false);
+								this.renderer.setLighting(false);
 								if (!this.renderer.mc.settings.anaglyph) {
 									break;
 								}
@@ -1171,7 +1171,7 @@ public final class Minecraft implements Runnable {
 				fps++;
 
 				while (System.currentTimeMillis() >= lastUpdate + 1000) {
-					this.debugInfo = fps + " fps, " + com.mojang.minecraft.render.Chunk.chunkUpdates + " chunk updates";
+					this.debugInfo = fps + " fps, " + Chunk.chunkUpdates + " chunk updates";
 					com.mojang.minecraft.render.Chunk.chunkUpdates = 0;
 					lastUpdate += 1000;
 					fps = 0;
@@ -1287,12 +1287,12 @@ public final class Minecraft implements Runnable {
 
 							this.level.netSetTile(x, y, z, id);
 							this.renderer.heldBlock.heldPosition = 0;
-							if(Blocks.fromId(id).getPhysics() != null) {
+							if(Blocks.fromId(id) != null && Blocks.fromId(id).getPhysics() != null) {
 								Blocks.fromId(id).getPhysics().onPlace(this.level.openclassic.getBlockAt(x, y, z));
 							}
 
 							BlockType type = Blocks.fromId(id);
-							if (type.getStepSound() != StepSound.NONE) {
+							if (type != null && type.getStepSound() != StepSound.NONE) {
 								this.level.playSound(type.getStepSound().getSound(), x, y, z, (type.getStepSound().getVolume() + 1.0F) / 2.0F, type.getStepSound().getPitch() * 0.8F);
 							}
 						}
@@ -1304,6 +1304,7 @@ public final class Minecraft implements Runnable {
 
 	private void tick() {
 		this.audio.update(this.player);
+		((ClientScheduler) OpenClassic.getGame().getScheduler()).tick();
 
 		if (this.currentScreen != null) {
 			this.lastClick = this.ticks + 10000;
@@ -1827,6 +1828,7 @@ public final class Minecraft implements Runnable {
 							if (Keyboard.getEventKey() == this.settings.loadLocKey.key && !this.ctf) {
 								PlayerRespawnEvent event = new PlayerRespawnEvent(OpenClassic.getClient().getPlayer(), new Position(OpenClassic.getClient().getLevel(), this.level.xSpawn + 0.5F, this.level.ySpawn, this.level.zSpawn + 0.5F, (byte) this.level.rotSpawn, (byte) 0));
 								if(!event.isCancelled()) {
+									System.out.println(event.getPosition().getX() + ", " + event.getPosition().getY() + ", " + event.getPosition().getZ() + " : " + this.level.xSpawn + 0.5F + ", " + this.level.ySpawn + ", " + this.level.zSpawn + 0.5F);
 									this.player.resetPos(event.getPosition());
 								}
 							}
