@@ -93,22 +93,22 @@ public class Sheep extends QuadrupedMob {
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, textures.bindTexture("/mob/sheep_fur.png"));
 			GL11.glDisable(GL11.GL_CULL_FACE);
 			AnimalModel fur = (AnimalModel) modelCache.getModel("sheep.fur");
-			fur.b.g = model.b.g;
-			fur.b.f = model.b.f;
+			fur.b.yaw = model.b.yaw;
+			fur.b.pitch = model.b.pitch;
 			fur.b.y = model.b.y;
 			fur.b.x = model.b.x;
-			fur.c.g = model.c.g;
-			fur.c.f = model.c.f;
-			fur.d.f = model.d.f;
-			fur.e.f = model.e.f;
-			fur.f.f = model.f.f;
-			fur.g.f = model.g.f;
-			fur.b.a(var7);
-			fur.c.a(var7);
-			fur.d.a(var7);
-			fur.e.a(var7);
-			fur.f.a(var7);
-			fur.g.a(var7);
+			fur.c.yaw = model.c.yaw;
+			fur.c.pitch = model.c.pitch;
+			fur.d.pitch = model.d.pitch;
+			fur.e.pitch = model.e.pitch;
+			fur.f.pitch = model.f.pitch;
+			fur.g.pitch = model.g.pitch;
+			fur.b.render(var7);
+			fur.c.render(var7);
+			fur.d.render(var7);
+			fur.e.render(var7);
+			fur.f.render(var7);
+			fur.g.render(var7);
 		}
 
 		model.b.y = var9;

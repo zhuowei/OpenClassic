@@ -305,7 +305,7 @@ public class Mob extends Entity {
 	}
 
 	public void renderModel(TextureManager textures, float var2, float var3, float var4, float var5, float var6, float var7) {
-		modelCache.getModel(this.modelName).a(var2, var4, this.tickCount + var3, var5, var6, var7);
+		modelCache.getModel(this.modelName).render(var2, var4, this.tickCount + var3, var5, var6, var7);
 	}
 
 	public void heal(int amount) {

@@ -91,7 +91,6 @@ public class ClientAudioManager implements AudioManager {
 		this.music.get(music).add(file);
 		this.system.backgroundMusic(music, file, file.getFile(), false);
 		this.system.backgroundMusic(music + "_loop", file, file.getFile(), true);
-		// TODO: Included
 	}
 	
 	private void download(URL url) {

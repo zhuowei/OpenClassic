@@ -2,29 +2,29 @@ package com.mojang.minecraft.model;
 
 import com.mojang.minecraft.model.Vector;
 
-public final class Vertex {
+public class Vertex {
 
-	public Vector a;
-	public float b;
-	public float c;
+	public Vector vector;
+	public float u;
+	public float v;
 
-	public Vertex(float var1, float var2, float var3, float var4, float var5) {
-		this(new Vector(var1, var2, var3), var4, var5);
+	public Vertex(float x, float y, float z, float u, float v) {
+		this(new Vector(x, y, z), u, v);
 	}
 
-	public final Vertex a(float var1, float var2) {
-		return new Vertex(this, var1, var2);
+	public Vertex create(float u, float v) {
+		return new Vertex(this, u, v);
 	}
 
-	private Vertex(Vertex var1, float var2, float var3) {
-		this.a = var1.a;
-		this.b = var2;
-		this.c = var3;
+	private Vertex(Vertex vert, float u, float v) {
+		this.vector = vert.vector;
+		this.u = u;
+		this.v = v;
 	}
 
-	private Vertex(Vector var1, float var2, float var3) {
-		this.a = var1;
-		this.b = var2;
-		this.c = var3;
+	private Vertex(Vector vec, float u, float v) {
+		this.vector = vec;
+		this.u = u;
+		this.v = v;
 	}
 }

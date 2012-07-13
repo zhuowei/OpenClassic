@@ -56,7 +56,7 @@ import com.mojang.minecraft.item.Arrow;
 import com.mojang.minecraft.item.Item;
 import com.mojang.minecraft.level.Level;
 import com.mojang.minecraft.level.LevelIO;
-import com.mojang.minecraft.model.ModelRenderer;
+import com.mojang.minecraft.model.ModelPart;
 import com.mojang.minecraft.model.Vector;
 import com.mojang.minecraft.net.NetworkManager;
 import com.mojang.minecraft.net.NetworkPlayer;
@@ -804,7 +804,7 @@ public final class Minecraft implements Runnable {
 								}
 
 								this.renderer.setLighting(true);
-								com.mojang.minecraft.model.Vector var103 = this.renderer.a(this.timer.time);
+								Vector var103 = this.renderer.a(this.timer.time);
 								this.levelRenderer.level.blockMap.render(var103, clipping, this.levelRenderer.textures, this.timer.time);
 								this.renderer.setLighting(false);
 								this.renderer.renderFog();
@@ -1120,13 +1120,12 @@ public final class Minecraft implements Runnable {
 									GL11.glTranslatef(0.0F, 0.2F, 0.0F);
 									GL11.glRotatef(-120.0F, 0.0F, 0.0F, 1.0F);
 									GL11.glScalef(1.0F, 1.0F, 1.0F);
-									var34 = 0.0625F;
-									ModelRenderer var127;
-									if (!(var127 = this.player.getModel().f).i) {
-										var127.b(var34);
+									ModelPart arm = this.player.getModel().arm;
+									if (!arm.hasList) {
+										arm.generateList(0.0625F);
 									}
 
-									GL11.glCallList(var127.list);
+									GL11.glCallList(arm.list);
 								}
 
 								GL11.glDisable(GL11.GL_NORMALIZE);

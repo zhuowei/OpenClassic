@@ -18,8 +18,8 @@ public class HumanoidMob extends Mob {
 		this.setPos(x, y, z);
 	}
 
-	public void renderModel(TextureManager textures, float var2, float var3, float var4, float var5, float var6, float var7) {
-		super.renderModel(textures, var2, var3, var4, var5, var6, var7);
+	public void renderModel(TextureManager textures, float var2, float var3, float var4, float var5, float var6, float scale) {
+		super.renderModel(textures, var2, var3, var4, var5, var6, scale);
 		HumanoidModel model = (HumanoidModel) modelCache.getModel(this.modelName);
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		if (this.allowAlpha) {
@@ -28,9 +28,9 @@ public class HumanoidMob extends Mob {
 
 		if (this.hasHair) {
 			GL11.glDisable(GL11.GL_CULL_FACE);
-			model.c.g = model.b.g;
-			model.c.f = model.b.f;
-			model.c.a(var7);
+			model.c.yaw = model.helmet.yaw;
+			model.c.pitch = model.helmet.pitch;
+			model.c.render(scale);
 			GL11.glEnable(GL11.GL_CULL_FACE);
 		}
 
@@ -38,26 +38,26 @@ public class HumanoidMob extends Mob {
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, textures.bindTexture("/armor/plate.png"));
 			GL11.glDisable(GL11.GL_CULL_FACE);
 			HumanoidModel armored = (HumanoidModel) modelCache.getModel("humanoid.armor");
-			armored.b.l = this.helmet;
-			armored.d.l = this.armor;
-			armored.e.l = this.armor;
-			armored.f.l = this.armor;
-			armored.g.l = false;
-			armored.h.l = false;
-			armored.b.g = model.b.g;
-			armored.b.f = model.b.f;
-			armored.e.f = model.e.f;
-			armored.e.h = model.e.h;
-			armored.f.f = model.f.f;
-			armored.f.h = model.f.h;
-			armored.g.f = model.g.f;
-			armored.h.f = model.h.f;
-			armored.b.a(var7);
-			armored.d.a(var7);
-			armored.e.a(var7);
-			armored.f.a(var7);
-			armored.g.a(var7);
-			armored.h.a(var7);
+			armored.helmet.render = this.helmet;
+			armored.chestplate.render = this.armor;
+			armored.leggings.render = this.armor;
+			armored.arm.render = this.armor;
+			armored.g.render = false;
+			armored.h.render = false;
+			armored.helmet.yaw = model.helmet.yaw;
+			armored.helmet.pitch = model.helmet.pitch;
+			armored.leggings.pitch = model.leggings.pitch;
+			armored.leggings.roll = model.leggings.roll;
+			armored.arm.pitch = model.arm.pitch;
+			armored.arm.roll = model.arm.roll;
+			armored.g.pitch = model.g.pitch;
+			armored.h.pitch = model.h.pitch;
+			armored.helmet.render(scale);
+			armored.chestplate.render(scale);
+			armored.leggings.render(scale);
+			armored.arm.render(scale);
+			armored.g.render(scale);
+			armored.h.render(scale);
 			GL11.glEnable(GL11.GL_CULL_FACE);
 		}
 

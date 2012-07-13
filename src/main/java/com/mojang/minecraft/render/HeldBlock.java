@@ -2,7 +2,7 @@ package com.mojang.minecraft.render;
 
 import ch.spacebase.openclassic.api.block.BlockType;
 
-public final class HeldBlock {
+public class HeldBlock {
 
 	public BlockType block = null;
 	public float heldPosition = 0;

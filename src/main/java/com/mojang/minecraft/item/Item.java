@@ -29,7 +29,7 @@ public class Item extends Entity {
 		for (int id = 0; id < 256; ++id) {
 			if (Blocks.fromId(id) != null) {
 				Quad quad = Blocks.fromId(id).getModel().getQuads().size() >= 3 ? Blocks.fromId(id).getModel().getQuad(2) : Blocks.fromId(id).getModel().getQuad(Blocks.fromId(id).getModel().getQuads().size() - 1);
-				models[id] = new ItemModel(quad.getTexture().getId());
+				models[id] = new ItemModel(id, quad.getTexture().getId());
 			}
 		}
 
@@ -89,17 +89,17 @@ public class Item extends Entity {
 		
 		if(models[this.resource] == null && Blocks.fromId(this.resource) != null) {
 			Quad quad = Blocks.fromId(this.resource).getModel().getQuads().size() >= 3 ? Blocks.fromId(this.resource).getModel().getQuad(2) : Blocks.fromId(this.resource).getModel().getQuad(Blocks.fromId(this.resource).getModel().getQuads().size() - 1);
-			models[this.resource] = new ItemModel(quad.getTexture().getId());
+			models[this.resource] = new ItemModel(this.resource, quad.getTexture().getId());
 		}
 		
-		models[this.resource].a();
+		models[this.resource].render();
 		var5 = (var5 = (var5 = var5 * 0.5F + 0.5F) * var5) * var5;
 		GL11.glColor4f(1, 1, 1, var5 * 0.4F);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
-		models[this.resource].a();
+		models[this.resource].render();
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);

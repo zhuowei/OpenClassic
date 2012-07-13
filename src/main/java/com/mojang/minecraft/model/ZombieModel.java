@@ -9,17 +9,17 @@ public class ZombieModel extends HumanoidModel {
 		super.b(var1, var2, var3, var4, var5, var6);
 		var1 = MathHelper.sin(this.a * 3.1415927F);
 		var2 = MathHelper.sin((1.0F - (1.0F - this.a) * (1.0F - this.a)) * 3.1415927F);
-		this.e.h = 0.0F;
-		this.f.h = 0.0F;
-		this.e.g = -(0.1F - var1 * 0.6F);
-		this.f.g = 0.1F - var1 * 0.6F;
-		this.e.f = -1.5707964F;
-		this.f.f = -1.5707964F;
-		this.e.f -= var1 * 1.2F - var2 * 0.4F;
-		this.f.f -= var1 * 1.2F - var2 * 0.4F;
-		this.e.h += MathHelper.cos(var3 * 0.09F) * 0.05F + 0.05F;
-		this.f.h -= MathHelper.cos(var3 * 0.09F) * 0.05F + 0.05F;
-		this.e.f += MathHelper.sin(var3 * 0.067F) * 0.05F;
-		this.f.f -= MathHelper.sin(var3 * 0.067F) * 0.05F;
+		this.leggings.roll = 0.0F;
+		this.arm.roll = 0.0F;
+		this.leggings.yaw = -(0.1F - var1 * 0.6F);
+		this.arm.yaw = 0.1F - var1 * 0.6F;
+		this.leggings.pitch = -1.5707964F;
+		this.arm.pitch = -1.5707964F;
+		this.leggings.pitch -= var1 * 1.2F - var2 * 0.4F;
+		this.arm.pitch -= var1 * 1.2F - var2 * 0.4F;
+		this.leggings.roll += MathHelper.cos(var3 * 0.09F) * 0.05F + 0.05F;
+		this.arm.roll -= MathHelper.cos(var3 * 0.09F) * 0.05F + 0.05F;
+		this.leggings.pitch += MathHelper.sin(var3 * 0.067F) * 0.05F;
+		this.arm.pitch -= MathHelper.sin(var3 * 0.067F) * 0.05F;
 	}
 }
