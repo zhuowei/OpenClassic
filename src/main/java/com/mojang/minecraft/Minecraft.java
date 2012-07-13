@@ -1106,7 +1106,8 @@ public final class Minecraft implements Runnable {
 									GL11.glRotatef(-var33 * 20.0F, 1.0F, 0.0F, 0.0F);
 								}
 
-								GL11.glColor4f(this.level.getBrightness((int) this.player.x, (int) this.player.y, (int) this.player.z), var1000, var1000, 1.0F);
+								float brightness = this.level.getBrightness((int) this.player.x, (int) this.player.y, (int) this.player.z);
+								GL11.glColor4f(brightness, brightness, brightness, 1);
 								com.mojang.minecraft.render.ShapeRenderer var123 = com.mojang.minecraft.render.ShapeRenderer.instance;
 								if (this.renderer.heldBlock.block != null) {
 									var34 = 0.4F;
