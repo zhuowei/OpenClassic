@@ -26,13 +26,7 @@ public class MCSharpLevelFormat {
 		if (magic != 1874) {
 			OpenClassic.getLogger().severe("Only version 1 MCSharp maps are supported.");
 			OpenClassic.getLogger().severe("Trying MCForge 6..");
-			Level l = null;
-			try {
-				l = MCForgeLevelFormat.load(file);
-			} catch (Exception e) {
-				return null;
-			}
-			return l;
+			return MCForgeLevelFormat.load(file);
 		}
 
 		short width = convert(data.readShort());
