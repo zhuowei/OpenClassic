@@ -52,7 +52,7 @@ public class OpenClassicLevelFormat {
 			
 			if(new File(OpenClassic.getGame().getDirectory(), "levels/" + name + ".lvl").exists()) {
 				OpenClassic.getLogger().info("MCSharp map detected! Reading...");
-				Level level = MinecraftLevelFormat.read("levels/" + name + ".lvl");
+				Level level = MCSharpLevelFormat.load("levels/" + name + ".lvl");
 				save(level);
 				return level;
 			}
