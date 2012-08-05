@@ -26,13 +26,13 @@ public class ServerListScreen extends GuiScreen {
 
 	public void onOpen() {
 		this.clearWidgets();
-		this.attachWidget(new ButtonList(0, this.getWidth(), this.getHeight(), this, true));
+		this.attachWidget(new ButtonList(0, this.getWidth(), this.getHeight(), this));
 		this.getWidget(0, ButtonList.class).setContents(SessionData.serverInfo);
 
-		this.attachWidget(new Button(1, this.getWidth() / 2 - 206, this.getHeight() / 6 + 144, 100, 20, this, true, "Favorites"));
-		this.attachWidget(new Button(2, this.getWidth() / 2 - 102, this.getHeight() / 6 + 144, 100, 20, this, true, "Add Favorite"));
-		this.attachWidget(new Button(3, this.getWidth() / 2 + 2, this.getHeight() / 6 + 144, 100, 20, this, true, "Enter a URL..."));
-		this.attachWidget(new Button(4, this.getWidth() / 2 + 106, this.getHeight() / 6 + 144, 100, 20, this, true, "Back to Menu"));
+		this.attachWidget(new Button(1, this.getWidth() / 2 - 206, this.getHeight() / 6 + 144, 100, 20, this, "Favorites"));
+		this.attachWidget(new Button(2, this.getWidth() / 2 - 102, this.getHeight() / 6 + 144, 100, 20, this, "Add Favorite"));
+		this.attachWidget(new Button(3, this.getWidth() / 2 + 2, this.getHeight() / 6 + 144, 100, 20, this, "Enter a URL..."));
+		this.attachWidget(new Button(4, this.getWidth() / 2 + 106, this.getHeight() / 6 + 144, 100, 20, this, "Back to Menu"));
 	}
 
 	public final void onButtonClick(Button button) {

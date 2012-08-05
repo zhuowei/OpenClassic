@@ -19,12 +19,12 @@ public class MainMenuScreen extends GuiScreen {
 	
 	public void onOpen() {
 		this.clearWidgets();
-		this.attachWidget(new Button(0, this.getWidth() / 2 - 100, this.getHeight() / 4 + 24, this, true, "Singleplayer"));
-		this.attachWidget(new Button(1, this.getWidth() / 2 - 100, this.getHeight() / 4 + 48, this, true, "Multiplayer"));
-		this.attachWidget(new Button(2, this.getWidth() / 2 - 100, this.getHeight() / 4 + 72, this, true, "Options"));
-		this.attachWidget(new Button(3, this.getWidth() / 2 - 100, this.getHeight() / 4 + 96, this, true, "Texture Packs"));
-		this.attachWidget(new Button(4, this.getWidth() / 2 - 102, this.getHeight() / 4 + 144, 100, 20, this, true, "About"));
-		this.attachWidget(new Button(5, this.getWidth() / 2 + 2, this.getHeight() / 4 + 144, 100, 20, this, true, "Quit"));
+		this.attachWidget(new Button(0, this.getWidth() / 2 - 100, this.getHeight() / 4 + 24, this, "Singleplayer"));
+		this.attachWidget(new Button(1, this.getWidth() / 2 - 100, this.getHeight() / 4 + 48, this, "Multiplayer"));
+		this.attachWidget(new Button(2, this.getWidth() / 2 - 100, this.getHeight() / 4 + 72, this, "Options"));
+		this.attachWidget(new Button(3, this.getWidth() / 2 - 100, this.getHeight() / 4 + 96, this, "Texture Packs"));
+		this.attachWidget(new Button(4, this.getWidth() / 2 - 102, this.getHeight() / 4 + 144, 100, 20, this, "About"));
+		this.attachWidget(new Button(5, this.getWidth() / 2 + 2, this.getHeight() / 4 + 144, 100, 20, this, "Quit"));
 	
 		if(!OpenClassic.getClient().getAudioManager().isPlaying("menu")) OpenClassic.getClient().getAudioManager().playMusic("menu", true);
 	}

@@ -385,5 +385,37 @@ public class ClientRenderHelper extends RenderHelper {
 
 		particles.spawnParticle((new TerrainParticle(level, particleX, particleY, particleZ, 0.0F, 0.0F, 0.0F, Blocks.fromId(level.getTile(x, y, z)))).setPower(0.2F).scale(0.6F));
 	}
+
+	@Override
+	public int getStringWidth(String string) {
+		return GeneralUtils.getMinecraft().fontRenderer.getWidth(string);
+	}
+	
+	@Override
+	public void drawRotatedBlock(int x, int y, BlockType block) {
+		this.drawRotatedBlock(x, y, block, 0);
+	}
+	
+	@Override
+	public void drawRotatedBlock(int x, int y, BlockType block, float scale) {
+		if(block != null && block.getModel() != null) {
+			GL11.glPushMatrix();
+			GL11.glTranslatef(x, y, 0);
+			GL11.glScalef(10, 10, 10);
+			GL11.glTranslatef(1, 0, 8);
+			GL11.glRotatef(-30, 1, 0, 0);
+			GL11.glRotatef(45, 0, 1, 0);
+			if(scale > 0) {
+				GL11.glScalef(scale, scale, scale);
+			}
+	
+			GL11.glTranslatef(-1.5F, 0.5F, 0.5F);
+			GL11.glScalef(-1, -1, -1);
+			ShapeRenderer.instance.begin();
+			block.getModel().renderFullbright(-2, 0, 0);
+			ShapeRenderer.instance.end();
+			GL11.glPopMatrix();
+		}
+	}
 	
 }

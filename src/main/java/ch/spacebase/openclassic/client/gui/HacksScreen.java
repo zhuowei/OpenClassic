@@ -3,7 +3,7 @@ package ch.spacebase.openclassic.client.gui;
 import ch.spacebase.openclassic.api.OpenClassic;
 import ch.spacebase.openclassic.api.gui.GuiScreen;
 import ch.spacebase.openclassic.api.gui.widget.Button;
-import ch.spacebase.openclassic.api.gui.widget.ToggleButton;
+import ch.spacebase.openclassic.api.gui.widget.StateButton;
 import ch.spacebase.openclassic.api.render.RenderHelper;
 import ch.spacebase.openclassic.client.util.GeneralUtils;
 
@@ -22,10 +22,10 @@ public final class HacksScreen extends GuiScreen {
 	public final void onOpen() {
 		this.clearWidgets();
 		for (int count = 0; count < this.settings.hacks; count++) {
-			this.attachWidget(new ToggleButton(count, this.getWidth() / 2 - 155 + count % 2 * 160, this.getHeight() / 6 + 24 * (count >> 1), 155, 20, this, true, this.settings.getHack(count)));
+			this.attachWidget(new StateButton(count, this.getWidth() / 2 - 155 + count % 2 * 160, this.getHeight() / 6 + 24 * (count >> 1), 155, 20, this, this.settings.getHack(count)));
 		}
 		
-		this.attachWidget(new Button(100, this.getWidth() / 2 - 100, this.getHeight() / 6 + 168, this, true, "Done"));
+		this.attachWidget(new Button(100, this.getWidth() / 2 - 100, this.getHeight() / 6 + 168, this, "Done"));
 	}
 
 	public final void onButtonClick(Button button) {

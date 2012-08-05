@@ -30,12 +30,12 @@ public class FavoriteServersScreen extends GuiScreen {
 
 	public void onOpen() {
 		this.clearWidgets();
-		this.attachWidget(new ButtonList(0, this.getWidth(), this.getHeight(), this, true));
+		this.attachWidget(new ButtonList(0, this.getWidth(), this.getHeight(), this));
 		this.getWidget(0, ButtonList.class).setContents(new ArrayList<String>(SessionData.favorites.keySet()));
 
-		this.attachWidget(new Button(1, this.getWidth() / 2 - 156, this.getHeight() / 6 + 144, 100, 20, this, true, "Add Favorite"));
-		this.attachWidget(new Button(2, this.getWidth() / 2 - 52, this.getHeight() / 6 + 144, 100, 20, this, true, "Remove Favorite"));
-		this.attachWidget(new Button(3, this.getWidth() / 2 + 52, this.getHeight() / 6 + 144, 100, 20, this, true, "Back"));
+		this.attachWidget(new Button(1, this.getWidth() / 2 - 156, this.getHeight() / 6 + 144, 100, 20, this, "Add Favorite"));
+		this.attachWidget(new Button(2, this.getWidth() / 2 - 52, this.getHeight() / 6 + 144, 100, 20, this, "Remove Favorite"));
+		this.attachWidget(new Button(3, this.getWidth() / 2 + 52, this.getHeight() / 6 + 144, 100, 20, this, "Back"));
 	}
 
 	public final void onButtonClick(Button button) {

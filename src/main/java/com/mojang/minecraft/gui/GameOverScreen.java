@@ -15,8 +15,8 @@ public final class GameOverScreen extends GuiScreen {
 
 	public final void onOpen() {
 		this.clearWidgets();
-		this.attachWidget(new Button(0, this.getWidth() / 2 - 100, this.getHeight() / 4 + 72, this, true, "Respawn"));
-		this.attachWidget(new Button(1, this.getWidth() / 2 - 100, this.getHeight() / 4 + 96, this, true, "Main Menu"));
+		this.attachWidget(new Button(0, this.getWidth() / 2 - 100, this.getHeight() / 4 + 72, this, "Respawn"));
+		this.attachWidget(new Button(1, this.getWidth() / 2 - 100, this.getHeight() / 4 + 96, this, "Main Menu"));
 	}
 
 	public final void onButtonClick(Button button) {

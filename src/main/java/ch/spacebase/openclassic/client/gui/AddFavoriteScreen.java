@@ -30,11 +30,12 @@ public class AddFavoriteScreen extends GuiScreen {
 		Keyboard.enableRepeatEvents(true);
 		
 		this.clearWidgets();
-		this.attachWidget(new Button(0, this.getWidth() / 2 - 100, this.getHeight() / 4 + 120, this, true, "Add Favorite"));
-		this.attachWidget(new Button(1, this.getWidth() / 2 - 100, this.getHeight() / 4 + 144, this, true, "Cancel"));
+		this.attachWidget(new Button(0, this.getWidth() / 2 - 100, this.getHeight() / 4 + 120, this, "Add Favorite"));
+		this.attachWidget(new Button(1, this.getWidth() / 2 - 100, this.getHeight() / 4 + 144, this, "Cancel"));
 		
-		this.name = new TextBox(2, this.getWidth() / 2 - 100, this.getHeight() / 2 - 50, this, true, true);
-		this.url = new TextBox(3, this.getWidth() / 2 - 100, this.getHeight() / 2 - 10, this, true, false);
+		this.name = new TextBox(2, this.getWidth() / 2 - 100, this.getHeight() / 2 - 50, this);
+		this.name.setFocus(true);
+		this.url = new TextBox(3, this.getWidth() / 2 - 100, this.getHeight() / 2 - 10, this);
 		this.attachWidget(this.name);
 		this.attachWidget(this.url);
 		

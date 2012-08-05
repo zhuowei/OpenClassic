@@ -1869,11 +1869,11 @@ public final class Minecraft implements Runnable {
 				if (Keyboard.getEventKey() == this.settings.fogKey.key) {
 					this.settings.toggleSetting(4, !Keyboard.isKeyDown(42) && !Keyboard.isKeyDown(54) ? 1 : -1);
 				}
-
-				EventFactory.callEvent(new PlayerKeyChangeEvent(OpenClassic.getClient().getPlayer(), Keyboard.getEventKey(), Keyboard.isKeyDown(Keyboard.getEventKey())));
-				if(this.netManager != null && this.netManager.isConnected() && this.openclassicServer) {
-					this.netManager.netHandler.send(PacketType.KEY_CHANGE, Keyboard.getEventKey(), Keyboard.isKeyDown(Keyboard.getEventKey()) ? (byte) 1 : (byte) 0);
-				}
+			}
+			
+			EventFactory.callEvent(new PlayerKeyChangeEvent(OpenClassic.getClient().getPlayer(), Keyboard.getEventKey(), Keyboard.getEventKeyState()));
+			if(this.netManager != null && this.netManager.isConnected() && this.openclassicServer) {
+				this.netManager.netHandler.send(PacketType.KEY_CHANGE, Keyboard.getEventKey(), Keyboard.getEventKeyState());
 			}
 		}
 

@@ -3,7 +3,7 @@ package com.mojang.minecraft.gui;
 import ch.spacebase.openclassic.api.gui.GuiScreen;
 import ch.spacebase.openclassic.api.gui.widget.Button;
 import ch.spacebase.openclassic.api.gui.widget.TextBox;
-import ch.spacebase.openclassic.api.gui.widget.ToggleButton;
+import ch.spacebase.openclassic.api.gui.widget.StateButton;
 import ch.spacebase.openclassic.api.render.RenderHelper;
 import ch.spacebase.openclassic.client.util.GeneralUtils;
 
@@ -24,13 +24,14 @@ public final class LevelDumpScreen extends GuiScreen {
 	public final void onOpen() {
 		Keyboard.enableRepeatEvents(true);
 		
-		this.widget = new TextBox(0, this.getWidth() / 2 - 100, this.getHeight() / 2 - 30, this, true, true, 30);
+		this.widget = new TextBox(0, this.getWidth() / 2 - 100, this.getHeight() / 2 - 30, this, 30);
 		
 		this.clearWidgets();
 		this.attachWidget(this.widget);
-		this.attachWidget(new ToggleButton(1, this.getWidth() / 2 - 100, this.getHeight() / 4 + 96, this, true, "Format: OpenClassic"));
-		this.attachWidget(new Button(2, this.getWidth() / 2 - 100, this.getHeight() / 4 + 120, this, true, "Dump"));
-		this.attachWidget(new Button(3, this.getWidth() / 2 - 100, this.getHeight() / 4 + 144, this, true, "Cancel"));
+		this.attachWidget(new StateButton(1, this.getWidth() / 2 - 100, this.getHeight() / 4 + 96, this, "Format"));
+		this.getWidget(1, StateButton.class).setState("OpenClassic");
+		this.attachWidget(new Button(2, this.getWidth() / 2 - 100, this.getHeight() / 4 + 120, this, "Dump"));
+		this.attachWidget(new Button(3, this.getWidth() / 2 - 100, this.getHeight() / 4 + 144, this, "Cancel"));
 		
 		this.getWidget(2, Button.class).setActive(false);
 	}
@@ -44,12 +45,12 @@ public final class LevelDumpScreen extends GuiScreen {
 			Minecraft mc = GeneralUtils.getMinecraft();
 			
 			if(button.getId() == 1) {
-				button.setText(button.getText().contains("Minecraft") ? "Format: OpenClassic" : "Format: Minecraft");
+				((StateButton) button).setState(((StateButton) button).getState().equals("Minecraft") ? "OpenClassic" : "Minecraft");
 			}
 			
 			if (button.getId() == 2 && this.widget.getText().trim().length() > 0) {
 				mc.level.name = this.widget.getText();
-				if(this.getWidget(1, Button.class).getText().contains("Minecraft")) {
+				if(this.getWidget(1, StateButton.class).getState().equals("Minecraft")) {
 					LevelIO.saveOld(mc.level);
 				} else {
 					mc.levelIo.save(mc.level);

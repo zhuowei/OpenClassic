@@ -15,10 +15,10 @@ public final class MenuScreen extends GuiScreen {
 
 	public final void onOpen() {
 		this.clearWidgets();
-		this.attachWidget(new Button(0, this.getWidth() / 2 - 100, this.getHeight() / 2 - 48, this, true, "Options..."));
-		this.attachWidget(new Button(1, this.getWidth() / 2 - 100, this.getHeight() / 2 - 24, this, true, "Dump Level"));
-		this.attachWidget(new Button(2, this.getWidth() / 2 - 100, this.getHeight() / 2, this, true, "Main Menu"));
-		this.attachWidget(new Button(3, this.getWidth() / 2 - 100, this.getHeight() / 2 + 60, this, true, "Back to game"));
+		this.attachWidget(new Button(0, this.getWidth() / 2 - 100, this.getHeight() / 2 - 48, this, "Options..."));
+		this.attachWidget(new Button(1, this.getWidth() / 2 - 100, this.getHeight() / 2 - 24, this, "Dump Level"));
+		this.attachWidget(new Button(2, this.getWidth() / 2 - 100, this.getHeight() / 2, this, "Main Menu"));
+		this.attachWidget(new Button(3, this.getWidth() / 2 - 100, this.getHeight() / 2 + 60, this, "Back to game"));
 	
 		if(GeneralUtils.getMinecraft().netManager == null) {
 			this.getWidget(1, Button.class).setActive(false);

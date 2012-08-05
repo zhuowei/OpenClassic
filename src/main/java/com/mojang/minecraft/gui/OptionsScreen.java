@@ -2,7 +2,7 @@ package com.mojang.minecraft.gui;
 
 import ch.spacebase.openclassic.api.gui.GuiScreen;
 import ch.spacebase.openclassic.api.gui.widget.Button;
-import ch.spacebase.openclassic.api.gui.widget.ToggleButton;
+import ch.spacebase.openclassic.api.gui.widget.StateButton;
 import ch.spacebase.openclassic.api.render.RenderHelper;
 import ch.spacebase.openclassic.client.gui.HacksScreen;
 import ch.spacebase.openclassic.client.util.GeneralUtils;
@@ -24,12 +24,13 @@ public final class OptionsScreen extends GuiScreen {
 	public final void onOpen() {
 		this.clearWidgets();
 		for (int count = 0; count < this.settings.count; count++) {
-			this.attachWidget(new ToggleButton(count, this.getWidth() / 2 - 155 + count % 2 * 160, this.getHeight() / 6 + 24 * (count >> 1), 155, 20, this, true, this.settings.getSetting(count)));
+			this.attachWidget(new StateButton(count, this.getWidth() / 2 - 155 + count % 2 * 160, this.getHeight() / 6 + 24 * (count >> 1), 155, 20, this, this.settings.getSettingName(count)));
+			this.getWidget(count, StateButton.class).setState(this.settings.getSettingValue(count));
 		}
 		
-		this.attachWidget(new Button(75, this.getWidth() / 2 - 100, this.getHeight() / 6 + 124, this, true, "Hacks..."));
-		this.attachWidget(new Button(100, this.getWidth() / 2 - 100, this.getHeight() / 6 + 148, this, true, "Controls..."));
-		this.attachWidget(new Button(200, this.getWidth() / 2 - 100, this.getHeight() / 6 + 172, this, true, "Done"));
+		this.attachWidget(new Button(75, this.getWidth() / 2 - 100, this.getHeight() / 6 + 124, this, "Hacks..."));
+		this.attachWidget(new Button(100, this.getWidth() / 2 - 100, this.getHeight() / 6 + 148, this, "Controls..."));
+		this.attachWidget(new Button(200, this.getWidth() / 2 - 100, this.getHeight() / 6 + 172, this, "Done"));
 		
 		if(GeneralUtils.getMinecraft().netManager != null) {
 			this.getWidget(8, Button.class).setActive(false);
@@ -61,7 +62,7 @@ public final class OptionsScreen extends GuiScreen {
 		if (button.isActive()) {
 			if (button.getId() < 75) {
 				this.settings.toggleSetting(button.getId(), 1);
-				button.setText(this.settings.getSetting(button.getId()));
+				((StateButton) button).setState(this.settings.getSettingValue(button.getId()));
 			}
 
 			if (button.getId() == 75) {

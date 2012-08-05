@@ -16,7 +16,8 @@ public final class ChatInputScreen extends GuiScreen {
 		Keyboard.enableRepeatEvents(true);
 		
 		this.clearWidgets();
-		this.attachWidget(new TextBox(0, 2, this.getHeight() - 14, this.getWidth() - 4, 12, this, true, true, true));
+		this.attachWidget(new TextBox(0, 2, this.getHeight() - 14, this.getWidth() - 4, 12, this, true));
+		this.getWidget(0, TextBox.class).setFocus(true);
 	}
 
 	public final void onClose() {

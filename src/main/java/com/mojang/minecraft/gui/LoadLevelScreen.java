@@ -26,10 +26,10 @@ public class LoadLevelScreen extends GuiScreen {
 
 	public void onOpen() {
 		this.clearWidgets();
-		this.attachWidget(new ButtonList(0, this.getWidth(), this.getHeight(), this, true));
-		this.attachWidget(new Button(1, this.getWidth() / 2 - 156, this.getHeight() / 6 + 144, 100, 20, this, true, "New Level"));
-		this.attachWidget(new Button(2, this.getWidth() / 2 - 52, this.getHeight() / 6 + 144, 100, 20, this, true, "Delete Level"));
-		this.attachWidget(new Button(3, this.getWidth() / 2 + 52, this.getHeight() / 6 + 144, 100, 20, this, true, "Back to Menu"));
+		this.attachWidget(new ButtonList(0, this.getWidth(), this.getHeight(), this));
+		this.attachWidget(new Button(1, this.getWidth() / 2 - 156, this.getHeight() / 6 + 144, 100, 20, this, "New Level"));
+		this.attachWidget(new Button(2, this.getWidth() / 2 - 52, this.getHeight() / 6 + 144, 100, 20, this, "Delete Level"));
+		this.attachWidget(new Button(3, this.getWidth() / 2 + 52, this.getHeight() / 6 + 144, 100, 20, this, "Back to Menu"));
 
 		StringBuilder levels = new StringBuilder();
 		for(String file : (new File(GeneralUtils.getMinecraft().dir, "levels").list())) {

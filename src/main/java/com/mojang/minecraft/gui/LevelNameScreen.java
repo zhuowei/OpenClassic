@@ -4,7 +4,7 @@ import ch.spacebase.openclassic.api.OpenClassic;
 import ch.spacebase.openclassic.api.gui.GuiScreen;
 import ch.spacebase.openclassic.api.gui.widget.Button;
 import ch.spacebase.openclassic.api.gui.widget.TextBox;
-import ch.spacebase.openclassic.api.gui.widget.ToggleButton;
+import ch.spacebase.openclassic.api.gui.widget.StateButton;
 import ch.spacebase.openclassic.api.render.RenderHelper;
 import ch.spacebase.openclassic.client.util.GeneralUtils;
 
@@ -25,14 +25,15 @@ public final class LevelNameScreen extends GuiScreen {
 	public final void onOpen() {
 		Keyboard.enableRepeatEvents(true);
 		
-		this.widget = new TextBox(0, this.getWidth() / 2 - 100, this.getHeight() / 2 - 45, this, true, true, 30);
+		this.widget = new TextBox(0, this.getWidth() / 2 - 100, this.getHeight() / 2 - 45, this, 30);
 		
 		this.clearWidgets();
-		this.attachWidget(new ToggleButton(0, this.getWidth() / 2 - 100, this.getHeight() / 4 + 48, this, true, "Type: normal"));
-		this.attachWidget(new Button(1, this.getWidth() / 2 - 100, this.getHeight() / 4 + 72, this, true, "Small"));
-		this.attachWidget(new Button(2, this.getWidth() / 2 - 100, this.getHeight() / 4 + 96, this, true, "Normal"));
-		this.attachWidget(new Button(3, this.getWidth() / 2 - 100, this.getHeight() / 4 + 120, this, true, "Huge"));
-		this.attachWidget(new Button(4, this.getWidth() / 2 - 100, this.getHeight() / 4 + 144, this, true, "Cancel"));
+		this.attachWidget(new StateButton(0, this.getWidth() / 2 - 100, this.getHeight() / 4 + 48, this, "Type"));
+		this.getWidget(0, StateButton.class).setState("normal");
+		this.attachWidget(new Button(1, this.getWidth() / 2 - 100, this.getHeight() / 4 + 72, this, "Small"));
+		this.attachWidget(new Button(2, this.getWidth() / 2 - 100, this.getHeight() / 4 + 96, this, "Normal"));
+		this.attachWidget(new Button(3, this.getWidth() / 2 - 100, this.getHeight() / 4 + 120, this, "Huge"));
+		this.attachWidget(new Button(4, this.getWidth() / 2 - 100, this.getHeight() / 4 + 144, this, "Cancel"));
 		this.attachWidget(this.widget);
 		
 		this.getWidget(1, Button.class).setActive(false);
@@ -54,13 +55,13 @@ public final class LevelNameScreen extends GuiScreen {
 					this.type = 0;
 				}
 				
-				button.setText("Type: " + OpenClassic.getGame().getGenerators().keySet().toArray(new String[OpenClassic.getGame().getGenerators().keySet().size()])[this.type]);
+				((StateButton) button).setState(OpenClassic.getGame().getGenerators().keySet().toArray(new String[OpenClassic.getGame().getGenerators().keySet().size()])[this.type]);
 			}
 			
 			if ((button.getId() == 1 || button.getId() == 2 || button.getId() == 3) && this.widget.getText().trim().length() > 0) {
 				mc.levelName = this.widget.getText();
 				mc.levelSize = button.getId() - 1;
-				mc.initGame(OpenClassic.getGame().getGenerator(this.getWidget(0, Button.class).getText().replace("Type: ", "")));
+				mc.initGame(OpenClassic.getGame().getGenerator(this.getWidget(0, StateButton.class).getState()));
 				mc.levelIo.save(mc.level);
 				mc.setCurrentScreen(null);
 				mc.grabMouse();

@@ -55,6 +55,14 @@ public final class GameSettings {
 	public final String getBinding(int key) {
 		return this.bindings[key].name + ": " + Keyboard.getKeyName(this.bindings[key].key);
 	}
+	
+	public final String getBindingName(int key) {
+		return this.bindings[key].name;
+	}
+	
+	public final String getBindingValue(int key) {
+		return Keyboard.getKeyName(this.bindings[key].key);
+	}
 
 	public final void setBinding(int key, int keyId) {
 		this.bindings[key].key = keyId;
@@ -119,6 +127,14 @@ public final class GameSettings {
 
 	public final String getSetting(int id) {
 		return id == 0 ? "Music: " + (this.music ? "ON" : "OFF") : (id == 1 ? "Sound: " + (this.sound ? "ON" : "OFF") : (id == 2 ? "Invert mouse: " + (this.invertMouse ? "ON" : "OFF") : (id == 3 ? "Show Info: " + (this.showInfo ? "ON" : "OFF") : (id == 4 ? "Render distance: " + fog[this.viewDistance] : (id == 5 ? "View bobbing: " + (this.viewBobbing ? "ON" : "OFF") : (id == 6 ? "3d anaglyph: " + (this.anaglyph ? "ON" : "OFF") : (id == 7 ? "Limit framerate: " + (this.limitFPS ? "ON" : "OFF") : (id == 8 ? "Survival Mode: " + (this.survival ? "ON" : "OFF") : id == 9 ? "Smoothing: " + (this.smoothing ? "ON" : "OFF") : ""))))))));
+	}
+	
+	public final String getSettingName(int id) {
+		return id == 0 ? "Music" : (id == 1 ? "Sound" : (id == 2 ? "Invert mouse" : (id == 3 ? "Show Info" : (id == 4 ? "Render distance" : (id == 5 ? "View bobbing" : (id == 6 ? "3d anaglyph" : (id == 7 ? "Limit framerate" : (id == 8 ? "Survival Mode" : id == 9 ? "Smoothing" : ""))))))));
+	}
+	
+	public final String getSettingValue(int id) {
+		return id == 0 ? (this.music ? "ON" : "OFF") : (id == 1 ? (this.sound ? "ON" : "OFF") : (id == 2 ? (this.invertMouse ? "ON" : "OFF") : (id == 3 ? (this.showInfo ? "ON" : "OFF") : (id == 4 ? fog[this.viewDistance] : (id == 5 ? (this.viewBobbing ? "ON" : "OFF") : (id == 6 ? (this.anaglyph ? "ON" : "OFF") : (id == 7 ? (this.limitFPS ? "ON" : "OFF") : (id == 8 ? (this.survival ? "ON" : "OFF") : id == 9 ? (this.smoothing ? "ON" : "OFF") : ""))))))));
 	}
 	
 	public final String getHack(int id) {

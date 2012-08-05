@@ -19,7 +19,7 @@ public final class ErrorScreen extends GuiScreen {
 
 	public final void onOpen() {
 		this.clearWidgets();
-		this.attachWidget(new Button(0, this.getWidth() / 2 - 100, this.getHeight() / 6 + 120 + 12, this, true, "Main Menu"));
+		this.attachWidget(new Button(0, this.getWidth() / 2 - 100, this.getHeight() / 6 + 120 + 12, this, "Main Menu"));
 	}
 
 	public final void onButtonClick(Button button) {

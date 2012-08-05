@@ -29,7 +29,7 @@ public class MCForgeLevelFormat {
 		
 		byte version = data.readByte();
 		if (version != 1) {
-			OpenClassic.getLogger().severe("Unknown version!");
+			OpenClassic.getLogger().severe("Unknown MCForge map version!");
 			return null;
 		}
 		
