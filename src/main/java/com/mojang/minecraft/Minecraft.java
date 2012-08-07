@@ -8,7 +8,7 @@ import ch.spacebase.openclassic.api.block.custom.CustomBlock;
 import ch.spacebase.openclassic.api.block.model.BoundingBox;
 import ch.spacebase.openclassic.api.block.model.CubeModel;
 import ch.spacebase.openclassic.api.block.model.CuboidModel;
-import ch.spacebase.openclassic.api.block.model.TransparentModel;
+import ch.spacebase.openclassic.api.block.model.LiquidModel;
 import ch.spacebase.openclassic.api.block.model.Model;
 import ch.spacebase.openclassic.api.block.model.Quad;
 import ch.spacebase.openclassic.api.block.model.Texture;
@@ -925,9 +925,9 @@ public final class Minecraft implements Runnable {
 										int var114 = this.levelRenderer.level.getTile(var102.x, var102.y, var102.z);
 										BlockType var10000 = var114 > 0 ? Blocks.fromId(var114) : null;
 										type = var10000;
-										var1000 = (type.getModel().getSelectionBox().getX1() + type.getModel().getSelectionBox().getX2()) / 2.0F;
-										var33 = (type.getModel().getSelectionBox().getY1() + type.getModel().getSelectionBox().getY2()) / 2.0F;
-										var34 = (type.getModel().getSelectionBox().getZ1() + type.getModel().getSelectionBox().getZ2()) / 2.0F;
+										var1000 = (type.getModel().getSelectionBox(var102.x, var102.y, var102.z).getX1() + type.getModel().getSelectionBox(var102.x, var102.y, var102.z).getX2()) / 2.0F;
+										var33 = (type.getModel().getSelectionBox(var102.x, var102.y, var102.z).getY1() + type.getModel().getSelectionBox(var102.x, var102.y, var102.z).getY2()) / 2.0F;
+										var34 = (type.getModel().getSelectionBox(var102.x, var102.y, var102.z).getZ1() + type.getModel().getSelectionBox(var102.x, var102.y, var102.z).getZ2()) / 2.0F;
 										GL11.glTranslatef(var102.x + var1000, var102.y + var33, var102.z + var34);
 										var35 = 1.01F;
 										GL11.glScalef(1.01F, var35, var35);
@@ -1114,7 +1114,7 @@ public final class Minecraft implements Runnable {
 									GL11.glScalef(0.4F, var34, var34);
 									GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
 									//GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.textureManager.bindTexture("/terrain.png"));
-									this.renderer.heldBlock.block.getModel().renderPreview(1);
+									this.renderer.heldBlock.block.getModel().renderPreview(this.level.getBrightness((int) this.player.x, (int) this.player.y, (int) this.player.z));
 								} else {
 									this.player.bindTexture(this.textureManager);
 									GL11.glScalef(1.0F, -1.0F, -1.0F);
@@ -1577,7 +1577,7 @@ public final class Minecraft implements Runnable {
 									} else if (type == PacketType.BLOCK_MODEL) {
 										byte block = (Byte) params[0];
 										String modelType = (String) params[1];
-										Model model = modelType.equals("TransparentModel") ? new TransparentModel("/terrain.png", 16) : (modelType.equals("CuboidModel") ? new CuboidModel("/terrain.png", 16, 0, 0, 0, 1, 1, 1) : (modelType.equals("CubeModel") ? new CubeModel("/terrain.png", 16) : new Model()));
+										Model model = modelType.equals("TransparentModel") ? new LiquidModel("/terrain.png", 16) : (modelType.equals("CuboidModel") ? new CuboidModel("/terrain.png", 16, 0, 0, 0, 1, 1, 1) : (modelType.equals("CubeModel") ? new CubeModel("/terrain.png", 16) : new Model()));
 										model.clearQuads();
 
 										float x1 = (Float) params[2];

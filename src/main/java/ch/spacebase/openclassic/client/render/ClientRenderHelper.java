@@ -12,7 +12,7 @@ import ch.spacebase.openclassic.api.block.Blocks;
 import ch.spacebase.openclassic.api.block.VanillaBlock;
 import ch.spacebase.openclassic.api.block.custom.CustomBlock;
 import ch.spacebase.openclassic.api.block.model.CuboidModel;
-import ch.spacebase.openclassic.api.block.model.TransparentModel;
+import ch.spacebase.openclassic.api.block.model.LiquidModel;
 import ch.spacebase.openclassic.api.block.model.Model;
 import ch.spacebase.openclassic.api.block.model.Quad;
 import ch.spacebase.openclassic.api.block.model.SubTexture;
@@ -179,7 +179,7 @@ public class ClientRenderHelper extends RenderHelper {
 		int y1 = quad.getTexture().getY1();
 		int y2 = quad.getTexture().getY2();
 		
-		if(quad.getParent() instanceof CuboidModel && !(quad.getParent() instanceof TransparentModel) && quad.getId() > 1 && (quad.getVertex(0).getY() > 0 || quad.getVertex(1).getY() < 1)) {
+		if(quad.getParent() instanceof CuboidModel && !(quad.getParent() instanceof LiquidModel) && quad.getId() > 1 && (quad.getVertex(0).getY() > 0 || quad.getVertex(1).getY() < 1)) {
 			y1 = (int) (y1 + quad.getVertex(0).getY() * quad.getTexture().getParent().getSubTextureHeight());
 			y2 = (int) (y1 + quad.getVertex(1).getY() * quad.getTexture().getParent().getSubTextureHeight());
 		}
@@ -356,31 +356,31 @@ public class ClientRenderHelper extends RenderHelper {
 	public final void spawnBlockParticles(Level level, int x, int y, int z, int side, ParticleManager particles) {
 		Model model = Blocks.fromId(level.getTile(x, y, z)).getModel();
 		
-		float particleX = x + rand.nextFloat() * (model.getSelectionBox().getX2() - model.getSelectionBox().getX1() - 0.1F * 2.0F) + 0.1F + model.getSelectionBox().getX1();
-		float particleY = y + rand.nextFloat() * (model.getSelectionBox().getY2() - model.getSelectionBox().getY1() - 0.1F * 2.0F) + 0.1F + model.getSelectionBox().getY1();
-		float particleZ = z + rand.nextFloat() * (model.getSelectionBox().getZ2() - model.getSelectionBox().getZ1() - 0.1F * 2.0F) + 0.1F + model.getSelectionBox().getZ1();
+		float particleX = x + rand.nextFloat() * (model.getSelectionBox(x, y, z).getX2() - model.getSelectionBox(x, y, z).getX1() - 0.1F * 2.0F) + 0.1F + model.getSelectionBox(x, y, z).getX1();
+		float particleY = y + rand.nextFloat() * (model.getSelectionBox(x, y, z).getY2() - model.getSelectionBox(x, y, z).getY1() - 0.1F * 2.0F) + 0.1F + model.getSelectionBox(x, y, z).getY1();
+		float particleZ = z + rand.nextFloat() * (model.getSelectionBox(x, y, z).getZ2() - model.getSelectionBox(x, y, z).getZ1() - 0.1F * 2.0F) + 0.1F + model.getSelectionBox(x, y, z).getZ1();
 		if (side == 0) {
-			particleY = y + model.getSelectionBox().getY1() - 0.1F;
+			particleY = y + model.getSelectionBox(x, y, z).getY1() - 0.1F;
 		}
 
 		if (side == 1) {
-			particleY = y + model.getSelectionBox().getY2() + 0.1F;
+			particleY = y + model.getSelectionBox(x, y, z).getY2() + 0.1F;
 		}
 
 		if (side == 2) {
-			particleZ = z + model.getSelectionBox().getZ1() - 0.1F;
+			particleZ = z + model.getSelectionBox(x, y, z).getZ1() - 0.1F;
 		}
 
 		if (side == 3) {
-			particleZ = z + model.getSelectionBox().getZ2() + 0.1F;
+			particleZ = z + model.getSelectionBox(x, y, z).getZ2() + 0.1F;
 		}
 
 		if (side == 4) {
-			particleX = x + model.getSelectionBox().getX1() - 0.1F;
+			particleX = x + model.getSelectionBox(x, y, z).getX1() - 0.1F;
 		}
 
 		if (side == 5) {
-			particleX = x + model.getSelectionBox().getX2() + 0.1F;
+			particleX = x + model.getSelectionBox(x, y, z).getX2() + 0.1F;
 		}
 
 		particles.spawnParticle((new TerrainParticle(level, particleX, particleY, particleZ, 0.0F, 0.0F, 0.0F, Blocks.fromId(level.getTile(x, y, z)))).setPower(0.2F).scale(0.6F));

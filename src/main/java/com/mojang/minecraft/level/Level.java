@@ -842,7 +842,7 @@ public class Level implements Serializable {
 							var23 = BlockUtils.clip(var21.getId(), var6, var7, var8, var1, var2);
 						}
 						
-						if (Blocks.fromId(var22).getModel().getCollisionBox() != null) {
+						if (Blocks.fromId(var22).getModel().getCollisionBox(var6, var7, var8) != null) {
 							if (var23 != null) {
 								return var23;
 							}

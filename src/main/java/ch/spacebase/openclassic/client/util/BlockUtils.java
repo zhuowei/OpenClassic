@@ -23,12 +23,12 @@ public class BlockUtils {
 		
 		point = point.add((-x), (-y), (-z));
 		other = other.add((-x), (-y), (-z));
-		Vector x1 = point.getXIntersection(other, model.getSelectionBox().getX1());
-		Vector x2 = point.getXIntersection(other, model.getSelectionBox().getX2());
-		Vector y1 = point.getYIntersection(other, model.getSelectionBox().getY1());
-		Vector y2 = point.getYIntersection(other, model.getSelectionBox().getY2());
-		Vector z1 = point.getZIntersection(other, model.getSelectionBox().getZ1());
-		Vector z2 = point.getZIntersection(other, model.getSelectionBox().getZ2());
+		Vector x1 = point.getXIntersection(other, model.getSelectionBox(x, y, z).getX1());
+		Vector x2 = point.getXIntersection(other, model.getSelectionBox(x, y, z).getX2());
+		Vector y1 = point.getYIntersection(other, model.getSelectionBox(x, y, z).getY1());
+		Vector y2 = point.getYIntersection(other, model.getSelectionBox(x, y, z).getY2());
+		Vector z1 = point.getZIntersection(other, model.getSelectionBox(x, y, z).getZ1());
+		Vector z2 = point.getZIntersection(other, model.getSelectionBox(x, y, z).getZ2());
 		if (!xIntersectsSelection(id, x1)) {
 			x1 = null;
 		}
@@ -115,12 +115,12 @@ public class BlockUtils {
 		
 		point = point.add((-x), (-y), (-z));
 		other = other.add((-x), (-y), (-z));
-		Vector x1 = point.getXIntersection(other, model.getCollisionBox().getX1());
-		Vector x2 = point.getXIntersection(other, model.getCollisionBox().getX2());
-		Vector y1 = point.getYIntersection(other, model.getCollisionBox().getY1());
-		Vector y2 = point.getYIntersection(other, model.getCollisionBox().getY2());
-		Vector z1 = point.getZIntersection(other, model.getCollisionBox().getZ1());
-		Vector z2 = point.getZIntersection(other, model.getCollisionBox().getZ2());
+		Vector x1 = point.getXIntersection(other, model.getCollisionBox(x, y, z).getX1());
+		Vector x2 = point.getXIntersection(other, model.getCollisionBox(x, y, z).getX2());
+		Vector y1 = point.getYIntersection(other, model.getCollisionBox(x, y, z).getY1());
+		Vector y2 = point.getYIntersection(other, model.getCollisionBox(x, y, z).getY2());
+		Vector z1 = point.getZIntersection(other, model.getCollisionBox(x, y, z).getZ1());
+		Vector z2 = point.getZIntersection(other, model.getCollisionBox(x, y, z).getZ2());
 		if (!xIntersects(id, x1)) {
 			x1 = null;
 		}
@@ -204,44 +204,44 @@ public class BlockUtils {
 
 	private static boolean xIntersectsSelection(int id, Vector point) {
 		Model model = Blocks.fromId(id).getModel();
-		return point != null && point.y >= model.getSelectionBox().getY1() && point.y <= model.getSelectionBox().getY2() && point.z >= model.getSelectionBox().getZ1() && point.z <= model.getSelectionBox().getZ2();
+		return point != null && point.y >= model.getSelectionBox((int) point.x, (int) point.y, (int) point.z).getY1() && point.y <= model.getSelectionBox((int) point.x, (int) point.y, (int) point.z).getY2() && point.z >= model.getSelectionBox((int) point.x, (int) point.y, (int) point.z).getZ1() && point.z <= model.getSelectionBox((int) point.x, (int) point.y, (int) point.z).getZ2();
 	}
 
 	private static boolean yIntersectsSelection(int id, Vector point) {
 		Model model = Blocks.fromId(id).getModel();
-		return point != null && point.x >= model.getSelectionBox().getX1() && point.x <= model.getSelectionBox().getX2() && point.z >= model.getSelectionBox().getZ1() && point.z <= model.getSelectionBox().getZ2();
+		return point != null && point.x >= model.getSelectionBox((int) point.x, (int) point.y, (int) point.z).getX1() && point.x <= model.getSelectionBox((int) point.x, (int) point.y, (int) point.z).getX2() && point.z >= model.getSelectionBox((int) point.x, (int) point.y, (int) point.z).getZ1() && point.z <= model.getSelectionBox((int) point.x, (int) point.y, (int) point.z).getZ2();
 	}
 
 	private static boolean zIntersectsSelection(int id, Vector point) {
 		Model model = Blocks.fromId(id).getModel();
-		return point != null && point.x >= model.getSelectionBox().getX1() && point.x <= model.getSelectionBox().getX2() && point.y >= model.getSelectionBox().getY1() && point.y <= model.getSelectionBox().getY2();
+		return point != null && point.x >= model.getSelectionBox((int) point.x, (int) point.y, (int) point.z).getX1() && point.x <= model.getSelectionBox((int) point.x, (int) point.y, (int) point.z).getX2() && point.y >= model.getSelectionBox((int) point.x, (int) point.y, (int) point.z).getY1() && point.y <= model.getSelectionBox((int) point.x, (int) point.y, (int) point.z).getY2();
 	}
 	
 	private static boolean xIntersects(int id, Vector point) {
 		Model model = Blocks.fromId(id).getModel();
-		return point != null && point.y >= model.getCollisionBox().getY1() && point.y <= model.getCollisionBox().getY2() && point.z >= model.getCollisionBox().getZ1() && point.z <= model.getCollisionBox().getZ2();
+		return point != null && point.y >= model.getCollisionBox((int) point.x, (int) point.y, (int) point.z).getY1() && point.y <= model.getCollisionBox((int) point.x, (int) point.y, (int) point.z).getY2() && point.z >= model.getCollisionBox((int) point.x, (int) point.y, (int) point.z).getZ1() && point.z <= model.getCollisionBox((int) point.x, (int) point.y, (int) point.z).getZ2();
 	}
 
 	private static boolean yIntersects(int id, Vector point) {
 		Model model = Blocks.fromId(id).getModel();
-		return point != null && point.x >= model.getCollisionBox().getX1() && point.x <= model.getCollisionBox().getX2() && point.z >= model.getCollisionBox().getZ1() && point.z <= model.getCollisionBox().getZ2();
+		return point != null && point.x >= model.getCollisionBox((int) point.x, (int) point.y, (int) point.z).getX1() && point.x <= model.getCollisionBox((int) point.x, (int) point.y, (int) point.z).getX2() && point.z >= model.getCollisionBox((int) point.x, (int) point.y, (int) point.z).getZ1() && point.z <= model.getCollisionBox((int) point.x, (int) point.y, (int) point.z).getZ2();
 	}
 
 	private static boolean zIntersects(int id, Vector point) {
 		Model model = Blocks.fromId(id).getModel();
-		return point != null && point.x >= model.getCollisionBox().getX1() && point.x <= model.getCollisionBox().getX2() && point.y >= model.getCollisionBox().getY1() && point.y <= model.getCollisionBox().getY2();
+		return point != null && point.x >= model.getCollisionBox((int) point.x, (int) point.y, (int) point.z).getX1() && point.x <= model.getCollisionBox((int) point.x, (int) point.y, (int) point.z).getX2() && point.y >= model.getCollisionBox((int) point.x, (int) point.y, (int) point.z).getY1() && point.y <= model.getCollisionBox((int) point.x, (int) point.y, (int) point.z).getY2();
 	}
 	
 	public static AABB getSelectionBox(int id, int x, int y, int z) {
 		Model model = Blocks.fromId(id).getModel();
-		if(model.getSelectionBox() == null) return null;
-		return new AABB(x + model.getSelectionBox().getX1(), y + model.getSelectionBox().getY1(), z + model.getSelectionBox().getZ1(), x + model.getSelectionBox().getX2(), y + model.getSelectionBox().getY2(), z + model.getSelectionBox().getZ2());
+		if(model.getSelectionBox(x, y, z) == null) return null;
+		return new AABB(x + model.getSelectionBox(x, y, z).getX1(), y + model.getSelectionBox(x, y, z).getY1(), z + model.getSelectionBox(x, y, z).getZ1(), x + model.getSelectionBox(x, y, z).getX2(), y + model.getSelectionBox(x, y, z).getY2(), z + model.getSelectionBox(x, y, z).getZ2());
 	}
 
 	public static AABB getCollisionBox(int id, int x, int y, int z) {
 		Model model = Blocks.fromId(id).getModel();
-		if(model.getCollisionBox() == null) return null;
-		return new AABB(x + model.getCollisionBox().getX1(), y + model.getCollisionBox().getY1(), z + model.getCollisionBox().getZ1(), x + model.getCollisionBox().getX2(), y + model.getCollisionBox().getY2(), z + model.getCollisionBox().getZ2());
+		if(model.getCollisionBox(x, y, z) == null) return null;
+		return new AABB(x + model.getCollisionBox(x, y, z).getX1(), y + model.getCollisionBox(x, y, z).getY1(), z + model.getCollisionBox(x, y, z).getZ1(), x + model.getCollisionBox(x, y, z).getX2(), y + model.getCollisionBox(x, y, z).getY2(), z + model.getCollisionBox(x, y, z).getZ2());
 	}
 	
 	public static boolean canExplode(BlockType type) {
