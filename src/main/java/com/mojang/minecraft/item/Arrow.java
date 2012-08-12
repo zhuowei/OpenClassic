@@ -58,9 +58,9 @@ public class Arrow extends Entity {
 		this.yd = var7 * var8;
 		this.zd = var10 * var6 * var8;
 		this.setPos(x, y, z);
-		var10 = MathHelper.sqrt(this.xd * this.xd + this.zd * this.zd);
+		float var15 = MathHelper.sqrt(this.xd * this.xd + this.zd * this.zd);
 		this.yRotO = this.yRot = (float) (Math.atan2(this.xd, this.zd) * 180.0D / 3.1415927410125732D);
-		this.xRotO = this.xRot = (float) (Math.atan2(this.yd, var10) * 180.0D / 3.1415927410125732D);
+		this.xRotO = this.xRot = (float) (Math.atan2(this.yd, var15) * 180.0D / 3.1415927410125732D);
 		this.makeStepSound = false;
 	}
 

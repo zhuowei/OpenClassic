@@ -126,7 +126,7 @@ public final class Minecraft implements Runnable {
 	public GameMode mode;
 	public int width;
 	public int height;
-	private Timer timer = new Timer(20);
+	private Timer timer = new Timer(Constants.TICKS_PER_SECOND);
 	public Level level;
 	public LevelRenderer levelRenderer;
 	public Player player;
@@ -545,43 +545,42 @@ public final class Minecraft implements Runnable {
 					}
 				}
 
-				long var18 = System.currentTimeMillis() - this.timer.g;
-				long var20 = System.nanoTime() / 1000000L;
-				double var24;
-				if (var18 > 1000) {
-					long var22 = var20 - this.timer.h;
-					var24 = (double) var18 / (double) var22;
-					this.timer.i += (var24 - this.timer.i) * 0.20000000298023224D;
-					this.timer.g = System.currentTimeMillis();
-					this.timer.h = var20;
+				long sysClock = System.currentTimeMillis() - this.timer.lastSysClock;
+				long hrClock = System.nanoTime() / 1000000L;
+				if (sysClock > 1000) {
+					long diff = hrClock - this.timer.lastHRClock;
+					double adj = (double) sysClock / (double) diff;
+					this.timer.adjustment += (adj - this.timer.adjustment) * 0.20000000298023224D;
+					this.timer.lastSysClock = System.currentTimeMillis();
+					this.timer.lastHRClock = hrClock;
 				}
 
-				if (var18 < 0L) {
-					this.timer.g = System.currentTimeMillis();
-					this.timer.h = var20;
+				if (sysClock < 0L) {
+					this.timer.lastSysClock = System.currentTimeMillis();
+					this.timer.lastHRClock = hrClock;
 				}
 
-				double var95;
-				var24 = ((var95 = var20 / 1000.0D) - this.timer.b) * this.timer.i;
-				this.timer.b = var95;
-				if (var24 < 0.0D) {
-					var24 = 0.0D;
+				double sec = hrClock / 1000D;
+				double add = (sec - this.timer.lastHR) * this.timer.adjustment;
+				this.timer.lastHR = sec;
+				if (add < 0) {
+					add = 0;
 				}
 
-				if (var24 > 1.0D) {
-					var24 = 1.0D;
+				if (add > 1) {
+					add = 1;
 				}
 
-				this.timer.f = (float) (this.timer.f + var24 * this.timer.e * this.timer.a);
-				this.timer.c = (int) this.timer.f;
-				if (this.timer.c > 100) {
-					this.timer.c = 100;
+				this.timer.elapsedPartialTicks = (float) (this.timer.elapsedPartialTicks + add * this.timer.speed * this.timer.tps);
+				this.timer.elapsedTicks = (int) this.timer.elapsedPartialTicks;
+				if (this.timer.elapsedTicks > 100) {
+					this.timer.elapsedTicks = 100;
 				}
 
-				this.timer.f -= this.timer.c;
-				this.timer.time = this.timer.f;
+				this.timer.elapsedPartialTicks -= this.timer.elapsedTicks;
+				this.timer.renderPartialTicks = this.timer.elapsedPartialTicks;
 
-				for (int var64 = 0; var64 < this.timer.c; var64++) {
+				for (int tick = 0; tick < this.timer.elapsedTicks; tick++) {
 					this.ticks++;
 					this.tick();
 				}
@@ -590,7 +589,7 @@ public final class Minecraft implements Runnable {
 				GL11.glEnable(GL11.GL_TEXTURE_2D);
 
 				if (!this.online) {
-					this.mode.applyBlockCracks(this.timer.time);
+					this.mode.applyBlockCracks(this.timer.renderPartialTicks);
 					if (this.renderer.displayActive && !Display.isActive() && !Mouse.isButtonDown(0) && !Mouse.isButtonDown(1) && !Mouse.isButtonDown(2)) { // Fixed focus bug for some computers/OS's
 						this.displayMenu();
 					}
@@ -623,9 +622,9 @@ public final class Minecraft implements Runnable {
 						int width = this.width * 240 / this.height;
 						int height = this.height * 240 / this.height;
 						if (this.level != null) {
-							float var29 = (this.player = this.renderer.mc.player).xRotO + (this.player.xRot - this.player.xRotO) * this.timer.time;
-							float var30 = this.player.yRotO + (this.player.yRot - this.player.yRotO) * this.timer.time;
-							Vector var31 = this.renderer.a(this.timer.time);
+							float var29 = (this.player = this.renderer.mc.player).xRotO + (this.player.xRot - this.player.xRotO) * this.timer.renderPartialTicks;
+							float var30 = this.player.yRotO + (this.player.yRot - this.player.yRotO) * this.timer.renderPartialTicks;
+							Vector var31 = this.renderer.a(this.timer.renderPartialTicks);
 							float var32 = MathHelper.cos(-var30 * 0.017453292F - (float) Math.PI);
 							float var69 = MathHelper.sin(-var30 * 0.017453292F - (float) Math.PI);
 							float var74 = MathHelper.cos(-var29 * 0.017453292F);
@@ -635,10 +634,10 @@ public final class Minecraft implements Runnable {
 							float reach = this.mode.getReachDistance();
 							this.selected = this.level.clip(var31, var31.add(var34 * reach, var33 * reach, var87 * reach), true);
 							if (this.selected != null) {
-								reach = this.selected.blockPos.distance(this.renderer.a(this.timer.time));
+								reach = this.selected.blockPos.distance(this.renderer.a(this.timer.renderPartialTicks));
 							}
 
-							var31 = this.renderer.a(this.timer.time);
+							var31 = this.renderer.a(this.timer.renderPartialTicks);
 							if (this.mode instanceof CreativeGameMode) {
 								reach = 32;
 							}
@@ -725,7 +724,7 @@ public final class Minecraft implements Runnable {
 
 								var69 = 70;
 								if (this.player.health <= 0) {
-									var69 /= (1.0F - 500.0F / (this.player.deathTime + this.timer.time + 500.0F)) * 2.0F + 1.0F;
+									var69 /= (1.0F - 500.0F / (this.player.deathTime + this.timer.renderPartialTicks + 500.0F)) * 2.0F + 1.0F;
 								}
 
 								GLU.gluPerspective(var69, (float) this.renderer.mc.width / (float) this.renderer.mc.height, 0.05F, this.renderer.fogEnd);
@@ -735,18 +734,18 @@ public final class Minecraft implements Runnable {
 									GL11.glTranslatef(((var77 << 1) - 1) * 0.1F, 0.0F, 0.0F);
 								}
 
-								this.renderer.hurtEffect(this.timer.time);
+								this.renderer.hurtEffect(this.timer.renderPartialTicks);
 								if (this.renderer.mc.settings.viewBobbing) {
-									this.renderer.applyBobbing(this.timer.time);
+									this.renderer.applyBobbing(this.timer.renderPartialTicks);
 								}
 
 								this.player = this.renderer.mc.player;
 								GL11.glTranslatef(0.0F, 0.0F, -0.1F);
-								GL11.glRotatef(this.player.xRotO + (this.player.xRot - this.player.xRotO) * this.timer.time, 1.0F, 0.0F, 0.0F);
-								GL11.glRotatef(this.player.yRotO + (this.player.yRot - this.player.yRotO) * this.timer.time, 0.0F, 1.0F, 0.0F);
-								var69 = this.player.xo + (this.player.x - this.player.xo) * this.timer.time;
-								float var1000 = this.player.yo + (this.player.y - this.player.yo) * this.timer.time;
-								var33 = this.player.zo + (this.player.z - this.player.zo) * this.timer.time;
+								GL11.glRotatef(this.player.xRotO + (this.player.xRot - this.player.xRotO) * this.timer.renderPartialTicks, 1.0F, 0.0F, 0.0F);
+								GL11.glRotatef(this.player.yRotO + (this.player.yRot - this.player.yRotO) * this.timer.renderPartialTicks, 0.0F, 1.0F, 0.0F);
+								var69 = this.player.xo + (this.player.x - this.player.xo) * this.timer.renderPartialTicks;
+								float var1000 = this.player.yo + (this.player.y - this.player.yo) * this.timer.renderPartialTicks;
+								var33 = this.player.zo + (this.player.z - this.player.zo) * this.timer.renderPartialTicks;
 								GL11.glTranslatef(-var69, -var1000, -var33);
 								ClippingHelper clipping = ClippingHelper.prepare();
 
@@ -805,11 +804,11 @@ public final class Minecraft implements Runnable {
 								}
 
 								this.renderer.setLighting(true);
-								Vector var103 = this.renderer.a(this.timer.time);
-								this.levelRenderer.level.blockMap.render(var103, clipping, this.levelRenderer.textures, this.timer.time);
+								Vector var103 = this.renderer.a(this.timer.renderPartialTicks);
+								this.levelRenderer.level.blockMap.render(var103, clipping, this.levelRenderer.textures, this.timer.renderPartialTicks);
 								this.renderer.setLighting(false);
 								this.renderer.renderFog();
-								float var107 = this.timer.time;
+								float var107 = this.timer.renderPartialTicks;
 								var29 = -MathHelper.cos(this.player.yRot * 3.1415927F / 180.0F);
 								var117 = -(var30 = -MathHelper.sin(this.player.yRot * 3.1415927F / 180.0F)) * MathHelper.sin(this.player.xRot * 3.1415927F / 180.0F);
 								var32 = var29 * MathHelper.sin(this.player.xRot * 3.1415927F / 180.0F);
@@ -858,7 +857,7 @@ public final class Minecraft implements Runnable {
 								var1000 = 0.0F;
 								var33 = 4.8828125E-4F;
 								var1000 = (this.levelRenderer.level.depth + 2);
-								var34 = (this.levelRenderer.ticks + this.timer.time) * var33 * 0.03F;
+								var34 = (this.levelRenderer.ticks + this.timer.renderPartialTicks) * var33 * 0.03F;
 								float var35 = 0;
 								ShapeRenderer.instance.begin();
 								ShapeRenderer.instance.color(var107, var29, var30);
@@ -1046,7 +1045,7 @@ public final class Minecraft implements Runnable {
 											}
 
 											if (var86 != var125) {
-												var1000 = (((this.renderer.levelTicks + cx * 3121 + cz * 418711) % 32) + this.timer.time) / 32.0F;
+												var1000 = (((this.renderer.levelTicks + cx * 3121 + cz * 418711) % 32) + this.timer.renderPartialTicks) / 32.0F;
 												float var124 = cx + 0.5F - this.player.x;
 												var35 = cz + 0.5F - this.player.z;
 												float var92 = MathHelper.sqrt(var124 * var124 + var35 * var35) / 5;
@@ -1070,7 +1069,7 @@ public final class Minecraft implements Runnable {
 								}
 
 								if (this.renderer.entity != null) {
-									this.renderer.entity.renderHover(this.renderer.mc.textureManager, this.timer.time);
+									this.renderer.entity.renderHover(this.renderer.mc.textureManager, this.timer.renderPartialTicks);
 								}
 
 								GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
@@ -1079,21 +1078,21 @@ public final class Minecraft implements Runnable {
 									GL11.glTranslatef(((var77 << 1) - 1) * 0.1F, 0.0F, 0.0F);
 								}
 
-								this.renderer.hurtEffect(this.timer.time);
+								this.renderer.hurtEffect(this.timer.renderPartialTicks);
 								if (this.renderer.mc.settings.viewBobbing) {
-									this.renderer.applyBobbing(this.timer.time);
+									this.renderer.applyBobbing(this.timer.renderPartialTicks);
 								}
 
-								var117 = this.renderer.heldBlock.lastPosition + (this.renderer.heldBlock.heldPosition - this.renderer.heldBlock.lastPosition) * this.timer.time;
+								var117 = this.renderer.heldBlock.lastPosition + (this.renderer.heldBlock.heldPosition - this.renderer.heldBlock.lastPosition) * this.timer.renderPartialTicks;
 								GL11.glPushMatrix();
-								GL11.glRotatef(this.player.xRotO + (this.player.xRot - this.player.xRotO) * this.timer.time, 1.0F, 0.0F, 0.0F);
-								GL11.glRotatef(this.player.yRotO + (this.player.yRot - this.player.yRotO) * this.timer.time, 0.0F, 1.0F, 0.0F);
+								GL11.glRotatef(this.player.xRotO + (this.player.xRot - this.player.xRotO) * this.timer.renderPartialTicks, 1.0F, 0.0F, 0.0F);
+								GL11.glRotatef(this.player.yRotO + (this.player.yRot - this.player.yRotO) * this.timer.renderPartialTicks, 0.0F, 1.0F, 0.0F);
 								this.renderer.setLighting(true);
 								GL11.glPopMatrix();
 								GL11.glPushMatrix();
 								var69 = 0.8F;
 								if (this.renderer.heldBlock.moving) {
-									var33 = MathHelper.sin((var1000 = (this.renderer.heldBlock.heldOffset + this.timer.time) / 7.0F) * 3.1415927F);
+									var33 = MathHelper.sin((var1000 = (this.renderer.heldBlock.heldOffset + this.timer.renderPartialTicks) / 7.0F) * 3.1415927F);
 									GL11.glTranslatef(-MathHelper.sin(MathHelper.sqrt(var1000) * 3.1415927F) * 0.4F, MathHelper.sin(MathHelper.sqrt(var1000) * 3.1415927F * 2.0F) * 0.2F, -var33 * 0.2F);
 								}
 
@@ -1101,7 +1100,7 @@ public final class Minecraft implements Runnable {
 								GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
 								GL11.glEnable(GL11.GL_NORMALIZE);
 								if (this.renderer.heldBlock.moving) {
-									var33 = MathHelper.sin((var1000 = (this.renderer.heldBlock.heldOffset + this.timer.time) / 7.0F) * var1000 * 3.1415927F);
+									var33 = MathHelper.sin((var1000 = (this.renderer.heldBlock.heldOffset + this.timer.renderPartialTicks) / 7.0F) * var1000 * 3.1415927F);
 									GL11.glRotatef(MathHelper.sin(MathHelper.sqrt(var1000) * 3.1415927F) * 80.0F, 0.0F, 1.0F, 0.0F);
 									GL11.glRotatef(-var33 * 20.0F, 1.0F, 0.0F, 0.0F);
 								}
@@ -1138,7 +1137,7 @@ public final class Minecraft implements Runnable {
 								var77++;
 							}
 
-							this.hud.render(this.timer.time, this.currentScreen != null, Mouse.getX() * width / this.width, height - Mouse.getY() * height / this.height - 1);
+							this.hud.render(this.timer.renderPartialTicks, this.currentScreen != null, Mouse.getX() * width / this.width, height - Mouse.getY() * height / this.height - 1);
 						} else {
 							GL11.glViewport(0, 0, this.width, this.height);
 							GL11.glClearColor(0.0F, 0.0F, 0.0F, 0.0F);
@@ -1931,12 +1930,12 @@ public final class Minecraft implements Runnable {
 			}
 
 			if (this.currentScreen == null) {
-				if (Mouse.isButtonDown(0) && (this.ticks - this.lastClick) >= this.timer.a / 4 && this.hasMouse) {
+				if (Mouse.isButtonDown(0) && (this.ticks - this.lastClick) >= this.timer.tps / 4 && this.hasMouse) {
 					this.onMouseClick(0);
 					this.lastClick = this.ticks;
 				}
 
-				if (Mouse.isButtonDown(1) && (this.ticks - this.lastClick) >= this.timer.a / 4 && this.hasMouse) {
+				if (Mouse.isButtonDown(1) && (this.ticks - this.lastClick) >= this.timer.tps / 4 && this.hasMouse) {
 					this.onMouseClick(1);
 					this.lastClick = this.ticks;
 				}

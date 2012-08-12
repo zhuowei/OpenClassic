@@ -46,15 +46,12 @@ public final class BlockSelectScreen extends GuiScreen {
 		}
 
 		RenderHelper.getHelper().renderText("Select block", this.getWidth() / 2, 40);
-		//RenderHelper.getHelper().bindTexture("/terrain.png", true);
 
 		int count = 0;
 		for (BlockType b : Blocks.getBlocks()) {
 			if(b != null && b.isSelectable()) {
 				GL11.glPushMatrix();
-				int var5 = this.getWidth() / 2 + count % 9 * 24 + -108;
-				int var6 = this.getHeight() / 2 + count / 9 * 24 + -60;
-				GL11.glTranslatef(var5, var6, 0.0F);
+				GL11.glTranslatef(this.getWidth() / 2 + count % 9 * 24 + -108, this.getHeight() / 2 + count / 9 * 24 + -60, 0);
 				GL11.glScalef(10.0F, 10.0F, 10.0F);
 				GL11.glTranslatef(1.0F, 0.5F, 8.0F);
 				GL11.glRotatef(-30.0F, 1.0F, 0.0F, 0.0F);

@@ -200,21 +200,21 @@ public final class LevelGenerator extends Generator {
 			}
 		}
 
-		this.a(VanillaBlock.COAL_ORE.getId(), 90, 1, 4, data);
-		this.a(VanillaBlock.IRON_ORE.getId(), 70, 2, 4, data);
-		this.a(VanillaBlock.GOLD_ORE.getId(), 50, 3, 4, data);
+		this.populateOre(VanillaBlock.COAL_ORE.getId(), 90, 1, 4, data);
+		this.populateOre(VanillaBlock.IRON_ORE.getId(), 70, 2, 4, data);
+		this.populateOre(VanillaBlock.GOLD_ORE.getId(), 50, 3, 4, data);
 		this.progress.setText("Watering..");
 		var51 = VanillaBlock.WATER.getId();
 		this.setProgress(0);
 
 		for (var54 = 0; var54 < this.width; ++var54) {
-			this.a(var54, this.d / 2 - 1, 0, 0, var51, data);
-			this.a(var54, this.d / 2 - 1, this.depth - 1, 0, var51, data);
+			this.liquify(var54, this.d / 2 - 1, 0, 0, var51, data);
+			this.liquify(var54, this.d / 2 - 1, this.depth - 1, 0, var51, data);
 		}
 
 		for (var54 = 0; var54 < this.depth; ++var54) {
-			this.a(0, this.d / 2 - 1, var54, 0, var51, data);
-			this.a(this.width - 1, this.d / 2 - 1, var54, 0, var51, data);
+			this.liquify(0, this.d / 2 - 1, var54, 0, var51, data);
+			this.liquify(this.width - 1, this.d / 2 - 1, var54, 0, var51, data);
 		}
 
 		var54 = this.width * this.depth / 8000;
@@ -228,7 +228,7 @@ public final class LevelGenerator extends Generator {
 			z = this.g - 1 - this.rand.nextInt(2);
 			var23 = this.rand.nextInt(this.depth);
 			if (data[(z * this.depth + var23) * this.width + x] == 0) {
-				this.a(x, z, var23, 0, var51, data);
+				this.liquify(x, z, var23, 0, var51, data);
 			}
 		}
 
@@ -245,7 +245,7 @@ public final class LevelGenerator extends Generator {
 			var54 = (int) (this.rand.nextFloat() * this.rand.nextFloat() * (this.g - 3));
 			var24 = this.rand.nextInt(this.depth);
 			if (data[(var54 * this.depth + var24) * this.width + var51] == 0) {
-				this.a(var51, var54, var24, 0, VanillaBlock.LAVA.getId(), data);
+				this.liquify(var51, var54, var24, 0, VanillaBlock.LAVA.getId(), data);
 			}
 		}
 
@@ -384,7 +384,7 @@ public final class LevelGenerator extends Generator {
 		level.setGenerating(false);
 	}
 
-	private void a(int var1, int var2, int var3, int var4, byte data[]) {
+	private void populateOre(int var1, int var2, int var3, int var4, byte data[]) {
 		byte var25 = (byte) var1;
 		var4 = this.width;
 		int var5 = this.depth;
@@ -436,7 +436,7 @@ public final class LevelGenerator extends Generator {
 		this.progress.setProgress(progress);
 	}
 
-	private long a(int var1, int var2, int var3, int var4, int var5, byte data[]) {
+	private long liquify(int var1, int var2, int var3, int var4, int var5, byte data[]) {
 		byte var20 = (byte) var5;
 		ArrayList<int[]> var21 = new ArrayList<int[]>();
 		byte var6 = 0;

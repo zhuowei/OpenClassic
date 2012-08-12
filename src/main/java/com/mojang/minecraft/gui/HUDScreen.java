@@ -33,7 +33,7 @@ public final class HUDScreen implements MainScreen {
 		this.height = height * 240 / height;
 	}
 
-	public final void render(float var1, boolean focus, int mouseX, int mouseY) {
+	public final void render(float renderPartialTicks, boolean focus, int mouseX, int mouseY) {
 		this.mc.renderer.reset();
 		RenderHelper.getHelper().bindTexture("/gui/gui.png", true);
 		GL11.glColor4f(1, 1, 1, 1);
@@ -102,12 +102,9 @@ public final class HUDScreen implements MainScreen {
 				GL11.glTranslatef(x, y, -50);
 				
 				if (this.mc.player.inventory.popTime[slot] > 0) {
-					float var18 = (this.mc.player.inventory.popTime[slot] - var1) / 5;
-					float var21 = -MathHelper.sin(var18 * var18 * (float) Math.PI) * 8;
-					float var19 = MathHelper.sin(var18 * var18 * (float) Math.PI) + 1;
-					float var16 = MathHelper.sin(var18 * (float) Math.PI) + 1;
-					GL11.glTranslatef(10, var21 + 10, 0);
-					GL11.glScalef(var19, var16, 1);
+					float off = (this.mc.player.inventory.popTime[slot] - renderPartialTicks) / 5;
+					GL11.glTranslatef(10, (-MathHelper.sin(off * off * (float) Math.PI) * 8) + 10, 0);
+					GL11.glScalef(MathHelper.sin(off * off * (float) Math.PI) + 1, MathHelper.sin(off * (float) Math.PI) + 1, 1);
 					GL11.glTranslatef(-10, -10, 0);
 				}
 

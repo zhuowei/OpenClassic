@@ -20,7 +20,6 @@ import com.mojang.util.MathHelper;
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.List;
-import org.lwjgl.opengl.GL11;
 
 public class Player extends Mob {
 

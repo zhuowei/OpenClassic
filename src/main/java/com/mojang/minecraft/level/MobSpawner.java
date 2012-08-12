@@ -21,12 +21,12 @@ public final class MobSpawner {
 		this.level = var1;
 	}
 
-	public final int spawn(int var1, Entity var2, ProgressBarDisplay var3) {
-		int var4 = 0;
+	public final int spawn(int max, Entity var2, ProgressBarDisplay var3) {
+		int count = 0;
 
-		for (int var5 = 0; var5 < var1; ++var5) {
+		for (int mob = 0; mob < max; ++mob) {
 			if (var3 != null) {
-				var3.setProgress(var5 * 100 / (var1 - 1));
+				var3.setProgress(mob * 100 / (max - 1));
 			}
 
 			int var6 = this.level.random.nextInt(6);
@@ -92,7 +92,7 @@ public final class MobSpawner {
 							}
 
 							if (this.level.isFree(((Mob) var21).bb)) {
-								++var4;
+								++count;
 								this.level.addEntity((Entity) var21);
 							}
 						}
@@ -101,6 +101,6 @@ public final class MobSpawner {
 			}
 		}
 
-		return var4;
+		return count;
 	}
 }
