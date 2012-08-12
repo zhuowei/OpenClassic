@@ -32,6 +32,7 @@ import ch.spacebase.openclassic.api.level.generator.Generator;
 import ch.spacebase.openclassic.api.network.msg.custom.CustomMessage;
 import ch.spacebase.openclassic.api.plugin.Plugin;
 import ch.spacebase.openclassic.api.plugin.RemotePluginInfo;
+import ch.spacebase.openclassic.api.render.RenderHelper;
 import ch.spacebase.openclassic.api.util.Constants;
 import ch.spacebase.openclassic.client.ClassicClient;
 import ch.spacebase.openclassic.client.MinecraftStandalone;
@@ -825,7 +826,7 @@ public final class Minecraft implements Runnable {
 											textureId = this.particleManager.textureManager.bindTexture("/terrain.png");
 										}
 
-										GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureId);
+										RenderHelper.getHelper().bindTexture(textureId);
 										ShapeRenderer.instance.begin();
 
 										for (int count = 0; count < this.particleManager.particles[particle].size(); ++count) {
@@ -836,11 +837,11 @@ public final class Minecraft implements Runnable {
 									}
 								}
 
-								GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.textureManager.bindTexture("/rock.png"));
+								RenderHelper.getHelper().bindTexture("/rock.png", true);
 								GL11.glEnable(GL11.GL_TEXTURE_2D);
 								GL11.glCallList(this.levelRenderer.listId);
 								this.renderer.renderFog();
-								GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.textureManager.bindTexture("/clouds.png"));
+								RenderHelper.getHelper().bindTexture("/clouds.png", true);
 								GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 								var107 = (this.levelRenderer.level.cloudColor >> 16 & 255) / 255.0F;
 								var29 = (this.levelRenderer.level.cloudColor >> 8 & 255) / 255.0F;
@@ -918,8 +919,7 @@ public final class Minecraft implements Runnable {
 									GL11.glColor4f(1.0F, 1.0F, 1.0F, (MathHelper.sin(System.currentTimeMillis() / 100.0F) * 0.2F + 0.4F) * 0.5F);
 									if (this.levelRenderer.cracks > 0) {
 										GL11.glBlendFunc(GL11.GL_DST_COLOR, GL11.GL_SRC_COLOR);
-										var108 = this.levelRenderer.textures.bindTexture("/terrain.png");
-										GL11.glBindTexture(GL11.GL_TEXTURE_2D, var108);
+										RenderHelper.getHelper().bindTexture("/terrain.png", true);
 										GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.5F);
 										GL11.glPushMatrix();
 										int var114 = this.levelRenderer.level.getTile(var102.x, var102.y, var102.z);
@@ -999,7 +999,7 @@ public final class Minecraft implements Runnable {
 								this.renderer.renderFog();
 								GL11.glEnable(GL11.GL_TEXTURE_2D);
 								GL11.glEnable(GL11.GL_BLEND);
-								GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.levelRenderer.textures.bindTexture("/water.png"));
+								RenderHelper.getHelper().bindTexture("/water.png", true);
 								GL11.glCallList(this.levelRenderer.listId + 1);
 								GL11.glDisable(GL11.GL_BLEND);
 								GL11.glEnable(GL11.GL_BLEND);
@@ -1015,7 +1015,7 @@ public final class Minecraft implements Runnable {
 								}
 
 								if (cy > 0) {
-									GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.textureManager.bindTexture("/terrain.png"));
+									RenderHelper.getHelper().bindTexture("/terrain.png", true);
 									GL11.glCallLists(this.levelRenderer.buffer);
 								}
 
@@ -1030,7 +1030,7 @@ public final class Minecraft implements Runnable {
 									GL11.glNormal3f(0, 1, 0);
 									GL11.glEnable(GL11.GL_BLEND);
 									GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-									GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.renderer.mc.textureManager.bindTexture("/rain.png"));
+									RenderHelper.getHelper().bindTexture("/rain.png", true);
 
 									for (int cx = x - 5; cx <= x + 5; ++cx) {
 										for (int cz = z - 5; cz <= z + 5; ++cz) {
@@ -1113,7 +1113,6 @@ public final class Minecraft implements Runnable {
 									var34 = 0.4F;
 									GL11.glScalef(0.4F, var34, var34);
 									GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-									//GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.textureManager.bindTexture("/terrain.png"));
 									this.renderer.heldBlock.block.getModel().renderPreview(this.level.getBrightness((int) this.player.x, (int) this.player.y, (int) this.player.z));
 								} else {
 									this.player.bindTexture(this.textureManager);
@@ -1347,7 +1346,7 @@ public final class Minecraft implements Runnable {
 			this.hud.chatHistory.get(index).time++;
 		}
 
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.textureManager.bindTexture("/terrain.png"));
+		RenderHelper.getHelper().bindTexture("/terrain.png", true);
 
 		for (int index = 0; index < this.textureManager.animations.size(); index++) {
 			AnimatedTexture animation = this.textureManager.animations.get(index);

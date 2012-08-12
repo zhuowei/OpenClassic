@@ -1,5 +1,7 @@
 package com.mojang.minecraft.render;
 
+import ch.spacebase.openclassic.api.render.RenderHelper;
+
 import com.mojang.minecraft.GameSettings;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -71,7 +73,7 @@ public final class FontRenderer {
 				color = (color & 16579836) >> 2;
 			}
 
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.fontId);
+			RenderHelper.getHelper().bindTexture(this.fontId);
 			ShapeRenderer.instance.begin();
 			ShapeRenderer.instance.color(color);
 			int var7 = 0;

@@ -1,5 +1,7 @@
 package com.mojang.minecraft.mob;
 
+import ch.spacebase.openclassic.api.render.RenderHelper;
+
 import com.mojang.minecraft.Entity;
 import com.mojang.minecraft.level.Level;
 import com.mojang.minecraft.mob.ai.AI;
@@ -199,8 +201,7 @@ public class Mob extends Entity {
 	}
 
 	protected void bindTexture(TextureManager textures) {
-		this.textureId = textures.bindTexture(this.textureName);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.textureId);
+		this.textureId = RenderHelper.getHelper().bindTexture(this.textureName, true);
 	}
 
 	public void render(TextureManager textures, float var2) {

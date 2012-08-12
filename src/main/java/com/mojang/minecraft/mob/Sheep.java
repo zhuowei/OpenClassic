@@ -3,6 +3,7 @@ package com.mojang.minecraft.mob;
 import java.io.Serializable;
 
 import ch.spacebase.openclassic.api.block.VanillaBlock;
+import ch.spacebase.openclassic.api.render.RenderHelper;
 
 import com.mojang.minecraft.Entity;
 import com.mojang.minecraft.item.Item;
@@ -90,7 +91,7 @@ public class Sheep extends QuadrupedMob {
 		model.b.z -= this.grazeO + (this.graze - this.grazeO) * var3;
 		super.renderModel(textures, var2, var3, var4, var5, var6, var7);
 		if (this.hasFur) {
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, textures.bindTexture("/mob/sheep_fur.png"));
+			RenderHelper.getHelper().bindTexture("/mob/sheep_fur.png", true);
 			GL11.glDisable(GL11.GL_CULL_FACE);
 			AnimalModel fur = (AnimalModel) modelCache.getModel("sheep.fur");
 			fur.b.yaw = model.b.yaw;

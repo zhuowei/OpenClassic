@@ -1,5 +1,7 @@
 package com.mojang.minecraft.mob;
 
+import ch.spacebase.openclassic.api.render.RenderHelper;
+
 import com.mojang.minecraft.level.Level;
 import com.mojang.minecraft.mob.Mob;
 import com.mojang.minecraft.model.HumanoidModel;
@@ -35,7 +37,7 @@ public class HumanoidMob extends Mob {
 		}
 
 		if (this.armor || this.helmet) {
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, textures.bindTexture("/armor/plate.png"));
+			RenderHelper.getHelper().bindTexture("/armor/plate.png", true);
 			GL11.glDisable(GL11.GL_CULL_FACE);
 			HumanoidModel armored = (HumanoidModel) modelCache.getModel("humanoid.armor");
 			armored.helmet.render = this.helmet;

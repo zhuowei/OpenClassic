@@ -3,6 +3,7 @@ package com.mojang.minecraft.player;
 import ch.spacebase.openclassic.api.Position;
 import ch.spacebase.openclassic.api.event.EventFactory;
 import ch.spacebase.openclassic.api.event.player.PlayerMoveEvent;
+import ch.spacebase.openclassic.api.render.RenderHelper;
 import ch.spacebase.openclassic.client.player.ClientPlayer;
 import ch.spacebase.openclassic.client.util.GeneralUtils;
 
@@ -175,10 +176,9 @@ public class Player extends Mob {
 		}
 
 		if (newTextureId < 0) {
-			int textureId = textureManager.bindTexture("/char.png");
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureId);
+			RenderHelper.getHelper().bindTexture("/char.png", true);
 		} else {
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, newTextureId);
+			RenderHelper.getHelper().bindTexture(newTextureId);
 		}
 	}
 

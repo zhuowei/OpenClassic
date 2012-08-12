@@ -24,7 +24,12 @@ import ch.spacebase.openclassic.api.Client;
 import ch.spacebase.openclassic.api.Color;
 import ch.spacebase.openclassic.api.OpenClassic;
 import ch.spacebase.openclassic.api.ProgressBar;
+import ch.spacebase.openclassic.api.block.Blocks;
+import ch.spacebase.openclassic.api.block.StepSound;
 import ch.spacebase.openclassic.api.block.VanillaBlock;
+import ch.spacebase.openclassic.api.block.custom.CustomBlock;
+import ch.spacebase.openclassic.api.block.model.CubeModel;
+import ch.spacebase.openclassic.api.block.model.Texture;
 import ch.spacebase.openclassic.api.block.physics.FallingBlockPhysics;
 import ch.spacebase.openclassic.api.block.physics.FlowerPhysics;
 import ch.spacebase.openclassic.api.block.physics.GrassPhysics;
@@ -129,6 +134,8 @@ public class ClassicClient implements Client {
 		VanillaBlock.SPONGE.setPhysics(new SpongePhysics());
 		VanillaBlock.SLAB.setPhysics(new HalfStepPhysics());
 		VanillaBlock.TNT.setPhysics(new TNTPhysics());
+		
+		Blocks.register(new CustomBlock((byte) 50, StepSound.STONE, new CubeModel(new Texture("/rock.png", true, 16, 16), 0)));
 		
 		this.pluginManager.loadPlugins(LoadOrder.PREWORLD);
 		this.pluginManager.loadPlugins(LoadOrder.POSTWORLD);

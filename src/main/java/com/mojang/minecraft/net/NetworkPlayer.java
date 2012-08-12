@@ -1,5 +1,7 @@
 package com.mojang.minecraft.net;
 
+import ch.spacebase.openclassic.api.render.RenderHelper;
+
 import com.mojang.minecraft.Minecraft;
 import com.mojang.minecraft.mob.HumanoidMob;
 import com.mojang.minecraft.net.SkinDownloadThread;
@@ -85,9 +87,9 @@ public class NetworkPlayer extends HumanoidMob {
 		}
 
 		if (this.newTextureId < 0) {
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, textures.bindTexture("/char.png"));
+			RenderHelper.getHelper().bindTexture("/char.png", true);
 		} else {
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.newTextureId);
+			RenderHelper.getHelper().bindTexture(this.newTextureId);
 		}
 	}
 

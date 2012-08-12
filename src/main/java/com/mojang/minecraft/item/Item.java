@@ -2,6 +2,7 @@ package com.mojang.minecraft.item;
 
 import ch.spacebase.openclassic.api.block.Blocks;
 import ch.spacebase.openclassic.api.block.model.Quad;
+import ch.spacebase.openclassic.api.render.RenderHelper;
 
 import com.mojang.minecraft.Entity;
 import com.mojang.minecraft.item.ItemModel;
@@ -77,8 +78,7 @@ public class Item extends Entity {
 	}
 
 	public void render(TextureManager var1, float var2) {
-		this.textureId = var1.bindTexture("/terrain.png");
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.textureId);
+		this.textureId = RenderHelper.getHelper().bindTexture("/terrain.png", true);
 		float var5 = this.level.getBrightness((int) this.x, (int) this.y, (int) this.z);
 		float var3 = this.rot + (this.tickCount + var2) * 3.0F;
 		GL11.glPushMatrix();

@@ -39,6 +39,8 @@ public class ClientRenderHelper extends RenderHelper {
 		return (ClientRenderHelper) helper;
 	}
 	
+	private int binded = -1;
+	
 	public void drawDirtBG() {
 		this.bindTexture("/dirt.png", true);
 
@@ -140,8 +142,16 @@ public class ClientRenderHelper extends RenderHelper {
 	}
 
 	@Override
-	public void bindTexture(String file, boolean jar) {
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, GeneralUtils.getMinecraft().textureManager.bindTexture(file, jar));
+	public int bindTexture(String file, boolean jar) {
+		int id = GeneralUtils.getMinecraft().textureManager.bindTexture(file, jar);
+		this.bindTexture(id);
+		return id;
+	}
+	
+	@Override
+	public void bindTexture(int id) {
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, id);
+		this.binded = id;
 	}
 
 	@Override
@@ -164,11 +174,11 @@ public class ClientRenderHelper extends RenderHelper {
 		this.drawQuad(quad, x, y, z, 1);
 	}
 	
-	@Override // TODO: Custom block's custom textures mess up other textures.
+	@Override // TODO: Custom block's custom textures mess up other textures sometimes?
 	public void drawQuad(Quad quad, int x, int y, int z, float brightness) {
 		ShapeRenderer.instance.begin();
 		Integer id = GeneralUtils.getMinecraft().textureManager.textures.get(quad.getTexture().getParent().getTexture());
-		if(id == null || id != GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D)) {
+		if(id == null || id.intValue() != this.binded) {
 			this.bindTexture(quad.getTexture().getParent().getTexture(), quad.getTexture().getParent().isInJar());
 		}
 		

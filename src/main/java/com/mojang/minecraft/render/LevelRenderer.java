@@ -1,5 +1,7 @@
 package com.mojang.minecraft.render;
 
+import ch.spacebase.openclassic.api.render.RenderHelper;
+
 import com.mojang.minecraft.level.Level;
 import com.mojang.minecraft.player.Player;
 import com.mojang.minecraft.render.TextureManager;
@@ -191,7 +193,7 @@ public final class LevelRenderer {
 		this.buffer.put(this.chunkDataCache, 0, length);
 		this.buffer.flip();
 		if (this.buffer.remaining() > 0) {
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.textures.bindTexture("/terrain.png"));
+			RenderHelper.getHelper().bindTexture("/terrain.png", true);
 			GL11.glCallLists(this.buffer);
 		}
 

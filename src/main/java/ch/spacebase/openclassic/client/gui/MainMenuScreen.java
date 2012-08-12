@@ -57,7 +57,7 @@ public class MainMenuScreen extends GuiScreen {
 
 	public void render() {
 		RenderHelper.getHelper().drawDirtBG();
-		RenderHelper.getHelper().drawTexture(logo, this.getWidth() / 2 - logo.getWidth() / 2, 20); // TODO: Fullscreen issue here
+		RenderHelper.getHelper().drawTexture(logo, this.getWidth() / 2 - logo.getWidth() / 2, 20);
 		super.render();
 	}
 }

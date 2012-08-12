@@ -1,5 +1,7 @@
 package com.mojang.minecraft.item;
 
+import ch.spacebase.openclassic.api.render.RenderHelper;
+
 import com.mojang.minecraft.Entity;
 import com.mojang.minecraft.item.TakeEntityAnim;
 import com.mojang.minecraft.level.Level;
@@ -147,8 +149,7 @@ public class Arrow extends Entity {
 	}
 
 	public void render(TextureManager var1, float var2) {
-		this.textureId = var1.bindTexture("/item/arrows.png");
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.textureId);
+		this.textureId = RenderHelper.getHelper().bindTexture("/item/arrows.png", true);
 		float var10 = this.level.getBrightness((int) this.x, (int) this.y, (int) this.z);
 		GL11.glPushMatrix();
 		GL11.glColor4f(var10, var10, var10, 1.0F);

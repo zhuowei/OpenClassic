@@ -102,7 +102,6 @@ public class PrimedTnt extends Entity {
 	}
 
 	public void render(TextureManager textures, float var2) {
-		//GL11.glBindTexture(GL11.GL_TEXTURE_2D, textures.bindTexture("/terrain.png"));
 		float brightness = this.level.getBrightness((int) this.x, (int) this.y, (int) this.z);
 		GL11.glPushMatrix();
 		GL11.glTranslatef(this.xo + (this.x - this.xo) * var2 - 0.5F, this.yo + (this.y - this.yo) * var2 - 0.5F, this.zo + (this.z - this.zo) * var2 - 0.5F);
