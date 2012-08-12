@@ -19,7 +19,7 @@ public final class ModelPart {
 	public float roll;
 	public boolean hasList = false;
 	public int list = 0;
-	public boolean invertVertices = false;
+	public boolean mirror = false;
 	public boolean render = true;
 
 	public ModelPart(int u, int v) {
@@ -39,7 +39,7 @@ public final class ModelPart {
 		var8 += var7;
 		var9 += var7;
 		var10 += var7;
-		if (this.invertVertices) {
+		if (this.mirror) {
 			var7 = var8;
 			var8 = x1;
 			x1 = var7;
@@ -67,7 +67,7 @@ public final class ModelPart {
 		this.quads[3] = new Quad(new Vertex[] { var12, var18, var14, var21 }, this.u + z2 + x2, this.v, this.u + z2 + x2 + x2, this.v + z2);
 		this.quads[4] = new Quad(new Vertex[] { var11, var20, var18, var12 }, this.u + z2, this.v + z2, this.u + z2 + x2, this.v + z2 + y2);
 		this.quads[5] = new Quad(new Vertex[] { var13, var15, var21, var14 }, this.u + z2 + x2 + z2, this.v + z2, this.u + z2 + x2 + z2 + x2, this.v + z2 + y2);
-		if (this.invertVertices) {
+		if (this.mirror) {
 			for (int q = 0; q < this.quads.length; ++q) {
 				Quad quad = this.quads[q];
 				Vertex[] vecs = new Vertex[quad.vertices.length];
@@ -82,7 +82,7 @@ public final class ModelPart {
 
 	}
 
-	public final void setPos(float x, float y, float z) {
+	public final void setRotationPoint(float x, float y, float z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -130,9 +130,9 @@ public final class ModelPart {
 
 		for (int q = 0; q < this.quads.length; ++q) {
 			Quad quad = this.quads[q];
-			Vector var5 = quad.vertices[1].vector.subtract(quad.vertices[0].vector).a();
-			Vector var6 = quad.vertices[1].vector.subtract(quad.vertices[2].vector).a();
-			var5 = (new Vector(var5.y * var6.z - var5.z * var6.y, var5.z * var6.x - var5.x * var6.z, var5.x * var6.y - var5.y * var6.x)).a();
+			Vector var5 = quad.vertices[1].vector.subtract(quad.vertices[0].vector).normalize();
+			Vector var6 = quad.vertices[1].vector.subtract(quad.vertices[2].vector).normalize();
+			var5 = (new Vector(var5.y * var6.z - var5.z * var6.y, var5.z * var6.x - var5.x * var6.z, var5.x * var6.y - var5.y * var6.x)).normalize();
 			GL11.glNormal3f(var5.x, var5.y, var5.z);
 
 			for (int vertex = 0; vertex < 4; ++vertex) {

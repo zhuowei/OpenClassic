@@ -18,7 +18,7 @@ public final class Vector {
 		return new Vector(this.x - other.x, this.y - other.y, this.z - other.z);
 	}
 
-	public final Vector a() {
+	public final Vector normalize() {
 		float var1 = MathHelper.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
 		return new Vector(this.x / var1, this.y / var1, this.z / var1);
 	}

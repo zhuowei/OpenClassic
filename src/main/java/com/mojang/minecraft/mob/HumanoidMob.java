@@ -30,9 +30,9 @@ public class HumanoidMob extends Mob {
 
 		if (this.hasHair) {
 			GL11.glDisable(GL11.GL_CULL_FACE);
-			model.c.yaw = model.helmet.yaw;
-			model.c.pitch = model.helmet.pitch;
-			model.c.render(scale);
+			model.headwear.yaw = model.head.yaw;
+			model.headwear.pitch = model.head.pitch;
+			model.headwear.render(scale);
 			GL11.glEnable(GL11.GL_CULL_FACE);
 		}
 
@@ -40,26 +40,26 @@ public class HumanoidMob extends Mob {
 			RenderHelper.getHelper().bindTexture("/armor/plate.png", true);
 			GL11.glDisable(GL11.GL_CULL_FACE);
 			HumanoidModel armored = (HumanoidModel) modelCache.getModel("humanoid.armor");
-			armored.helmet.render = this.helmet;
-			armored.chestplate.render = this.armor;
-			armored.leggings.render = this.armor;
-			armored.arm.render = this.armor;
-			armored.g.render = false;
-			armored.h.render = false;
-			armored.helmet.yaw = model.helmet.yaw;
-			armored.helmet.pitch = model.helmet.pitch;
-			armored.leggings.pitch = model.leggings.pitch;
-			armored.leggings.roll = model.leggings.roll;
-			armored.arm.pitch = model.arm.pitch;
-			armored.arm.roll = model.arm.roll;
-			armored.g.pitch = model.g.pitch;
-			armored.h.pitch = model.h.pitch;
-			armored.helmet.render(scale);
-			armored.chestplate.render(scale);
-			armored.leggings.render(scale);
-			armored.arm.render(scale);
-			armored.g.render(scale);
-			armored.h.render(scale);
+			armored.head.render = this.helmet;
+			armored.body.render = this.armor;
+			armored.rightArm.render = this.armor;
+			armored.leftArm.render = this.armor;
+			armored.rightLeg.render = false;
+			armored.leftLeg.render = false;
+			armored.head.yaw = model.head.yaw;
+			armored.head.pitch = model.head.pitch;
+			armored.rightArm.pitch = model.rightArm.pitch;
+			armored.rightArm.roll = model.rightArm.roll;
+			armored.leftArm.pitch = model.leftArm.pitch;
+			armored.leftArm.roll = model.leftArm.roll;
+			armored.rightLeg.pitch = model.rightLeg.pitch;
+			armored.leftLeg.pitch = model.leftLeg.pitch;
+			armored.head.render(scale);
+			armored.body.render(scale);
+			armored.rightArm.render(scale);
+			armored.leftArm.render(scale);
+			armored.rightLeg.render(scale);
+			armored.leftLeg.render(scale);
 			GL11.glEnable(GL11.GL_CULL_FACE);
 		}
 

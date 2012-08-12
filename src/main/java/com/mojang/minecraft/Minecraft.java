@@ -1119,7 +1119,7 @@ public final class Minecraft implements Runnable {
 									GL11.glTranslatef(0.0F, 0.2F, 0.0F);
 									GL11.glRotatef(-120.0F, 0.0F, 0.0F, 1.0F);
 									GL11.glScalef(1.0F, 1.0F, 1.0F);
-									ModelPart arm = this.player.getModel().arm;
+									ModelPart arm = this.player.getModel().leftArm;
 									if (!arm.hasList) {
 										arm.generateList(0.0625F);
 									}

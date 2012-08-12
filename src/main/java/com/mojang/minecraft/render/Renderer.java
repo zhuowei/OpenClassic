@@ -74,7 +74,7 @@ public final class Renderer {
 			GL11.glEnable(GL11.GL_COLOR_BUFFER_BIT);
 			GL11.glEnable(GL11.GL_COLOR_MATERIAL);
 			GL11.glColorMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_AMBIENT_AND_DIFFUSE);
-			Vector vec = new Vector(0.0F, -1.0F, 0.5F).a();
+			Vector vec = new Vector(0.0F, -1.0F, 0.5F).normalize();
 			GL11.glLight(GL11.GL_COLOR_BUFFER_BIT, GL11.GL_POSITION, this.getParamBuffer(vec.x, vec.y, vec.z, 0));
 			GL11.glLight(GL11.GL_COLOR_BUFFER_BIT, GL11.GL_DIFFUSE, this.getParamBuffer(0.3F, 0.3F, 0.3F, 1));
 			GL11.glLight(GL11.GL_COLOR_BUFFER_BIT, GL11.GL_AMBIENT, this.getParamBuffer(0, 0, 0, 1));

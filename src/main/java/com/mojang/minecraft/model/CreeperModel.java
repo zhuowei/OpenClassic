@@ -6,46 +6,43 @@ import com.mojang.util.MathHelper;
 
 public final class CreeperModel extends Model {
 
-	private ModelPart b = new ModelPart(0, 0);
-	private ModelPart c;
-	private ModelPart d;
-	private ModelPart e;
-	private ModelPart f;
-	private ModelPart g;
-	private ModelPart h;
+	private ModelPart head = new ModelPart(0, 0);
+	private ModelPart body;
+	private ModelPart leg1;
+	private ModelPart leg2;
+	private ModelPart leg3;
+	private ModelPart leg4;
 
 	public CreeperModel() {
-		this.b.addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, 0.0F);
-		this.c = new ModelPart(32, 0);
-		this.c.addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, 0.0F + 0.5F);
-		this.d = new ModelPart(16, 16);
-		this.d.addBox(-4.0F, 0.0F, -2.0F, 8, 12, 4, 0.0F);
-		this.e = new ModelPart(0, 16);
-		this.e.addBox(-2.0F, 0.0F, -2.0F, 4, 6, 4, 0.0F);
-		this.e.setPos(-2.0F, 12.0F, 4.0F);
-		this.f = new ModelPart(0, 16);
-		this.f.addBox(-2.0F, 0.0F, -2.0F, 4, 6, 4, 0.0F);
-		this.f.setPos(2.0F, 12.0F, 4.0F);
-		this.g = new ModelPart(0, 16);
-		this.g.addBox(-2.0F, 0.0F, -2.0F, 4, 6, 4, 0.0F);
-		this.g.setPos(-2.0F, 12.0F, -4.0F);
-		this.h = new ModelPart(0, 16);
-		this.h.addBox(-2.0F, 0.0F, -2.0F, 4, 6, 4, 0.0F);
-		this.h.setPos(2.0F, 12.0F, -4.0F);
+		this.head.addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, 0.0F);
+		this.body = new ModelPart(16, 16);
+		this.body.addBox(-4.0F, 0.0F, -2.0F, 8, 12, 4, 0.0F);
+		this.leg1 = new ModelPart(0, 16);
+		this.leg1.addBox(-2.0F, 0.0F, -2.0F, 4, 6, 4, 0.0F);
+		this.leg1.setRotationPoint(-2.0F, 12.0F, 4.0F);
+		this.leg2 = new ModelPart(0, 16);
+		this.leg2.addBox(-2.0F, 0.0F, -2.0F, 4, 6, 4, 0.0F);
+		this.leg2.setRotationPoint(2.0F, 12.0F, 4.0F);
+		this.leg3 = new ModelPart(0, 16);
+		this.leg3.addBox(-2.0F, 0.0F, -2.0F, 4, 6, 4, 0.0F);
+		this.leg3.setRotationPoint(-2.0F, 12.0F, -4.0F);
+		this.leg4 = new ModelPart(0, 16);
+		this.leg4.addBox(-2.0F, 0.0F, -2.0F, 4, 6, 4, 0.0F);
+		this.leg4.setRotationPoint(2.0F, 12.0F, -4.0F);
 	}
 
 	public final void render(float var1, float var2, float var3, float var4, float var5, float var6) {
-		this.b.yaw = var4 / 57.295776F;
-		this.b.pitch = var5 / 57.295776F;
-		this.e.pitch = MathHelper.cos(var1 * 0.6662F) * 1.4F * var2;
-		this.f.pitch = MathHelper.cos(var1 * 0.6662F + 3.1415927F) * 1.4F * var2;
-		this.g.pitch = MathHelper.cos(var1 * 0.6662F + 3.1415927F) * 1.4F * var2;
-		this.h.pitch = MathHelper.cos(var1 * 0.6662F) * 1.4F * var2;
-		this.b.render(var6);
-		this.d.render(var6);
-		this.e.render(var6);
-		this.f.render(var6);
-		this.g.render(var6);
-		this.h.render(var6);
+		this.head.yaw = var4 / 57.295776F;
+		this.head.pitch = var5 / 57.295776F;
+		this.leg1.pitch = MathHelper.cos(var1 * 0.6662F) * 1.4F * var2;
+		this.leg2.pitch = MathHelper.cos(var1 * 0.6662F + 3.1415927F) * 1.4F * var2;
+		this.leg3.pitch = MathHelper.cos(var1 * 0.6662F + 3.1415927F) * 1.4F * var2;
+		this.leg4.pitch = MathHelper.cos(var1 * 0.6662F) * 1.4F * var2;
+		this.head.render(var6);
+		this.body.render(var6);
+		this.leg1.render(var6);
+		this.leg2.render(var6);
+		this.leg3.render(var6);
+		this.leg4.render(var6);
 	}
 }

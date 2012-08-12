@@ -85,35 +85,35 @@ public class Sheep extends QuadrupedMob {
 
 	public void renderModel(TextureManager textures, float var2, float var3, float var4, float var5, float var6, float var7) {
 		AnimalModel model = (AnimalModel) modelCache.getModel(this.modelName);
-		float var9 = model.b.y;
-		float var10 = model.b.z;
-		model.b.y += (this.grazeO + (this.graze - this.grazeO) * var3) * 8.0F;
-		model.b.z -= this.grazeO + (this.graze - this.grazeO) * var3;
+		float var9 = model.head.y;
+		float var10 = model.head.z;
+		model.head.y += (this.grazeO + (this.graze - this.grazeO) * var3) * 8.0F;
+		model.head.z -= this.grazeO + (this.graze - this.grazeO) * var3;
 		super.renderModel(textures, var2, var3, var4, var5, var6, var7);
 		if (this.hasFur) {
 			RenderHelper.getHelper().bindTexture("/mob/sheep_fur.png", true);
 			GL11.glDisable(GL11.GL_CULL_FACE);
 			AnimalModel fur = (AnimalModel) modelCache.getModel("sheep.fur");
-			fur.b.yaw = model.b.yaw;
-			fur.b.pitch = model.b.pitch;
-			fur.b.y = model.b.y;
-			fur.b.x = model.b.x;
-			fur.c.yaw = model.c.yaw;
-			fur.c.pitch = model.c.pitch;
-			fur.d.pitch = model.d.pitch;
-			fur.e.pitch = model.e.pitch;
-			fur.f.pitch = model.f.pitch;
-			fur.g.pitch = model.g.pitch;
-			fur.b.render(var7);
-			fur.c.render(var7);
-			fur.d.render(var7);
-			fur.e.render(var7);
-			fur.f.render(var7);
-			fur.g.render(var7);
+			fur.head.yaw = model.head.yaw;
+			fur.head.pitch = model.head.pitch;
+			fur.head.y = model.head.y;
+			fur.head.x = model.head.x;
+			fur.body.yaw = model.body.yaw;
+			fur.body.pitch = model.body.pitch;
+			fur.leg1.pitch = model.leg1.pitch;
+			fur.leg2.pitch = model.leg2.pitch;
+			fur.leg3.pitch = model.leg3.pitch;
+			fur.leg4.pitch = model.leg4.pitch;
+			fur.head.render(var7);
+			fur.body.render(var7);
+			fur.leg1.render(var7);
+			fur.leg2.render(var7);
+			fur.leg3.render(var7);
+			fur.leg4.render(var7);
 		}
 
-		model.b.y = var9;
-		model.b.z = var10;
+		model.head.y = var9;
+		model.head.z = var10;
 	}
 	
 	public static class SheepAI extends BasicAI implements Serializable {

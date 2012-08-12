@@ -282,7 +282,7 @@ public class Mob extends Entity {
 			}
 
 			GL11.glScalef(-1.0F, 1.0F, 1.0F);
-			modelCache.getModel(this.modelName).a = var3 / 5.0F;
+			modelCache.getModel(this.modelName).grounded = var3 / 5.0F;
 			this.bindTexture(textures);
 			this.renderModel(textures, var8, var2, var5, var6, var7, var9);
 			if (this.invulnerableTime > this.invulnerableDuration - 10) {
