@@ -9,73 +9,73 @@ public final class ClippingHelper {
 
 	private static ClippingHelper instance = new ClippingHelper();
 	
-	public float[][] data = new float[16][16];
-	public float[] widthData = new float[16];
-	public float[] depthData = new float[16];
-	public float[] d = new float[16];
+	public float[][] frustrum = new float[16][16];
+	public float[] projectionMatrix = new float[16];
+	public float[] modelviewMatrix = new float[16];
+	public float[] clippingMatrix = new float[16];
 	
-	private FloatBuffer widthBuffer = BufferUtils.createFloatBuffer(16);
-	private FloatBuffer depthBuffer = BufferUtils.createFloatBuffer(16);
+	private FloatBuffer projectionMatrixBuffer = BufferUtils.createFloatBuffer(16);
+	private FloatBuffer modelviewMatrixBuffer = BufferUtils.createFloatBuffer(16);
 
-	public static ClippingHelper prepare() {
-		instance.widthBuffer.clear();
-		instance.depthBuffer.clear();
-		GL11.glGetFloat(2983, instance.widthBuffer);
-		GL11.glGetFloat(2982, instance.depthBuffer);
-		instance.widthBuffer.flip().limit(16);
-		instance.widthBuffer.get(instance.widthData);
-		instance.depthBuffer.flip().limit(16);
-		instance.depthBuffer.get(instance.depthData);
-		instance.d[0] = instance.depthData[0] * instance.widthData[0] + instance.depthData[1] * instance.widthData[4] + instance.depthData[2] * instance.widthData[8] + instance.depthData[3] * instance.widthData[12];
-		instance.d[1] = instance.depthData[0] * instance.widthData[1] + instance.depthData[1] * instance.widthData[5] + instance.depthData[2] * instance.widthData[9] + instance.depthData[3] * instance.widthData[13];
-		instance.d[2] = instance.depthData[0] * instance.widthData[2] + instance.depthData[1] * instance.widthData[6] + instance.depthData[2] * instance.widthData[10] + instance.depthData[3] * instance.widthData[14];
-		instance.d[3] = instance.depthData[0] * instance.widthData[3] + instance.depthData[1] * instance.widthData[7] + instance.depthData[2] * instance.widthData[11] + instance.depthData[3] * instance.widthData[15];
-		instance.d[4] = instance.depthData[4] * instance.widthData[0] + instance.depthData[5] * instance.widthData[4] + instance.depthData[6] * instance.widthData[8] + instance.depthData[7] * instance.widthData[12];
-		instance.d[5] = instance.depthData[4] * instance.widthData[1] + instance.depthData[5] * instance.widthData[5] + instance.depthData[6] * instance.widthData[9] + instance.depthData[7] * instance.widthData[13];
-		instance.d[6] = instance.depthData[4] * instance.widthData[2] + instance.depthData[5] * instance.widthData[6] + instance.depthData[6] * instance.widthData[10] + instance.depthData[7] * instance.widthData[14];
-		instance.d[7] = instance.depthData[4] * instance.widthData[3] + instance.depthData[5] * instance.widthData[7] + instance.depthData[6] * instance.widthData[11] + instance.depthData[7] * instance.widthData[15];
-		instance.d[8] = instance.depthData[8] * instance.widthData[0] + instance.depthData[9] * instance.widthData[4] + instance.depthData[10] * instance.widthData[8] + instance.depthData[11] * instance.widthData[12];
-		instance.d[9] = instance.depthData[8] * instance.widthData[1] + instance.depthData[9] * instance.widthData[5] + instance.depthData[10] * instance.widthData[9] + instance.depthData[11] * instance.widthData[13];
-		instance.d[10] = instance.depthData[8] * instance.widthData[2] + instance.depthData[9] * instance.widthData[6] + instance.depthData[10] * instance.widthData[10] + instance.depthData[11] * instance.widthData[14];
-		instance.d[11] = instance.depthData[8] * instance.widthData[3] + instance.depthData[9] * instance.widthData[7] + instance.depthData[10] * instance.widthData[11] + instance.depthData[11] * instance.widthData[15];
-		instance.d[12] = instance.depthData[12] * instance.widthData[0] + instance.depthData[13] * instance.widthData[4] + instance.depthData[14] * instance.widthData[8] + instance.depthData[15] * instance.widthData[12];
-		instance.d[13] = instance.depthData[12] * instance.widthData[1] + instance.depthData[13] * instance.widthData[5] + instance.depthData[14] * instance.widthData[9] + instance.depthData[15] * instance.widthData[13];
-		instance.d[14] = instance.depthData[12] * instance.widthData[2] + instance.depthData[13] * instance.widthData[6] + instance.depthData[14] * instance.widthData[10] + instance.depthData[15] * instance.widthData[14];
-		instance.d[15] = instance.depthData[12] * instance.widthData[3] + instance.depthData[13] * instance.widthData[7] + instance.depthData[14] * instance.widthData[11] + instance.depthData[15] * instance.widthData[15];
-		instance.data[0][0] = instance.d[3] - instance.d[0];
-		instance.data[0][1] = instance.d[7] - instance.d[4];
-		instance.data[0][2] = instance.d[11] - instance.d[8];
-		instance.data[0][3] = instance.d[15] - instance.d[12];
-		a(instance.data, 0);
-		instance.data[1][0] = instance.d[3] + instance.d[0];
-		instance.data[1][1] = instance.d[7] + instance.d[4];
-		instance.data[1][2] = instance.d[11] + instance.d[8];
-		instance.data[1][3] = instance.d[15] + instance.d[12];
-		a(instance.data, 1);
-		instance.data[2][0] = instance.d[3] + instance.d[1];
-		instance.data[2][1] = instance.d[7] + instance.d[5];
-		instance.data[2][2] = instance.d[11] + instance.d[9];
-		instance.data[2][3] = instance.d[15] + instance.d[13];
-		a(instance.data, 2);
-		instance.data[3][0] = instance.d[3] - instance.d[1];
-		instance.data[3][1] = instance.d[7] - instance.d[5];
-		instance.data[3][2] = instance.d[11] - instance.d[9];
-		instance.data[3][3] = instance.d[15] - instance.d[13];
-		a(instance.data, 3);
-		instance.data[4][0] = instance.d[3] - instance.d[2];
-		instance.data[4][1] = instance.d[7] - instance.d[6];
-		instance.data[4][2] = instance.d[11] - instance.d[10];
-		instance.data[4][3] = instance.d[15] - instance.d[14];
-		a(instance.data, 4);
-		instance.data[5][0] = instance.d[3] + instance.d[2];
-		instance.data[5][1] = instance.d[7] + instance.d[6];
-		instance.data[5][2] = instance.d[11] + instance.d[10];
-		instance.data[5][3] = instance.d[15] + instance.d[14];
-		a(instance.data, 5);
+	public static ClippingHelper getInstance() {
+		instance.projectionMatrixBuffer.clear();
+		instance.modelviewMatrixBuffer.clear();
+		GL11.glGetFloat(2983, instance.projectionMatrixBuffer);
+		GL11.glGetFloat(2982, instance.modelviewMatrixBuffer);
+		instance.projectionMatrixBuffer.flip().limit(16);
+		instance.projectionMatrixBuffer.get(instance.projectionMatrix);
+		instance.modelviewMatrixBuffer.flip().limit(16);
+		instance.modelviewMatrixBuffer.get(instance.modelviewMatrix);
+		instance.clippingMatrix[0] = instance.modelviewMatrix[0] * instance.projectionMatrix[0] + instance.modelviewMatrix[1] * instance.projectionMatrix[4] + instance.modelviewMatrix[2] * instance.projectionMatrix[8] + instance.modelviewMatrix[3] * instance.projectionMatrix[12];
+		instance.clippingMatrix[1] = instance.modelviewMatrix[0] * instance.projectionMatrix[1] + instance.modelviewMatrix[1] * instance.projectionMatrix[5] + instance.modelviewMatrix[2] * instance.projectionMatrix[9] + instance.modelviewMatrix[3] * instance.projectionMatrix[13];
+		instance.clippingMatrix[2] = instance.modelviewMatrix[0] * instance.projectionMatrix[2] + instance.modelviewMatrix[1] * instance.projectionMatrix[6] + instance.modelviewMatrix[2] * instance.projectionMatrix[10] + instance.modelviewMatrix[3] * instance.projectionMatrix[14];
+		instance.clippingMatrix[3] = instance.modelviewMatrix[0] * instance.projectionMatrix[3] + instance.modelviewMatrix[1] * instance.projectionMatrix[7] + instance.modelviewMatrix[2] * instance.projectionMatrix[11] + instance.modelviewMatrix[3] * instance.projectionMatrix[15];
+		instance.clippingMatrix[4] = instance.modelviewMatrix[4] * instance.projectionMatrix[0] + instance.modelviewMatrix[5] * instance.projectionMatrix[4] + instance.modelviewMatrix[6] * instance.projectionMatrix[8] + instance.modelviewMatrix[7] * instance.projectionMatrix[12];
+		instance.clippingMatrix[5] = instance.modelviewMatrix[4] * instance.projectionMatrix[1] + instance.modelviewMatrix[5] * instance.projectionMatrix[5] + instance.modelviewMatrix[6] * instance.projectionMatrix[9] + instance.modelviewMatrix[7] * instance.projectionMatrix[13];
+		instance.clippingMatrix[6] = instance.modelviewMatrix[4] * instance.projectionMatrix[2] + instance.modelviewMatrix[5] * instance.projectionMatrix[6] + instance.modelviewMatrix[6] * instance.projectionMatrix[10] + instance.modelviewMatrix[7] * instance.projectionMatrix[14];
+		instance.clippingMatrix[7] = instance.modelviewMatrix[4] * instance.projectionMatrix[3] + instance.modelviewMatrix[5] * instance.projectionMatrix[7] + instance.modelviewMatrix[6] * instance.projectionMatrix[11] + instance.modelviewMatrix[7] * instance.projectionMatrix[15];
+		instance.clippingMatrix[8] = instance.modelviewMatrix[8] * instance.projectionMatrix[0] + instance.modelviewMatrix[9] * instance.projectionMatrix[4] + instance.modelviewMatrix[10] * instance.projectionMatrix[8] + instance.modelviewMatrix[11] * instance.projectionMatrix[12];
+		instance.clippingMatrix[9] = instance.modelviewMatrix[8] * instance.projectionMatrix[1] + instance.modelviewMatrix[9] * instance.projectionMatrix[5] + instance.modelviewMatrix[10] * instance.projectionMatrix[9] + instance.modelviewMatrix[11] * instance.projectionMatrix[13];
+		instance.clippingMatrix[10] = instance.modelviewMatrix[8] * instance.projectionMatrix[2] + instance.modelviewMatrix[9] * instance.projectionMatrix[6] + instance.modelviewMatrix[10] * instance.projectionMatrix[10] + instance.modelviewMatrix[11] * instance.projectionMatrix[14];
+		instance.clippingMatrix[11] = instance.modelviewMatrix[8] * instance.projectionMatrix[3] + instance.modelviewMatrix[9] * instance.projectionMatrix[7] + instance.modelviewMatrix[10] * instance.projectionMatrix[11] + instance.modelviewMatrix[11] * instance.projectionMatrix[15];
+		instance.clippingMatrix[12] = instance.modelviewMatrix[12] * instance.projectionMatrix[0] + instance.modelviewMatrix[13] * instance.projectionMatrix[4] + instance.modelviewMatrix[14] * instance.projectionMatrix[8] + instance.modelviewMatrix[15] * instance.projectionMatrix[12];
+		instance.clippingMatrix[13] = instance.modelviewMatrix[12] * instance.projectionMatrix[1] + instance.modelviewMatrix[13] * instance.projectionMatrix[5] + instance.modelviewMatrix[14] * instance.projectionMatrix[9] + instance.modelviewMatrix[15] * instance.projectionMatrix[13];
+		instance.clippingMatrix[14] = instance.modelviewMatrix[12] * instance.projectionMatrix[2] + instance.modelviewMatrix[13] * instance.projectionMatrix[6] + instance.modelviewMatrix[14] * instance.projectionMatrix[10] + instance.modelviewMatrix[15] * instance.projectionMatrix[14];
+		instance.clippingMatrix[15] = instance.modelviewMatrix[12] * instance.projectionMatrix[3] + instance.modelviewMatrix[13] * instance.projectionMatrix[7] + instance.modelviewMatrix[14] * instance.projectionMatrix[11] + instance.modelviewMatrix[15] * instance.projectionMatrix[15];
+		instance.frustrum[0][0] = instance.clippingMatrix[3] - instance.clippingMatrix[0];
+		instance.frustrum[0][1] = instance.clippingMatrix[7] - instance.clippingMatrix[4];
+		instance.frustrum[0][2] = instance.clippingMatrix[11] - instance.clippingMatrix[8];
+		instance.frustrum[0][3] = instance.clippingMatrix[15] - instance.clippingMatrix[12];
+		normalize(instance.frustrum, 0);
+		instance.frustrum[1][0] = instance.clippingMatrix[3] + instance.clippingMatrix[0];
+		instance.frustrum[1][1] = instance.clippingMatrix[7] + instance.clippingMatrix[4];
+		instance.frustrum[1][2] = instance.clippingMatrix[11] + instance.clippingMatrix[8];
+		instance.frustrum[1][3] = instance.clippingMatrix[15] + instance.clippingMatrix[12];
+		normalize(instance.frustrum, 1);
+		instance.frustrum[2][0] = instance.clippingMatrix[3] + instance.clippingMatrix[1];
+		instance.frustrum[2][1] = instance.clippingMatrix[7] + instance.clippingMatrix[5];
+		instance.frustrum[2][2] = instance.clippingMatrix[11] + instance.clippingMatrix[9];
+		instance.frustrum[2][3] = instance.clippingMatrix[15] + instance.clippingMatrix[13];
+		normalize(instance.frustrum, 2);
+		instance.frustrum[3][0] = instance.clippingMatrix[3] - instance.clippingMatrix[1];
+		instance.frustrum[3][1] = instance.clippingMatrix[7] - instance.clippingMatrix[5];
+		instance.frustrum[3][2] = instance.clippingMatrix[11] - instance.clippingMatrix[9];
+		instance.frustrum[3][3] = instance.clippingMatrix[15] - instance.clippingMatrix[13];
+		normalize(instance.frustrum, 3);
+		instance.frustrum[4][0] = instance.clippingMatrix[3] - instance.clippingMatrix[2];
+		instance.frustrum[4][1] = instance.clippingMatrix[7] - instance.clippingMatrix[6];
+		instance.frustrum[4][2] = instance.clippingMatrix[11] - instance.clippingMatrix[10];
+		instance.frustrum[4][3] = instance.clippingMatrix[15] - instance.clippingMatrix[14];
+		normalize(instance.frustrum, 4);
+		instance.frustrum[5][0] = instance.clippingMatrix[3] + instance.clippingMatrix[2];
+		instance.frustrum[5][1] = instance.clippingMatrix[7] + instance.clippingMatrix[6];
+		instance.frustrum[5][2] = instance.clippingMatrix[11] + instance.clippingMatrix[10];
+		instance.frustrum[5][3] = instance.clippingMatrix[15] + instance.clippingMatrix[14];
+		normalize(instance.frustrum, 5);
 		return instance;
 	}
 
-	private static void a(float[][] var0, int var1) {
+	private static void normalize(float[][] var0, int var1) {
 		float var2 = MathHelper.sqrt(var0[var1][0] * var0[var1][0] + var0[var1][1] * var0[var1][1] + var0[var1][2] * var0[var1][2]);
 		var0[var1][0] /= var2;
 		var0[var1][1] /= var2;
@@ -83,9 +83,9 @@ public final class ClippingHelper {
 		var0[var1][3] /= var2;
 	}
 	
-	public boolean checkClipping(float x1, float y1, float z1, float x2, float y2, float z2) {
+	public boolean isBoxInFrustrum(float x1, float y1, float z1, float x2, float y2, float z2) {
 		for (int var7 = 0; var7 < 6; ++var7) {
-			if (this.data[var7][0] * x1 + this.data[var7][1] * y1 + this.data[var7][2] * z1 + this.data[var7][3] <= 0.0F && this.data[var7][0] * x2 + this.data[var7][1] * y1 + this.data[var7][2] * z1 + this.data[var7][3] <= 0.0F && this.data[var7][0] * x1 + this.data[var7][1] * y2 + this.data[var7][2] * z1 + this.data[var7][3] <= 0.0F && this.data[var7][0] * x2 + this.data[var7][1] * y2 + this.data[var7][2] * z1 + this.data[var7][3] <= 0.0F && this.data[var7][0] * x1 + this.data[var7][1] * y1 + this.data[var7][2] * z2 + this.data[var7][3] <= 0.0F && this.data[var7][0] * x2 + this.data[var7][1] * y1 + this.data[var7][2] * z2 + this.data[var7][3] <= 0.0F && this.data[var7][0] * x1 + this.data[var7][1] * y2 + this.data[var7][2] * z2 + this.data[var7][3] <= 0.0F && this.data[var7][0] * x2 + this.data[var7][1] * y2 + this.data[var7][2] * z2 + this.data[var7][3] <= 0.0F) {
+			if (this.frustrum[var7][0] * x1 + this.frustrum[var7][1] * y1 + this.frustrum[var7][2] * z1 + this.frustrum[var7][3] <= 0.0F && this.frustrum[var7][0] * x2 + this.frustrum[var7][1] * y1 + this.frustrum[var7][2] * z1 + this.frustrum[var7][3] <= 0.0F && this.frustrum[var7][0] * x1 + this.frustrum[var7][1] * y2 + this.frustrum[var7][2] * z1 + this.frustrum[var7][3] <= 0.0F && this.frustrum[var7][0] * x2 + this.frustrum[var7][1] * y2 + this.frustrum[var7][2] * z1 + this.frustrum[var7][3] <= 0.0F && this.frustrum[var7][0] * x1 + this.frustrum[var7][1] * y1 + this.frustrum[var7][2] * z2 + this.frustrum[var7][3] <= 0.0F && this.frustrum[var7][0] * x2 + this.frustrum[var7][1] * y1 + this.frustrum[var7][2] * z2 + this.frustrum[var7][3] <= 0.0F && this.frustrum[var7][0] * x1 + this.frustrum[var7][1] * y2 + this.frustrum[var7][2] * z2 + this.frustrum[var7][3] <= 0.0F && this.frustrum[var7][0] * x2 + this.frustrum[var7][1] * y2 + this.frustrum[var7][2] * z2 + this.frustrum[var7][3] <= 0.0F) {
 				return false;
 			}
 		}

@@ -109,7 +109,7 @@ public final class Chunk {
 	}
 
 	public final void clip(ClippingHelper check) {
-		this.chunkDirty = check.checkClipping(this.x, this.y, this.z, this.x + this.width, this.y + this.height, this.z + this.depth);
+		this.chunkDirty = check.isBoxInFrustrum(this.x, this.y, this.z, this.x + this.width, this.y + this.height, this.z + this.depth);
 	}
 
 }

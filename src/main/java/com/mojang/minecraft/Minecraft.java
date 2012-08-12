@@ -747,7 +747,7 @@ public final class Minecraft implements Runnable {
 								float var1000 = this.player.yo + (this.player.y - this.player.yo) * this.timer.renderPartialTicks;
 								var33 = this.player.zo + (this.player.z - this.player.zo) * this.timer.renderPartialTicks;
 								GL11.glTranslatef(-var69, -var1000, -var33);
-								ClippingHelper clipping = ClippingHelper.prepare();
+								ClippingHelper clipping = ClippingHelper.getInstance();
 
 								for (int count = 0; count < this.levelRenderer.chunkCache.length; count++) {
 									this.levelRenderer.chunkCache[count].clip(clipping);
