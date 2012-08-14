@@ -9,6 +9,7 @@ import ch.spacebase.openclassic.api.data.NBTData;
 import ch.spacebase.openclassic.api.event.EventFactory;
 import ch.spacebase.openclassic.api.event.player.PlayerTeleportEvent;
 import ch.spacebase.openclassic.api.level.Level;
+import ch.spacebase.openclassic.api.network.msg.PlayerChatMessage;
 import ch.spacebase.openclassic.api.permissions.Group;
 import ch.spacebase.openclassic.api.player.Player;
 import ch.spacebase.openclassic.api.player.Session;
@@ -169,6 +170,24 @@ public class ClientPlayer implements Player {
 	@Override
 	public List<RemotePluginInfo> getPlugins() {
 		return GeneralUtils.getMinecraft().serverPlugins;
+	}
+
+	@Override
+	public void chat(String message) {
+		this.session.send(new PlayerChatMessage((byte) -1, message));
+	}
+
+	@Override
+	public void hidePlayer(Player player) {
+	}
+
+	@Override
+	public void showPlayer(Player player) {
+	}
+
+	@Override
+	public boolean canSee(Player player) {
+		return true;
 	}
 
 }

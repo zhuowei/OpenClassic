@@ -32,6 +32,7 @@ public class ClientSession implements Session {
 	@Override
 	public void send(Message message) {
 		if(GeneralUtils.getMinecraft().netManager == null || !GeneralUtils.getMinecraft().netManager.isConnected()) return;
+		if(message.getClass().getPackage().getName().contains("custom") && !GeneralUtils.getMinecraft().openclassicServer) return;
 		
 		PacketType type = PacketType.packets[message.getOpcode()];
 		if(type != null) {

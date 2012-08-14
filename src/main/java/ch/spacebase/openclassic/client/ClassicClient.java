@@ -45,6 +45,7 @@ import ch.spacebase.openclassic.api.config.Configuration;
 import ch.spacebase.openclassic.api.data.NBTData;
 import ch.spacebase.openclassic.api.event.EventFactory;
 import ch.spacebase.openclassic.api.event.game.PreCommandEvent;
+import ch.spacebase.openclassic.api.event.level.LevelCreateEvent;
 import ch.spacebase.openclassic.api.gui.GuiScreen;
 import ch.spacebase.openclassic.api.gui.MainScreen;
 import ch.spacebase.openclassic.api.input.InputHelper;
@@ -315,6 +316,7 @@ public class ClassicClient implements Client {
 
 		this.mc.mode.prepareLevel(level);
 		this.mc.setLevel(level);
+		EventFactory.callEvent(new LevelCreateEvent(level.openclassic));
 		return level.openclassic;
 	}
 
@@ -477,6 +479,11 @@ public class ClassicClient implements Client {
 	@Override
 	public String getServerVersion() {
 		return this.mc.openclassicVersion;
+	}
+
+	@Override
+	public Collection<CommandExecutor> getCommandExecutors() {
+		return this.executors.keySet();
 	}
 
 }

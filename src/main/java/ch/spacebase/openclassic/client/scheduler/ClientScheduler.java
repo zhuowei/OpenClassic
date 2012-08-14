@@ -147,6 +147,24 @@ public class ClientScheduler implements Scheduler {
 			}
 		}
 	}
+	
+	@Override
+	public boolean isRunning(int id) {
+		for(Task task : this.tasks) {
+			if(task.getTaskId() == id) return true;
+		}
+		
+		return false;
+	}
+
+	@Override
+	public boolean isQueued(int id) {
+		for(Task task : this.oldTasks) {
+			if(task.getTaskId() == id) return true;
+		}
+		
+		return false;
+	}
 
 	@Override
 	public List<Worker> getActiveWorkers() {
