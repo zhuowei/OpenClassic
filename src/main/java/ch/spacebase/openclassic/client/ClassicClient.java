@@ -44,6 +44,7 @@ import ch.spacebase.openclassic.api.command.Sender;
 import ch.spacebase.openclassic.api.config.Configuration;
 import ch.spacebase.openclassic.api.data.NBTData;
 import ch.spacebase.openclassic.api.event.EventFactory;
+import ch.spacebase.openclassic.api.event.game.CommandNotFoundEvent;
 import ch.spacebase.openclassic.api.event.game.PreCommandEvent;
 import ch.spacebase.openclassic.api.event.level.LevelCreateEvent;
 import ch.spacebase.openclassic.api.gui.GuiScreen;
@@ -278,7 +279,10 @@ public class ClassicClient implements Client {
 			break;
 		}
 		
-		sender.sendMessage(Color.RED + "Unknown command.");
+		CommandNotFoundEvent e = EventFactory.callEvent(new CommandNotFoundEvent(sender, command));
+		if(e.showMessage()) {
+			sender.sendMessage(Color.RED + "Unknown command.");
+		}
 	}
 
 	@Override
