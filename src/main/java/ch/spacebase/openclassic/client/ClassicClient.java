@@ -441,15 +441,12 @@ public class ClassicClient implements Client {
 
 	@Override
 	public void reload() {
-		OpenClassic.getLogger().info("Reloading OpenClassic...");
 		this.config.save();
 		this.config.load();
 		
 		for(Plugin plugin : this.pluginManager.getPlugins()) {
 			plugin.reload();
 		}
-		
-		OpenClassic.getLogger().info("Reload complete.");
 	}
 	
 	private static class DateOutputFormatter extends Formatter {
