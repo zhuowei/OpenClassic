@@ -44,6 +44,7 @@ import ch.spacebase.openclassic.client.sound.ClientAudioManager;
 import ch.spacebase.openclassic.client.util.BlockUtils;
 import ch.spacebase.openclassic.client.util.GeneralUtils;
 import ch.spacebase.openclassic.client.util.LWJGLNatives;
+import ch.spacebase.openclassic.client.util.ShaderManager;
 
 import com.mojang.minecraft.gamemode.CreativeGameMode;
 import com.mojang.minecraft.gamemode.GameMode;
@@ -164,6 +165,7 @@ public final class Minecraft implements Runnable {
 	public String levelName = "";
 	public int levelSize = 0;
 
+	public boolean hideGui = false;
 	public boolean openclassicServer = false;
 	public String openclassicVersion = "";
 	public boolean hacks = true;
@@ -296,6 +298,7 @@ public final class Minecraft implements Runnable {
 		this.hacks = true;
 		this.player = null;
 		this.settings.speed = false;
+		this.hideGui = false;
 	}
 
 	public void initGame() {
@@ -500,13 +503,14 @@ public final class Minecraft implements Runnable {
 		this.progressBar.setTitle("Downloading Resources...");
 		this.progressBar.setProgress(0);
 
+		ShaderManager.setup();
 		long lastUpdate = System.currentTimeMillis();
 		int fps = 0;
 
 		while (this.running) {
 			if (this.waiting) {
 				try {
-					Thread.sleep(100L);
+					Thread.sleep(100);
 				} catch (InterruptedException e) {
 				}
 			} else {
@@ -584,7 +588,7 @@ public final class Minecraft implements Runnable {
 					this.ticks++;
 					this.tick();
 				}
-
+				
 				checkGLError("Pre render");
 				GL11.glEnable(GL11.GL_TEXTURE_2D);
 
@@ -1108,25 +1112,28 @@ public final class Minecraft implements Runnable {
 								float brightness = this.level.getBrightness((int) this.player.x, (int) this.player.y, (int) this.player.z);
 								GL11.glColor4f(brightness, brightness, brightness, 1);
 								com.mojang.minecraft.render.ShapeRenderer var123 = com.mojang.minecraft.render.ShapeRenderer.instance;
-								if (this.renderer.heldBlock.block != null) {
-									var34 = 0.4F;
-									GL11.glScalef(0.4F, var34, var34);
-									GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-									this.renderer.heldBlock.block.getModel().renderPreview(this.level.getBrightness((int) this.player.x, (int) this.player.y, (int) this.player.z));
-								} else {
-									this.player.bindTexture(this.textureManager);
-									GL11.glScalef(1.0F, -1.0F, -1.0F);
-									GL11.glTranslatef(0.0F, 0.2F, 0.0F);
-									GL11.glRotatef(-120.0F, 0.0F, 0.0F, 1.0F);
-									GL11.glScalef(1.0F, 1.0F, 1.0F);
-									ModelPart arm = this.player.getModel().leftArm;
-									if (!arm.hasList) {
-										arm.generateList(0.0625F);
+								
+								if(!this.hideGui) {
+									if (this.renderer.heldBlock.block != null) {
+										var34 = 0.4F;
+										GL11.glScalef(0.4F, var34, var34);
+										GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+										this.renderer.heldBlock.block.getModel().renderPreview(this.level.getBrightness((int) this.player.x, (int) this.player.y, (int) this.player.z));
+									} else {
+										this.player.bindTexture(this.textureManager);
+										GL11.glScalef(1.0F, -1.0F, -1.0F);
+										GL11.glTranslatef(0.0F, 0.2F, 0.0F);
+										GL11.glRotatef(-120.0F, 0.0F, 0.0F, 1.0F);
+										GL11.glScalef(1.0F, 1.0F, 1.0F);
+										ModelPart arm = this.player.getModel().leftArm;
+										if (!arm.hasList) {
+											arm.generateList(0.0625F);
+										}
+	
+										GL11.glCallList(arm.list);
 									}
-
-									GL11.glCallList(arm.list);
 								}
-
+								
 								GL11.glDisable(GL11.GL_NORMALIZE);
 								GL11.glPopMatrix();
 								this.renderer.setLighting(false);
@@ -1176,7 +1183,8 @@ public final class Minecraft implements Runnable {
 				}
 			}
 		}
-
+		
+		ShaderManager.cleanup();
 		this.shutdown();
 		return;
 	}
@@ -1783,6 +1791,10 @@ public final class Minecraft implements Runnable {
 					}
 
 					this.resize();
+				}
+				
+				if(Keyboard.getEventKey() == Keyboard.KEY_F1) {
+					this.hideGui = !this.hideGui;
 				}
 
 				if (this.ingame && (this.netManager == null || this.netManager.isConnected() && this.netManager.levelLoaded)) {					

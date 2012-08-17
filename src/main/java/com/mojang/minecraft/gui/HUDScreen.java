@@ -39,104 +39,106 @@ public final class HUDScreen implements MainScreen {
 		GL11.glColor4f(1, 1, 1, 1);
 		GL11.glEnable(GL11.GL_BLEND);
 		
-		RenderHelper.getHelper().drawImage(this.width / 2 - 91, this.height - 22, -90, 0, 0, 182, 22);
-		RenderHelper.getHelper().drawImage(this.width / 2 - 91 - 1 + this.mc.player.inventory.selected * 20, this.height - 22 - 1, -90, 0, 22, 24, 22);
+		if(!this.mc.hideGui) {
+			RenderHelper.getHelper().drawImage(this.width / 2 - 91, this.height - 22, -90, 0, 0, 182, 22);
+			RenderHelper.getHelper().drawImage(this.width / 2 - 91 - 1 + this.mc.player.inventory.selected * 20, this.height - 22 - 1, -90, 0, 22, 24, 22);
 		
-		RenderHelper.getHelper().bindTexture("/gui/icons.png", true);
-		RenderHelper.getHelper().drawImage(this.width / 2 - 7, this.height / 2 - 7, -90, 0, 0, 16, 16);
+			RenderHelper.getHelper().bindTexture("/gui/icons.png", true);
+			RenderHelper.getHelper().drawImage(this.width / 2 - 7, this.height / 2 - 7, -90, 0, 0, 16, 16);
 		
-		boolean glow = this.mc.player.invulnerableTime / 3 % 2 != 0 && this.mc.player.invulnerableTime >= 10;
-		this.rand.setSeed((this.ticks * 312871L));
-		if (this.mc.mode.isSurvival()) {
-			for (int heart = 0; heart < 10; heart++) {
-				int heartX = this.width / 2 - 91 + (heart << 3);
-				int heartY = this.height - 32;
-				
-				if (this.mc.player.health <= 4) {
-					heartY += this.rand.nextInt(2);
-				}
-
-				RenderHelper.getHelper().drawImage(heartX, heartY, -90, 16 + (glow ? 9 : 0), 0, 9, 9);
-				if (glow) {
-					if ((heart << 1) + 1 < this.mc.player.lastHealth) {
-						RenderHelper.getHelper().drawImage(heartX, heartY, -90, 70, 0, 9, 9);
+			boolean glow = this.mc.player.invulnerableTime / 3 % 2 != 0 && this.mc.player.invulnerableTime >= 10;
+			this.rand.setSeed((this.ticks * 312871L));
+			if (this.mc.mode.isSurvival()) {
+				for (int heart = 0; heart < 10; heart++) {
+					int heartX = this.width / 2 - 91 + (heart << 3);
+					int heartY = this.height - 32;
+					
+					if (this.mc.player.health <= 4) {
+						heartY += this.rand.nextInt(2);
 					}
-
-					if ((heart << 1) + 1 == this.mc.player.lastHealth) {
-						RenderHelper.getHelper().drawImage(heartX, heartY, -90, 79, 0, 9, 9);
+	
+					RenderHelper.getHelper().drawImage(heartX, heartY, -90, 16 + (glow ? 9 : 0), 0, 9, 9);
+					if (glow) {
+						if ((heart << 1) + 1 < this.mc.player.lastHealth) {
+							RenderHelper.getHelper().drawImage(heartX, heartY, -90, 70, 0, 9, 9);
+						}
+	
+						if ((heart << 1) + 1 == this.mc.player.lastHealth) {
+							RenderHelper.getHelper().drawImage(heartX, heartY, -90, 79, 0, 9, 9);
+						}
 					}
-				}
-
-				if ((heart << 1) + 1 < this.mc.player.health) {
-					RenderHelper.getHelper().drawImage(heartX, heartY, -90, 52, 0, 9, 9);
-				}
-
-				if ((heart << 1) + 1 == this.mc.player.health) {
-					RenderHelper.getHelper().drawImage(heartX, heartY, -90, 61, 0, 9, 9);
-				}
-			}
-
-			if (this.mc.player.isUnderWater()) {
-				int var100 = (int) Math.ceil((this.mc.player.airSupply - 2) * 10.0D / 300.0D);
-				int var101 = (int) Math.ceil(this.mc.player.airSupply * 10.0D / 300.0D) - var100;
-
-				for (int count = 0; count < var100 + var101; count++) {
-					if (count < var100) {
-						RenderHelper.getHelper().drawImage(this.width / 2 - 91 + (count << 3), this.height - 32 - 9, -90, 16, 18, 9, 9);
-					} else {
-						RenderHelper.getHelper().drawImage(this.width / 2 - 91 + (count << 3), this.height - 32 - 9, -90, 25, 18, 9, 9);
+	
+					if ((heart << 1) + 1 < this.mc.player.health) {
+						RenderHelper.getHelper().drawImage(heartX, heartY, -90, 52, 0, 9, 9);
+					}
+	
+					if ((heart << 1) + 1 == this.mc.player.health) {
+						RenderHelper.getHelper().drawImage(heartX, heartY, -90, 61, 0, 9, 9);
 					}
 				}
-			}
-		}
-
-		GL11.glDisable(GL11.GL_BLEND);
-
-		for (int slot = 0; slot < this.mc.player.inventory.slots.length; slot++) {
-			int x = this.width / 2 - 90 + slot * 20;
-			int y = this.height - 16;
-			int block = this.mc.player.inventory.slots[slot];
-			
-			if (block > 0) {
-				GL11.glPushMatrix();
-				GL11.glTranslatef(x, y, -50);
-				
-				if (this.mc.player.inventory.popTime[slot] > 0) {
-					float off = (this.mc.player.inventory.popTime[slot] - renderPartialTicks) / 5;
-					GL11.glTranslatef(10, (-MathHelper.sin(off * off * (float) Math.PI) * 8) + 10, 0);
-					GL11.glScalef(MathHelper.sin(off * off * (float) Math.PI) + 1, MathHelper.sin(off * (float) Math.PI) + 1, 1);
-					GL11.glTranslatef(-10, -10, 0);
-				}
-
-				GL11.glScalef(10, 10, 10);
-				GL11.glTranslatef(1, 0.5F, 0);
-				GL11.glRotatef(-30, 1, 0, 0);
-				GL11.glRotatef(45, 0, 1, 0);
-				GL11.glTranslatef(-1.5F, 0.5F, 0.5F);
-				GL11.glScalef(-1, -1, -1);
-				
-				ShapeRenderer.instance.begin();
-				Blocks.fromId(block).getModel().renderFullbright(-2, 0, 0);
-				ShapeRenderer.instance.end();
-				
-				GL11.glPopMatrix();
-				
-				if (this.mc.player.inventory.count[slot] > 1) {
-					this.mc.fontRenderer.renderWithShadow(String.valueOf(this.mc.player.inventory.count[slot]), x + 19 - this.mc.fontRenderer.getWidth(String.valueOf(this.mc.player.inventory.count[slot])), y + 6, 16777215);
+	
+				if (this.mc.player.isUnderWater()) {
+					int var100 = (int) Math.ceil((this.mc.player.airSupply - 2) * 10.0D / 300.0D);
+					int var101 = (int) Math.ceil(this.mc.player.airSupply * 10.0D / 300.0D) - var100;
+	
+					for (int count = 0; count < var100 + var101; count++) {
+						if (count < var100) {
+							RenderHelper.getHelper().drawImage(this.width / 2 - 91 + (count << 3), this.height - 32 - 9, -90, 16, 18, 9, 9);
+						} else {
+							RenderHelper.getHelper().drawImage(this.width / 2 - 91 + (count << 3), this.height - 32 - 9, -90, 25, 18, 9, 9);
+						}
+					}
 				}
 			}
-		}
-
-		this.mc.fontRenderer.renderWithShadow(Constants.CLIENT_VERSION, 2, 2, 16777215);
-		if (this.mc.settings.showInfo) {
-			this.mc.fontRenderer.renderWithShadow(this.mc.debugInfo, 2, 12, 16777215);
-			this.mc.fontRenderer.renderWithShadow("Position: " + (int) Math.floor(this.mc.player.x) + ", " + (int) Math.floor(this.mc.player.y) + ", " + (int) Math.floor(this.mc.player.z), 2, 22, 16777215);
-		}
-
-		if (this.mc.mode instanceof SurvivalGameMode) {
-			String score = "Score: &e" + this.mc.player.getScore();
-			this.mc.fontRenderer.renderWithShadow(score, this.width - this.mc.fontRenderer.getWidth(score) - 2, 2, 16777215);
-			this.mc.fontRenderer.renderWithShadow("Arrows: " + this.mc.player.arrows, this.width / 2 + 8, this.height - 33, 16777215);
+	
+			GL11.glDisable(GL11.GL_BLEND);
+	
+			for (int slot = 0; slot < this.mc.player.inventory.slots.length; slot++) {
+				int x = this.width / 2 - 90 + slot * 20;
+				int y = this.height - 16;
+				int block = this.mc.player.inventory.slots[slot];
+				
+				if (block > 0) {
+					GL11.glPushMatrix();
+					GL11.glTranslatef(x, y, -50);
+					
+					if (this.mc.player.inventory.popTime[slot] > 0) {
+						float off = (this.mc.player.inventory.popTime[slot] - renderPartialTicks) / 5;
+						GL11.glTranslatef(10, (-MathHelper.sin(off * off * (float) Math.PI) * 8) + 10, 0);
+						GL11.glScalef(MathHelper.sin(off * off * (float) Math.PI) + 1, MathHelper.sin(off * (float) Math.PI) + 1, 1);
+						GL11.glTranslatef(-10, -10, 0);
+					}
+	
+					GL11.glScalef(10, 10, 10);
+					GL11.glTranslatef(1, 0.5F, 0);
+					GL11.glRotatef(-30, 1, 0, 0);
+					GL11.glRotatef(45, 0, 1, 0);
+					GL11.glTranslatef(-1.5F, 0.5F, 0.5F);
+					GL11.glScalef(-1, -1, -1);
+					
+					ShapeRenderer.instance.begin();
+					Blocks.fromId(block).getModel().renderFullbright(-2, 0, 0);
+					ShapeRenderer.instance.end();
+					
+					GL11.glPopMatrix();
+					
+					if (this.mc.player.inventory.count[slot] > 1) {
+						this.mc.fontRenderer.renderWithShadow(String.valueOf(this.mc.player.inventory.count[slot]), x + 19 - this.mc.fontRenderer.getWidth(String.valueOf(this.mc.player.inventory.count[slot])), y + 6, 16777215);
+					}
+				}
+			}
+	
+			this.mc.fontRenderer.renderWithShadow(Constants.CLIENT_VERSION, 2, 2, 16777215);
+			if (this.mc.settings.showInfo) {
+				this.mc.fontRenderer.renderWithShadow(this.mc.debugInfo, 2, 12, 16777215);
+				this.mc.fontRenderer.renderWithShadow("Position: " + (int) Math.floor(this.mc.player.x) + ", " + (int) Math.floor(this.mc.player.y) + ", " + (int) Math.floor(this.mc.player.z), 2, 22, 16777215);
+			}
+	
+			if (this.mc.mode instanceof SurvivalGameMode) {
+				String score = "Score: &e" + this.mc.player.getScore();
+				this.mc.fontRenderer.renderWithShadow(score, this.width - this.mc.fontRenderer.getWidth(score) - 2, 2, 16777215);
+				this.mc.fontRenderer.renderWithShadow("Arrows: " + this.mc.player.arrows, this.width / 2 + 8, this.height - 33, 16777215);
+			}
 		}
 
 		byte maxMsgs = 10;

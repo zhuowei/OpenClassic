@@ -242,6 +242,5 @@ public final class LevelRenderer {
 				}
 			}
 		}
-
 	}
 }
