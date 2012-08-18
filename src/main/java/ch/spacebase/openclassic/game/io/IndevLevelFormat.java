@@ -1,4 +1,4 @@
-package ch.spacebase.openclassic.client.io;
+package ch.spacebase.openclassic.game.io;
 
 import java.io.File;
 import java.io.FileInputStream;

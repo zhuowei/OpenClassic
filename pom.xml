@@ -1,15 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ch.spacebase</groupId>
-	<artifactId>openclassicclient</artifactId>
+	<artifactId>openclassic</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>OpenClassic Client</name>
-	<description>The Minecraft Classic client modded to support the OpenClassicAPI and more.</description>
-	<url>N/A</url>
+	<name>OpenClassic</name>
+	<description>A full client/server implementation of the OpenClassic API.</description>
+	<url>http://github.com/Steveice10/OpenClassic</url>
 
-	<!-- <licenses>
+	<licenses>
 		<license>
 			<name>MIT</name>
 			<url>http://www.opensource.org/licenses/mit-license.html</url>
@@ -21,7 +21,7 @@
     		<connection>scm:git:git@github.com:Steveice10/OpenClassic.git</connection>
 		<developerConnection>scm:git:git@github.com:Steveice10/OpenClassic.git</developerConnection>
 		<url>git@github.com:Steveice10/OpenClassic/</url>
-	</scm> -->
+	</scm>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -111,6 +111,18 @@
     			<artifactId>soundsystem</artifactId>
     			<version>0.0.1</version>
   		</dependency>
+        	<dependency>
+            		<groupId>jline</groupId>
+            		<artifactId>jline</artifactId>
+            		<version>1.0</version>
+			<scope>compile</scope>
+        	</dependency>
+  		<dependency>
+    			<groupId>org.jboss.netty</groupId>
+    			<artifactId>netty</artifactId>
+    			<version>3.2.7.Final</version>
+    			<scope>compile</scope>
+  		</dependency>
 	</dependencies>
 
 	<build>
@@ -138,7 +150,7 @@
 				<configuration>
 					<archive>
 						<manifestEntries>
-							<Main-Class>ch.spacebase.openclassic.client.MinecraftStandalone</Main-Class>
+							<Main-Class>ch.spacebase.openclassic.game.Main</Main-Class>
 							<Implementation-Title>${project.name}</Implementation-Title>
 							<Implementation-Version>${describe}</Implementation-Version>
 							<Implementation-Vendor>Steveice10</Implementation-Vendor>
@@ -146,7 +158,7 @@
 						</manifestEntries>
 						<manifestSections>
 							<manifestSection>
-								<name>ch/spacebase/openclassic/client</name>
+								<name>ch/spacebase/openclassic/game</name>
 								<manifestEntries>
 									<Sealed>true</Sealed>
 								</manifestEntries>

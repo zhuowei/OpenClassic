@@ -1,46 +1,28 @@
-package ch.spacebase.openclassic.client.scheduler;
+package ch.spacebase.openclassic.game.scheduler;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledExecutorService;
 import ch.spacebase.openclassic.api.scheduler.Scheduler;
 import ch.spacebase.openclassic.api.scheduler.Task;
 import ch.spacebase.openclassic.api.scheduler.Worker;
 
-public class ClientScheduler implements Scheduler {
+public class ClassicScheduler implements Scheduler {
 
-    private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-
-    private final List<ClientTask> newTasks = new ArrayList<ClientTask>();
-    private final List<ClientTask> oldTasks = new ArrayList<ClientTask>();
-    private final List<ClientTask> tasks = new ArrayList<ClientTask>();
+    private final List<ClassicTask> newTasks = new ArrayList<ClassicTask>();
+    private final List<ClassicTask> oldTasks = new ArrayList<ClassicTask>();
+    private final List<ClassicTask> tasks = new ArrayList<ClassicTask>();
     
-    private final List<ClientWorker> activeWorkers = Collections.synchronizedList(new ArrayList<ClientWorker>());
-	
-	public ClientScheduler() {
-        /* this.executor.scheduleAtFixedRate(new Runnable() {
-            public void run() {
-                try {
-                    tick();
-                } catch (Exception e) {
-                    OpenClassic.getLogger().log(java.util.logging.Level.SEVERE, "Error while ticking: {0}", e);
-                    e.printStackTrace();
-                }
-            }
-        }, 0, Constants.TICK_MILLISECONDS, TimeUnit.MILLISECONDS); */
-	}
+    private final List<ClassicWorker> activeWorkers = Collections.synchronizedList(new ArrayList<ClassicWorker>());
 	
 	public void stop() {
 		this.cancelAllTasks();
-		this.executor.shutdown();
 	}
 	
-	private int schedule(ClientTask task) {
+	private int schedule(ClassicTask task) {
 		synchronized(this.newTasks) {
 			this.newTasks.add(task);
 		}
@@ -50,7 +32,7 @@ public class ClientScheduler implements Scheduler {
 	
 	public void tick() {
 		synchronized(this.newTasks) {
-			for(ClientTask task : this.newTasks) {
+			for(ClassicTask task : this.newTasks) {
 				this.tasks.add(task);
 			}
 			
@@ -58,22 +40,22 @@ public class ClientScheduler implements Scheduler {
 		}
 
 		synchronized(this.oldTasks) {
-			for(ClientTask task : this.oldTasks) {
+			for(ClassicTask task : this.oldTasks) {
 				this.tasks.remove(task);
 			}
 			
 			this.oldTasks.clear();
 		}
 
-		for(Iterator<ClientTask> it = this.tasks.iterator(); it.hasNext();) {
-			ClientTask task = it.next();
+		for(Iterator<ClassicTask> it = this.tasks.iterator(); it.hasNext();) {
+			ClassicTask task = it.next();
 			boolean cont = false;
 				
 			try {
 				if(task.isSync()) {
 					cont = task.run();
 				} else {
-					this.activeWorkers.add(new ClientWorker(task, this));
+					this.activeWorkers.add(new ClassicWorker(task, this));
 				}
 			} finally {
 				if(!cont) it.remove();
@@ -93,7 +75,7 @@ public class ClientScheduler implements Scheduler {
 
 	@Override
 	public int scheduleRepeatingTask(Object obj, Runnable task, long delay, long period) {
-		return schedule(new ClientTask(obj, task, true, delay, period));
+		return schedule(new ClassicTask(obj, task, true, delay, period));
 	}
 
 	@Override
@@ -108,7 +90,7 @@ public class ClientScheduler implements Scheduler {
 
 	@Override
 	public int scheduleAsyncRepeatingTask(Object obj, Runnable task, long delay, long period) {
-		return schedule(new ClientTask(obj, task, false, delay, period));
+		return schedule(new ClassicTask(obj, task, false, delay, period));
 	}
 
 	@Override
@@ -119,7 +101,7 @@ public class ClientScheduler implements Scheduler {
 	@Override
 	public void cancelTask(int taskId) {
 		synchronized(this.oldTasks) {
-			for(ClientTask task : this.tasks) {
+			for(ClassicTask task : this.tasks) {
 				if(task.getTaskId() == taskId) {
 					this.oldTasks.add(task);
 					return;
@@ -131,7 +113,7 @@ public class ClientScheduler implements Scheduler {
 	@Override
 	public void cancelTasks(Object plugin) {
 		synchronized(this.oldTasks) {
-			for(ClientTask task : this.tasks) {
+			for(ClassicTask task : this.tasks) {
 				if(task.getOwner() == plugin) {
 					this.oldTasks.add(task);
 				}
@@ -142,7 +124,7 @@ public class ClientScheduler implements Scheduler {
 	@Override
 	public void cancelAllTasks() {
 		synchronized(this.oldTasks) {
-			for(ClientTask task : this.tasks) {
+			for(ClassicTask task : this.tasks) {
 				this.oldTasks.add(task);
 			}
 		}
@@ -175,14 +157,14 @@ public class ClientScheduler implements Scheduler {
 	public List<Task> getPendingTasks() {
 		ArrayList<Task> result = new ArrayList<Task>();
 		
-		for(ClientTask task : this.tasks) {
+		for(ClassicTask task : this.tasks) {
 			result.add(task);
 		}
 		
 		return result;
 	}
 
-	public synchronized void workerComplete(ClientWorker worker) {
+	public synchronized void workerComplete(ClassicWorker worker) {
 		this.activeWorkers.remove(worker);
 		
 		if(!worker.shouldContinue()) {

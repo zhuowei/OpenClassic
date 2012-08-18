@@ -1,0 +1,48 @@
+package ch.spacebase.openclassic.server.player;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import ch.spacebase.openclassic.api.player.Player;
+import ch.spacebase.openclassic.api.plugin.RemotePluginInfo;
+
+public class ClientInfo {
+
+	private Player player;
+	private boolean custom;
+	private String version;
+	private List<RemotePluginInfo> plugins = new ArrayList<RemotePluginInfo>();
+	
+	public ClientInfo(Player player) {
+		this.player = player;
+	}
+
+	public Player getPlayer() {
+		return this.player;
+	}
+
+	public boolean isCustom() {
+		return this.custom;
+	}
+
+	public void setCustom(boolean custom) {
+		this.custom = custom;
+	}
+
+	public String getVersion() {
+		return this.version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
+	public void addPlugin(RemotePluginInfo info) {
+		this.plugins.add(info);
+	}
+	
+	public List<RemotePluginInfo> getPlugins() {
+		return this.plugins;
+	}
+	
+}

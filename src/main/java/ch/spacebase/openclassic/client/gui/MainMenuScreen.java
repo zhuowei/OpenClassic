@@ -6,7 +6,6 @@ import ch.spacebase.openclassic.api.gui.GuiScreen;
 import ch.spacebase.openclassic.api.gui.widget.Button;
 import ch.spacebase.openclassic.api.render.RenderHelper;
 import ch.spacebase.openclassic.client.util.GeneralUtils;
-
 import com.mojang.minecraft.gui.LoadLevelScreen;
 import com.mojang.minecraft.gui.OptionsScreen;
 

@@ -36,15 +36,16 @@ import ch.spacebase.openclassic.api.render.RenderHelper;
 import ch.spacebase.openclassic.api.util.Constants;
 import ch.spacebase.openclassic.client.ClassicClient;
 import ch.spacebase.openclassic.client.MinecraftStandalone;
+import ch.spacebase.openclassic.client.gui.LoginScreen;
 import ch.spacebase.openclassic.client.gui.MainMenuScreen;
 import ch.spacebase.openclassic.client.player.ClientPlayer;
 import ch.spacebase.openclassic.client.render.ClientRenderHelper;
-import ch.spacebase.openclassic.client.scheduler.ClientScheduler;
 import ch.spacebase.openclassic.client.sound.ClientAudioManager;
 import ch.spacebase.openclassic.client.util.BlockUtils;
 import ch.spacebase.openclassic.client.util.GeneralUtils;
 import ch.spacebase.openclassic.client.util.LWJGLNatives;
 import ch.spacebase.openclassic.client.util.ShaderManager;
+import ch.spacebase.openclassic.game.scheduler.ClassicScheduler;
 
 import com.mojang.minecraft.gamemode.CreativeGameMode;
 import com.mojang.minecraft.gamemode.GameMode;
@@ -261,6 +262,10 @@ public final class Minecraft implements Runnable {
 		if (this.resourceThread != null) {
 			this.resourceThread.running = false;
 		}
+		
+		if(OpenClassic.getServer() != null) {
+			OpenClassic.getServer().shutdown();
+		}
 
 		this.audio.cleanup();
 		Mouse.destroy();
@@ -376,12 +381,13 @@ public final class Minecraft implements Runnable {
 			@Override
 			public void uncaughtException(Thread t, Throwable e) {
 				System.out.println("Uncaught exception in thread \"" + t.getName() + "\"");
+				e.printStackTrace();
 				handleException(e);
 			}
 		});
 
 		this.running = true;
-		OpenClassic.setGame(new ClassicClient(this));
+		OpenClassic.setClient(new ClassicClient(this));
 
 		this.dir = GeneralUtils.getMinecraftDirectory();
 		File lib = new File(this.dir, "lib");
@@ -537,7 +543,8 @@ public final class Minecraft implements Runnable {
 						}
 
 						if(this.server == null || this.server.equals("") || this.port == 0) {
-							this.setCurrentScreen(new MainMenuScreen());
+							//this.setCurrentScreen(new MainMenuScreen());
+							this.setCurrentScreen(new LoginScreen());
 						} else {
 							this.initGame();
 						}
@@ -1310,7 +1317,7 @@ public final class Minecraft implements Runnable {
 
 	private void tick() {
 		this.audio.update(this.player);
-		((ClientScheduler) OpenClassic.getGame().getScheduler()).tick();
+		((ClassicScheduler) OpenClassic.getGame().getScheduler()).tick();
 
 		if (this.currentScreen != null) {
 			this.lastClick = this.ticks + 10000;

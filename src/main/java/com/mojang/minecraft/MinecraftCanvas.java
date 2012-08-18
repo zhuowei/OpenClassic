@@ -16,7 +16,7 @@ public class MinecraftCanvas extends Canvas {
 		super.addNotify();
 		
 		if (this.thread == null) {
-			this.thread = new Thread(this.mc);
+			this.thread = new Thread(this.mc, "Client");
 			this.thread.start();
 		}
 	}

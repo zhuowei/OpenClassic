@@ -1,26 +1,26 @@
-package ch.spacebase.openclassic.client.scheduler;
+package ch.spacebase.openclassic.game.scheduler;
 
 import ch.spacebase.openclassic.api.scheduler.Worker;
 
-public class ClientWorker implements Worker, Runnable {
+public class ClassicWorker implements Worker, Runnable {
 
 	private final int id;
 	private final Object owner;
-	private final ClientTask task;
+	private final ClassicTask task;
 	private Thread thread = null;
 	private boolean shouldContinue = true;
 	
-	protected ClientWorker(final ClientTask task, final ClientScheduler scheduler) {
+	protected ClassicWorker(final ClassicTask task, final ClassicScheduler scheduler) {
 		this.id = task.getTaskId();
 		this.owner = task.getOwner();
 		this.task = task;
 		
-		String name = "Worker{Owner:" + (this.owner != null ? this.owner.getClass().getName() : "null") + ", id:" + this.id + "}";
+		String name = "Client-Worker{Owner:" + (this.owner != null ? this.owner.getClass().getName() : "null") + ", id:" + this.id + "}";
 		this.thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				task.run();
-				scheduler.workerComplete(ClientWorker.this);
+				scheduler.workerComplete(ClassicWorker.this);
 			}
 		}, name);
 		
@@ -42,7 +42,7 @@ public class ClientWorker implements Worker, Runnable {
 		return this.thread;
 	}
 	
-	public ClientTask getTask() {
+	public ClassicTask getTask() {
 		return this.task;
 	}
 

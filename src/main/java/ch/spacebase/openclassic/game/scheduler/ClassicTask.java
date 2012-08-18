@@ -1,8 +1,8 @@
-package ch.spacebase.openclassic.client.scheduler;
+package ch.spacebase.openclassic.game.scheduler;
 
 import ch.spacebase.openclassic.api.scheduler.Task;
 
-public class ClientTask implements Task {
+public class ClassicTask implements Task {
 
 	private static final Object nextLock = new Object();
 	
@@ -18,7 +18,7 @@ public class ClientTask implements Task {
 	private long counter = 0;
 	private boolean running = true;
 	
-	public ClientTask(Object owner, Runnable task, boolean sync, long delay, long period) {
+	public ClassicTask(Object owner, Runnable task, boolean sync, long delay, long period) {
 		synchronized(nextLock) {
 			id = next++;
 		}
