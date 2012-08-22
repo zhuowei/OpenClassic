@@ -33,7 +33,7 @@ public abstract class ClassicGame implements Game {
 	private final File directory;
 	
 	private Configuration config;
-	private final ClassicScheduler scheduler = new ClassicScheduler();
+	private final ClassicScheduler scheduler = new ClassicScheduler(this instanceof Client ? "Client" : "Server");
 	
 	private final PluginManager pluginManager = new PluginManager();
 	private PackageManager pkgManager;

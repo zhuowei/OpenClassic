@@ -10,12 +10,12 @@ public class ClassicWorker implements Worker, Runnable {
 	private Thread thread = null;
 	private boolean shouldContinue = true;
 	
-	protected ClassicWorker(final ClassicTask task, final ClassicScheduler scheduler) {
+	protected ClassicWorker(final String prefix, final ClassicTask task, final ClassicScheduler scheduler) {
 		this.id = task.getTaskId();
 		this.owner = task.getOwner();
 		this.task = task;
 		
-		String name = "Client-Worker{Owner:" + (this.owner != null ? this.owner.getClass().getName() : "null") + ", id:" + this.id + "}";
+		String name = prefix + "-Worker{Owner:" + (this.owner != null ? this.owner.getClass().getName() : "null") + ", id:" + this.id + "}";
 		this.thread = new Thread(new Runnable() {
 			@Override
 			public void run() {

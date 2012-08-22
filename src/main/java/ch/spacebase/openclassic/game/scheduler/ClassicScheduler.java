@@ -17,7 +17,12 @@ public class ClassicScheduler implements Scheduler {
     private final List<ClassicTask> tasks = new ArrayList<ClassicTask>();
     
     private final List<ClassicWorker> activeWorkers = Collections.synchronizedList(new ArrayList<ClassicWorker>());
+	private final String prefix;
 	
+	public ClassicScheduler(String prefix) {
+		this.prefix = prefix;
+	}
+    
 	public void stop() {
 		this.cancelAllTasks();
 	}
@@ -55,7 +60,7 @@ public class ClassicScheduler implements Scheduler {
 				if(task.isSync()) {
 					cont = task.run();
 				} else {
-					this.activeWorkers.add(new ClassicWorker(task, this));
+					this.activeWorkers.add(new ClassicWorker(this.prefix, task, this));
 				}
 			} finally {
 				if(!cont) it.remove();
