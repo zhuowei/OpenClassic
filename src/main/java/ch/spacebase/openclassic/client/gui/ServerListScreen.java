@@ -33,7 +33,7 @@ public class ServerListScreen extends GuiScreen {
 
 	public void onOpen() {
 		this.clearWidgets();
-		this.attachWidget(new ButtonList(0, this.getWidth(), this.getHeight(), this));
+		this.attachWidget(new ButtonList(0, this.getWidth(), this.getHeight(), this, true));
 		this.getWidget(0, ButtonList.class).setContents(SessionData.serverInfo);
 
 		this.attachWidget(new Button(1, this.getWidth() / 2 - 206, this.getHeight() / 6 + 144, 100, 20, this, "Favorites"));
