@@ -34,7 +34,7 @@ public class ConsoleScreen extends GuiScreen {
 		
 		this.clearWidgets();
 		this.attachWidget(new TextBox(0, 2, this.getHeight() - 22, this.getWidth() - 58, 20, this));
-		this.attachWidget(new Button(1, this.getWidth() - 54, this.getHeight() - 22, 54, 20, this, "Back"));
+		this.attachWidget(new Button(1, this.getWidth() - 54, this.getHeight() - 22, 54, 20, this, OpenClassic.getGame().getTranslator().translate("gui.back")));
 		this.getWidget(0, TextBox.class).setFocus(true);
 	}
 

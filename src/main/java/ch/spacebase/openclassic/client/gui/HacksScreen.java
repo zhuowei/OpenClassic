@@ -25,7 +25,7 @@ public final class HacksScreen extends GuiScreen {
 			this.attachWidget(new StateButton(count, this.getWidth() / 2 - 155 + count % 2 * 160, this.getHeight() / 6 + 24 * (count >> 1), 155, 20, this, this.settings.getHack(count)));
 		}
 		
-		this.attachWidget(new Button(100, this.getWidth() / 2 - 100, this.getHeight() / 6 + 168, this, "Done"));
+		this.attachWidget(new Button(100, this.getWidth() / 2 - 100, this.getHeight() / 6 + 168, this, OpenClassic.getGame().getTranslator().translate("gui.done")));
 	}
 
 	public final void onButtonClick(Button button) {
@@ -48,7 +48,7 @@ public final class HacksScreen extends GuiScreen {
 			RenderHelper.getHelper().drawDirtBG();
 		}
 		
-		RenderHelper.getHelper().renderText("Hacks", this.getWidth() / 2, 20);
+		RenderHelper.getHelper().renderText(OpenClassic.getGame().getTranslator().translate("gui.hacks"), this.getWidth() / 2, 20);
 		super.render();
 	}
 }

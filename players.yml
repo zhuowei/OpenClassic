@@ -1,0 +1,5 @@
+bans:
+    exampleban: reasonhere
+ipbans:
+    example-ip-ban: reasonhere
+whitelist:

@@ -38,12 +38,12 @@ public class LoginScreen extends GuiScreen {
 		Keyboard.enableRepeatEvents(true);
 		
 		this.clearWidgets();
-		this.attachWidget(new Button(0, this.getWidth() / 2 - 100, this.getHeight() / 4 + 120, this, "Login"));
-		this.attachWidget(new StateButton(1, this.getWidth() / 2 - 100, this.getHeight() / 4 + 144, this, "Remember Password"));
+		this.attachWidget(new Button(0, this.getWidth() / 2 - 100, this.getHeight() / 4 + 120, this, OpenClassic.getGame().getTranslator().translate("gui.login.login")));
+		this.attachWidget(new StateButton(1, this.getWidth() / 2 - 100, this.getHeight() / 4 + 144, this, OpenClassic.getGame().getTranslator().translate("gui.login.remember")));
 		this.attachWidget(new TextBox(2, this.getWidth() / 2 - 100, this.getHeight() / 2 - 10, this, 64));
 		this.attachWidget(new PasswordTextBox(3, this.getWidth() / 2 - 100, this.getHeight() / 2 + 16, this, 64));
 		
-		this.getWidget(1, StateButton.class).setState(this.getLoginFile(false).exists() ? "YES" : "NO");
+		this.getWidget(1, StateButton.class).setState(this.getLoginFile(false).exists() ? OpenClassic.getGame().getTranslator().translate("gui.yes") : OpenClassic.getGame().getTranslator().translate("gui.no"));
 		this.getWidget(2, TextBox.class).setFocus(true);
 		
 		if(this.getLoginFile(false).exists()) {
@@ -61,7 +61,7 @@ public class LoginScreen extends GuiScreen {
 					}
 				}
 			} catch(IOException e) {
-				System.out.println("Failed to check login file.");
+				System.out.println(OpenClassic.getGame().getTranslator().translate("gui.login.fail-check"));
 				e.printStackTrace();
 			} finally {
 				if(reader != null) {
@@ -86,7 +86,7 @@ public class LoginScreen extends GuiScreen {
 			String user = this.getWidget(2, TextBox.class).getText();
 			String pass = this.getWidget(3, TextBox.class).getText();
 			
-			if(this.getWidget(1, StateButton.class).getState().equals("YES")) {
+			if(this.getWidget(1, StateButton.class).getState().equals(OpenClassic.getGame().getTranslator().translate("gui.yes"))) {
 				BufferedWriter writer = null;
 				
 				try {
@@ -95,7 +95,7 @@ public class LoginScreen extends GuiScreen {
 					writer.newLine();
 					writer.write(pass);
 				} catch (IOException e1) {
-					System.out.println("Failed to create login remember file.");
+					System.out.println(OpenClassic.getGame().getTranslator().translate("gui.login.fail-create"));
 					e1.printStackTrace();
 				} finally {
 					if(writer != null) {
@@ -110,17 +110,17 @@ public class LoginScreen extends GuiScreen {
 				this.getLoginFile(false).delete();
 			}
 			
-			OpenClassic.getClient().getProgressBar().setTitle("Logging in...");
+			OpenClassic.getClient().getProgressBar().setTitle(OpenClassic.getGame().getTranslator().translate("gui.login.logging-in"));
 			OpenClassic.getClient().getProgressBar().setProgress(0);
 			if (!auth(user, pass)) {
-				JOptionPane.showMessageDialog(null, "Login Failed! You will not be able to play multiplayer.");
+				JOptionPane.showMessageDialog(null, OpenClassic.getGame().getTranslator().translate("gui.login.failed"));
 			}
 			
 			GeneralUtils.getMinecraft().setCurrentScreen(new MainMenuScreen());
 		}
 		
 		if(button.getId() == 1) {
-			this.getWidget(1, StateButton.class).setState(this.getWidget(1, StateButton.class).getState() == "YES" ? "NO" : "YES");
+			this.getWidget(1, StateButton.class).setState(this.getWidget(1, StateButton.class).getState() == OpenClassic.getGame().getTranslator().translate("gui.yes") ? OpenClassic.getGame().getTranslator().translate("gui.no") : OpenClassic.getGame().getTranslator().translate("gui.yes"));
 		}
 	}
 
@@ -132,9 +132,9 @@ public class LoginScreen extends GuiScreen {
 	public void render() {
 		RenderHelper.getHelper().drawDirtBG();
 		
-		RenderHelper.getHelper().renderText("Enter your username and password.", this.getWidth() / 2, 40);
-		RenderHelper.getHelper().renderText("Username", (this.getWidth() / 2 - 104) - RenderHelper.getHelper().getStringWidth("Username"), this.getHeight() / 2 - 6);
-		RenderHelper.getHelper().renderText("Password", (this.getWidth() / 2 - 104) - RenderHelper.getHelper().getStringWidth("Password"), this.getHeight() / 2 + 20);
+		RenderHelper.getHelper().renderText(OpenClassic.getGame().getTranslator().translate("gui.login.enter"), this.getWidth() / 2, 40);
+		RenderHelper.getHelper().renderText(OpenClassic.getGame().getTranslator().translate("gui.login.user"), (this.getWidth() / 2 - 104) - RenderHelper.getHelper().getStringWidth("Username"), this.getHeight() / 2 - 6);
+		RenderHelper.getHelper().renderText(OpenClassic.getGame().getTranslator().translate("gui.login.pass"), (this.getWidth() / 2 - 104) - RenderHelper.getHelper().getStringWidth("Password"), this.getHeight() / 2 + 20);
 		super.render();
 	}
 	
@@ -144,7 +144,7 @@ public class LoginScreen extends GuiScreen {
 			try {
 				file.createNewFile();
 			} catch (IOException e) {
-				System.out.println("Failed to create login remember file.");
+				System.out.println(OpenClassic.getGame().getTranslator().translate("gui.login.fail-create"));
 				e.printStackTrace();
 			}
 		}
@@ -155,8 +155,6 @@ public class LoginScreen extends GuiScreen {
 	public static boolean auth(String username, String password) {
 		CookieList cookies = new CookieList();
 		CookieHandler.setDefault(cookies);
-
-		System.out.println("Authing...");
 		String result = "";
 
 		HTTPUtil.fetchUrl("https://www.minecraft.net/login", "", "https://www.minecraft.net");
@@ -180,7 +178,6 @@ public class LoginScreen extends GuiScreen {
 			} catch (UnsupportedEncodingException e) {
 			}
 
-			System.out.println("Success! You are " + GeneralUtils.getMinecraft().data.username + " and you " + (GeneralUtils.getMinecraft().data.haspaid ? "have not" : "have") + " paid!");
 			parseServers(HTTPUtil.rawFetchUrl("http://www.minecraft.net/classic/list", "", "http://www.minecraft.net"));
 			return true;
 		}

@@ -23,7 +23,7 @@ import com.mojang.minecraft.SessionData;
 public class ServerListScreen extends GuiScreen {
 
 	private GuiScreen parent;
-	private String title = "Select a server.";
+	private String title = OpenClassic.getGame().getTranslator().translate("gui.favorites.select");
 
 	private boolean select = false;
 
@@ -36,14 +36,14 @@ public class ServerListScreen extends GuiScreen {
 		this.attachWidget(new ButtonList(0, this.getWidth(), this.getHeight(), this, true));
 		this.getWidget(0, ButtonList.class).setContents(SessionData.serverInfo);
 
-		this.attachWidget(new Button(1, this.getWidth() / 2 - 206, this.getHeight() / 6 + 144, 100, 20, this, "Favorites"));
-		this.attachWidget(new Button(2, this.getWidth() / 2 - 102, this.getHeight() / 6 + 144, 100, 20, this, "Add Favorite"));
-		this.attachWidget(new Button(3, this.getWidth() / 2 + 2, this.getHeight() / 6 + 144, 100, 20, this, "Enter a URL..."));
-		this.attachWidget(new Button(4, this.getWidth() / 2 + 106, this.getHeight() / 6 + 144, 100, 20, this, "Back to Menu"));
-		this.attachWidget(new Button(5, this.getWidth() / 2 - 206, this.getHeight() / 6 + 168, 100, 20, this, OpenClassic.getServer() != null && OpenClassic.getServer().isRunning() ? "Stop Server" : "Start Server"));
-		this.attachWidget(new Button(6, this.getWidth() / 2 - 102, this.getHeight() / 6 + 168, 100, 20, this, "Server Settings"));
-		this.attachWidget(new Button(7, this.getWidth() / 2 + 2, this.getHeight() / 6 + 168, 100, 20, this, "Server Console"));
-		this.attachWidget(new Button(8, this.getWidth() / 2 + 106, this.getHeight() / 6 + 168, 100, 20, this, OpenClassic.getServer() != null && OpenClassic.getServer().isRunning() && HeartbeatManager.getURL().equals("") ? "Awaiting URL..." : "Connect"));
+		this.attachWidget(new Button(1, this.getWidth() / 2 - 206, this.getHeight() / 6 + 144, 100, 20, this, OpenClassic.getGame().getTranslator().translate("gui.servers.favorites")));
+		this.attachWidget(new Button(2, this.getWidth() / 2 - 102, this.getHeight() / 6 + 144, 100, 20, this, OpenClassic.getGame().getTranslator().translate("gui.add-favorite.add")));
+		this.attachWidget(new Button(3, this.getWidth() / 2 + 2, this.getHeight() / 6 + 144, 100, 20, this, OpenClassic.getGame().getTranslator().translate("gui.servers.enter-url")));
+		this.attachWidget(new Button(4, this.getWidth() / 2 + 106, this.getHeight() / 6 + 144, 100, 20, this, OpenClassic.getGame().getTranslator().translate("gui.back")));
+		this.attachWidget(new Button(5, this.getWidth() / 2 - 206, this.getHeight() / 6 + 168, 100, 20, this, OpenClassic.getServer() != null && OpenClassic.getServer().isRunning() ? OpenClassic.getGame().getTranslator().translate("gui.servers.stop-server") : OpenClassic.getGame().getTranslator().translate("gui.servers.start-server")));
+		this.attachWidget(new Button(6, this.getWidth() / 2 - 102, this.getHeight() / 6 + 168, 100, 20, this, OpenClassic.getGame().getTranslator().translate("gui.servers.settings")));
+		this.attachWidget(new Button(7, this.getWidth() / 2 + 2, this.getHeight() / 6 + 168, 100, 20, this, OpenClassic.getGame().getTranslator().translate("gui.servers.console")));
+		this.attachWidget(new Button(8, this.getWidth() / 2 + 106, this.getHeight() / 6 + 168, 100, 20, this, OpenClassic.getServer() != null && OpenClassic.getServer().isRunning() && HeartbeatManager.getURL().equals("") ? OpenClassic.getGame().getTranslator().translate("gui.servers.awaiting") : OpenClassic.getGame().getTranslator().translate("gui.servers.connect")));
 		if(OpenClassic.getServer() == null || !OpenClassic.getServer().isRunning()) {
 			this.getWidget(6, Button.class).setActive(false);
 			this.getWidget(7, Button.class).setActive(false);
@@ -62,10 +62,10 @@ public class ServerListScreen extends GuiScreen {
 
 		if (button.getId() == 2) {
 			if (this.select) {
-				this.title = "Select a server.";
+				this.title = OpenClassic.getGame().getTranslator().translate("gui.favorites.select");
 				this.select = false;
 			} else {
-				this.title = Color.GREEN + "Select a server to favorite.";
+				this.title = Color.GREEN + OpenClassic.getGame().getTranslator().translate("gui.servers.select-fav");
 				this.select = true;
 			}
 		}
@@ -81,7 +81,7 @@ public class ServerListScreen extends GuiScreen {
 		if (button.getId() == 5) {
 			if(OpenClassic.getServer() != null) {
 				OpenClassic.getServer().shutdown();
-				this.getWidget(5, Button.class).setText("Start Server");
+				this.getWidget(5, Button.class).setText(OpenClassic.getGame().getTranslator().translate("gui.servers.start-server"));
 				this.getWidget(6, Button.class).setActive(false);
 				this.getWidget(7, Button.class).setActive(false);
 				this.getWidget(8, Button.class).setActive(false);
@@ -95,11 +95,11 @@ public class ServerListScreen extends GuiScreen {
 				thr.setDaemon(true);
 				thr.start();
 				
-				this.getWidget(5, Button.class).setText("Stop Server");
+				this.getWidget(5, Button.class).setText(OpenClassic.getGame().getTranslator().translate("gui.servers.stop-server"));
 				this.getWidget(6, Button.class).setActive(true);
 				this.getWidget(7, Button.class).setActive(true);
 				this.getWidget(8, Button.class).setActive(false);
-				this.getWidget(8, Button.class).setText("Awaiting URL...");
+				this.getWidget(8, Button.class).setText(OpenClassic.getGame().getTranslator().translate("gui.servers.awaiting"));
 			}
 		}
 		
@@ -152,7 +152,7 @@ public class ServerListScreen extends GuiScreen {
 	public void update() {
 		if(!HeartbeatManager.getURL().equals("") && !this.getWidget(8, Button.class).isActive()) {
 			this.getWidget(8, Button.class).setActive(true);
-			this.getWidget(8, Button.class).setText("Connect");
+			this.getWidget(8, Button.class).setText(OpenClassic.getGame().getTranslator().translate("gui.servers.connect"));
 		}
 	}
 
@@ -161,7 +161,7 @@ public class ServerListScreen extends GuiScreen {
 		Server server = SessionData.servers.get(list.getCurrentPage() * 5 + button.getId());
 		
 		if (this.select) {
-			this.title = "Select a server.";
+			this.title = OpenClassic.getGame().getTranslator().translate("gui.favorites.select");
 			this.select = false;
 			
 			SessionData.favorites.put(server.name, server.getUrl());
@@ -174,8 +174,8 @@ public class ServerListScreen extends GuiScreen {
 		if(server != null) {
 			Minecraft mc = GeneralUtils.getMinecraft();
 			
-			OpenClassic.getClient().getProgressBar().setTitle("Connecting...");
-			OpenClassic.getClient().getProgressBar().setText("Getting server info...");
+			OpenClassic.getClient().getProgressBar().setTitle(OpenClassic.getGame().getTranslator().translate("connecting.connect"));
+			OpenClassic.getClient().getProgressBar().setText(OpenClassic.getGame().getTranslator().translate("connecting.getting-info"));
 			OpenClassic.getClient().getProgressBar().setProgress(0);
 
 			String page = HTTPUtil.fetchUrl(server.getUrl(), "", "http://www.minecraft.net/classic/list/");

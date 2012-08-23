@@ -32,8 +32,8 @@ public class ServerURLScreen extends GuiScreen {
 		Keyboard.enableRepeatEvents(true);
 		
 		this.clearWidgets();
-		this.attachWidget(new Button(0, this.getWidth() / 2 - 100, this.getHeight() / 4 + 120, this, "Connect"));
-		this.attachWidget(new Button(1, this.getWidth() / 2 - 100, this.getHeight() / 4 + 144, this, "Cancel"));
+		this.attachWidget(new Button(0, this.getWidth() / 2 - 100, this.getHeight() / 4 + 120, this, OpenClassic.getGame().getTranslator().translate("gui.servers.connect")));
+		this.attachWidget(new Button(1, this.getWidth() / 2 - 100, this.getHeight() / 4 + 144, this, OpenClassic.getGame().getTranslator().translate("gui.cancel")));
 		this.attachWidget(new TextBox(2, this.getWidth() / 2 - 100, this.getHeight() / 2 - 10, this));
 		this.getWidget(2, TextBox.class).setFocus(true);
 		
@@ -48,16 +48,14 @@ public class ServerURLScreen extends GuiScreen {
 		if(button.getId() == 0) {
 			Minecraft mc = GeneralUtils.getMinecraft();
 			
-			mc.progressBar.setTitle("Connecting...");
-			mc.progressBar.setText("Getting server info...");
+			mc.progressBar.setTitle(OpenClassic.getGame().getTranslator().translate("connecting.connect"));
+			mc.progressBar.setText(OpenClassic.getGame().getTranslator().translate("connecting.getting-info"));
 			mc.progressBar.setProgress(0);
 			String play = HTTPUtil.fetchUrl(this.getWidget(2, TextBox.class).getText(), "", "http://www.minecraft.net/classic/list");
 			String mppass = HTTPUtil.getParameterOffPage(play, "mppass");
 			
 			if (mppass.length() > 0) {
 				String user = HTTPUtil.getParameterOffPage(play, "username");
-				System.out.println("Got user details: user=" + user);
-					
 				mc.data = new SessionData(user);
 				mc.data.key = mppass;
 				
@@ -69,7 +67,7 @@ public class ServerURLScreen extends GuiScreen {
 				mc.server = HTTPUtil.getParameterOffPage(play, "server");
 				mc.port = Integer.parseInt(HTTPUtil.getParameterOffPage(play, "port"));
 			} else {
-				OpenClassic.getClient().setCurrentScreen(new ErrorScreen("Failed to connect!", "Make sure the URL is correct and from the minecraft.net server list!"));
+				OpenClassic.getClient().setCurrentScreen(new ErrorScreen(OpenClassic.getGame().getTranslator().translate("connecting.failed"), OpenClassic.getGame().getTranslator().translate("connecting.check")));
 				return;
 			}
 			
@@ -90,7 +88,7 @@ public class ServerURLScreen extends GuiScreen {
 	public void render() {
 		RenderHelper.getHelper().drawDirtBG();
 		
-		RenderHelper.getHelper().renderText("Enter the server's URL.", this.getWidth() / 2, 40);
+		RenderHelper.getHelper().renderText(OpenClassic.getGame().getTranslator().translate("gui.add-favorite.enter-url"), this.getWidth() / 2, 40);
 		super.render();
 	}
 }

@@ -22,8 +22,8 @@ public class ConfirmDeleteScreen extends GuiScreen {
 
 	public void onOpen() {
 		this.clearWidgets();
-		this.attachWidget(new Button(0, this.getWidth() / 2 - 102, this.getHeight() / 6 + 132, 100, 20, this, "Yes"));
-		this.attachWidget(new Button(0, this.getWidth() / 2 + 2, this.getHeight() / 6 + 132, 100, 20, this, "No"));
+		this.attachWidget(new Button(0, this.getWidth() / 2 - 102, this.getHeight() / 6 + 132, 100, 20, this, OpenClassic.getGame().getTranslator().translate("gui.yes")));
+		this.attachWidget(new Button(0, this.getWidth() / 2 + 2, this.getHeight() / 6 + 132, 100, 20, this, OpenClassic.getGame().getTranslator().translate("gui.no")));
 	}
 
 	public void onButtonClick(Button button) {
@@ -41,7 +41,7 @@ public class ConfirmDeleteScreen extends GuiScreen {
 	public void render() {
 		RenderHelper.getHelper().drawDirtBG();
 		
-		RenderHelper.getHelper().renderText("Are you sure you want to delete level \"" + this.file.getName().substring(0, this.file.getName().indexOf(".")) + "\"?", this.getWidth() / 2, (this.getHeight() / 2) - 32);
+		RenderHelper.getHelper().renderText(String.format(OpenClassic.getGame().getTranslator().translate("gui.delete.level"), this.file.getName().substring(0, this.file.getName().indexOf("."))), this.getWidth() / 2, (this.getHeight() / 2) - 32);
 		super.render();
 	}
 }

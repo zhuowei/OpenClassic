@@ -30,8 +30,8 @@ public class AddFavoriteScreen extends GuiScreen {
 		Keyboard.enableRepeatEvents(true);
 		
 		this.clearWidgets();
-		this.attachWidget(new Button(0, this.getWidth() / 2 - 100, this.getHeight() / 4 + 120, this, "Add Favorite"));
-		this.attachWidget(new Button(1, this.getWidth() / 2 - 100, this.getHeight() / 4 + 144, this, "Cancel"));
+		this.attachWidget(new Button(0, this.getWidth() / 2 - 100, this.getHeight() / 4 + 120, this, OpenClassic.getGame().getTranslator().translate("gui.add-favorite.add")));
+		this.attachWidget(new Button(1, this.getWidth() / 2 - 100, this.getHeight() / 4 + 144, this, OpenClassic.getGame().getTranslator().translate("gui.cancel")));
 		
 		this.name = new TextBox(2, this.getWidth() / 2 - 100, this.getHeight() / 2 - 50, this);
 		this.name.setFocus(true);
@@ -71,9 +71,9 @@ public class AddFavoriteScreen extends GuiScreen {
 	public void render() {
 		RenderHelper.getHelper().drawDirtBG();
 		
-		if(this.error) RenderHelper.getHelper().renderText(Color.RED + "Enter the server's URL.", this.getWidth() / 2, 40);
-		RenderHelper.getHelper().renderText("Enter the favorite's name.", this.getWidth() / 2, this.getHeight() / 2 - 65);
-		RenderHelper.getHelper().renderText("Enter the server's URL.", this.getWidth() / 2, this.getHeight() / 2 - 25);
+		if(this.error) RenderHelper.getHelper().renderText(Color.RED + OpenClassic.getGame().getTranslator().translate("gui.add-favorite.enter-url"), this.getWidth() / 2, 40);
+		RenderHelper.getHelper().renderText(OpenClassic.getGame().getTranslator().translate("gui.add-favorite.enter-name"), this.getWidth() / 2, this.getHeight() / 2 - 65);
+		RenderHelper.getHelper().renderText(OpenClassic.getGame().getTranslator().translate("gui.add-favorite.enter-url"), this.getWidth() / 2, this.getHeight() / 2 - 25);
 		super.render();
 	}
 }

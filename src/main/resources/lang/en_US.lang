@@ -86,6 +86,22 @@ disconnect:
     server-full: The server is full!
     disallowed: Login disallowed.
 gui:
+    cancel: Cancel
+    yes: Yes
+    no: No
+    back: Back
+    done: Done
+    hacks: Hacks
+    login:
+        enter: Enter your username and password.
+        user: Username
+        pass: Password
+        login: Login
+        remember: Remember Password
+        logging-in: Logging in...
+        fail-check: Failed to check login file.
+        fail-create: Failed to create login file.
+        failed: Login failed! You will not be able to play multiplayer.
     main-menu:
         singleplayer: Singleplayer
         multiplayer: Multiplayer
@@ -93,4 +109,37 @@ gui:
         texture-packs: Texture Packs
         about: About
         quit: Quit
+    add-favorite:
+        add: Add Favorite
+        remove: Remove Favorite
+        enter-url: Enter the server's URL.
+        enter-name: Enter the favorite's name.
+    favorites:
+        select: Select a server.
+        delete: Select a server to delete.
+    delete:
+        level: Are you sure you want to delete level "%s"?
+        server: Are you sure you want to delete server "%s"?
+    servers:
+        select-fav: Select a server to favorite.
+        favorites: Favorites
+        enter-url: Enter a URL...
+        stop-server: Stop Server
+        start-server: Start Server
+        settings: Server Settings
+        console: Server Console
+        awaiting: Awaiting URL...
+        connect: Connect
+    texture-packs:
+        select: Select a texture pack.
+        current: Current texture pack - %s
+log:
+    create-fail: Failed to create log file handler!
+client:
+    startup: Starting OpenClassic Client v%s...
+connecting:
+    connect: Connecting...
+    getting-info: Getting server info...
+    failed: Failed to connect!
+    check: Make sure the URL is correct and hasn't expired.
 

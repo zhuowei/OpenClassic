@@ -1,4 +1,4 @@
-package ch.spacebase.openclassic.game.io;
+package ch.spacebase.openclassic.client.io;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;

@@ -1,11 +1,14 @@
-package ch.spacebase.openclassic.game.io;
+package ch.spacebase.openclassic.server.io;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
 import ch.spacebase.openclassic.api.OpenClassic;
+import ch.spacebase.openclassic.api.Position;
 import ch.spacebase.openclassic.api.level.Level;
+import ch.spacebase.openclassic.server.level.ServerLevel;
+
 
 import ch.spacebase.opennbt.stream.NBTInputStream;
 import ch.spacebase.opennbt.tag.ByteArrayTag;
@@ -16,13 +19,12 @@ import ch.spacebase.opennbt.tag.ShortTag;
 import ch.spacebase.opennbt.tag.StringTag;
 
 public class IndevLevelFormat {
-	
+
 	@SuppressWarnings("unchecked")
 	public static Level read(String file) throws IOException {
-		com.mojang.minecraft.level.Level level = new com.mojang.minecraft.level.Level();
+		ServerLevel level = new ServerLevel();
 		
-		File f = new File(OpenClassic.getGame().getDirectory(), file);
-		NBTInputStream in = new NBTInputStream(new FileInputStream(f));
+		NBTInputStream in = new NBTInputStream(new FileInputStream(new File(OpenClassic.getGame().getDirectory(), file)));
 		CompoundTag data = (CompoundTag) in.readTag();
 		CompoundTag map = (CompoundTag) data.get("Map");
 		ListTag<ShortTag> spawn = (ListTag<ShortTag>) map.get("Spawn");
@@ -37,32 +39,22 @@ public class IndevLevelFormat {
 			blocks[index] = convert(blocks[index]);
 		}
 		
-		double x = spawn.get(0).getValue() / 32d;
-		double y = spawn.get(1).getValue() / 32d;
-		double z = spawn.get(2).getValue() / 32d;
+		double x = spawn.get(0).getValue() / 32;
+		double y = spawn.get(1).getValue() / 32;
+		double z = spawn.get(2).getValue() / 32;
 		
 		String name = ((StringTag) about.get("Name")).getValue();
 		String author = ((StringTag) about.get("Author")).getValue();
 		long created = ((LongTag) about.get("CreatedOn")).getValue();
 		
-		level.name = name;
-		level.creator = author;
-		level.createTime = created;
-		level.setData(width, height, depth, blocks);
+		level.setName(name);
+		level.setAuthor(author);
+		level.setCreationTime(created);
+		level.setWorldData(width, height, depth, blocks);
+		level.setSpawn(new Position(level, x, y, z));
 		
-		level.xSpawn = (short) x;
-		level.ySpawn = (short) y;
-		level.zSpawn = (short) z;
-		
-		in.close();
-		
-		try {
-			f.delete();
-		} catch(SecurityException e) {
-			e.printStackTrace();
-		}
-		
-		return level.openclassic;
+		in.close();	
+		return level;
 	}
 	
 	public static byte convert(byte input) {

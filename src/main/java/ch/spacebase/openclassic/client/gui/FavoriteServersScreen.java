@@ -33,9 +33,9 @@ public class FavoriteServersScreen extends GuiScreen {
 		this.attachWidget(new ButtonList(0, this.getWidth(), this.getHeight(), this));
 		this.getWidget(0, ButtonList.class).setContents(new ArrayList<String>(SessionData.favorites.keySet()));
 
-		this.attachWidget(new Button(1, this.getWidth() / 2 - 156, this.getHeight() / 6 + 144, 100, 20, this, "Add Favorite"));
-		this.attachWidget(new Button(2, this.getWidth() / 2 - 52, this.getHeight() / 6 + 144, 100, 20, this, "Remove Favorite"));
-		this.attachWidget(new Button(3, this.getWidth() / 2 + 52, this.getHeight() / 6 + 144, 100, 20, this, "Back"));
+		this.attachWidget(new Button(1, this.getWidth() / 2 - 156, this.getHeight() / 6 + 144, 100, 20, this, OpenClassic.getGame().getTranslator().translate("gui.add-favorite.add")));
+		this.attachWidget(new Button(2, this.getWidth() / 2 - 52, this.getHeight() / 6 + 144, 100, 20, this, OpenClassic.getGame().getTranslator().translate("gui.add-favorite.remove")));
+		this.attachWidget(new Button(3, this.getWidth() / 2 + 52, this.getHeight() / 6 + 144, 100, 20, this, OpenClassic.getGame().getTranslator().translate("gui.back")));
 	}
 
 	public final void onButtonClick(Button button) {
@@ -45,10 +45,10 @@ public class FavoriteServersScreen extends GuiScreen {
 		
 		if (button.getId() == 2) {
 			if (this.delete) {
-				this.title = "Select a server.";
+				this.title = OpenClassic.getGame().getTranslator().translate("gui.favorites.select");
 				this.delete = false;
 			} else {
-				this.title = Color.RED + "Select a server to delete.";
+				this.title = Color.RED + OpenClassic.getGame().getTranslator().translate("gui.favorites.delete");
 				this.delete = true;
 			}
 		}
@@ -62,7 +62,7 @@ public class FavoriteServersScreen extends GuiScreen {
 	public void onButtonListClick(ButtonList list, Button button) {
 		if (this.delete) {
 			OpenClassic.getClient().setCurrentScreen(new ConfirmDeleteServerScreen(this, button.getText()));
-			this.title = "Select a server.";
+			this.title = OpenClassic.getGame().getTranslator().translate("gui.favorites.select");
 			this.delete = false;
 		} else {
 			this.joinServer(SessionData.favorites.get(button.getText()));
@@ -72,16 +72,14 @@ public class FavoriteServersScreen extends GuiScreen {
 	private void joinServer(String url) {
 		Minecraft mc = GeneralUtils.getMinecraft();
 		
-		mc.progressBar.setTitle("Connecting...");
-		mc.progressBar.setText("Getting server info...");
+		mc.progressBar.setTitle(OpenClassic.getGame().getTranslator().translate("connecting.connect"));
+		mc.progressBar.setText(OpenClassic.getGame().getTranslator().translate("connecting.getting-info"));
 		mc.progressBar.setProgress(0);
 		String play = HTTPUtil.fetchUrl(url, "", "http://www.minecraft.net/classic/list");
 		String mppass = HTTPUtil.getParameterOffPage(play, "mppass");
 		
 		if (mppass.length() > 0) {
 			String user = HTTPUtil.getParameterOffPage(play, "username");
-			System.out.println("Got user details: user=" + user + ", mppass=" + mppass);
-				
 			mc.data = new SessionData(user);
 			mc.data.key = mppass;
 			
@@ -93,7 +91,7 @@ public class FavoriteServersScreen extends GuiScreen {
 			mc.server = HTTPUtil.getParameterOffPage(play, "server");
 			mc.port = Integer.parseInt(HTTPUtil.getParameterOffPage(play, "port"));
 		} else {
-			mc.setCurrentScreen(new ErrorScreen("Failed to connect!", "Make sure the URL is correct and hasn't expired!"));
+			mc.setCurrentScreen(new ErrorScreen(OpenClassic.getGame().getTranslator().translate("connecting.failed"), OpenClassic.getGame().getTranslator().translate("connecting.check")));
 			return;
 		}
 		

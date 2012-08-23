@@ -5,8 +5,8 @@ import ch.spacebase.openclassic.api.data.NBTData;
 import ch.spacebase.openclassic.api.event.EventFactory;
 import ch.spacebase.openclassic.api.event.level.LevelLoadEvent;
 import ch.spacebase.openclassic.api.event.level.LevelSaveEvent;
+import ch.spacebase.openclassic.client.io.OpenClassicLevelFormat;
 import ch.spacebase.openclassic.client.level.ClientLevel;
-import ch.spacebase.openclassic.game.io.OpenClassicLevelFormat;
 
 import com.mojang.minecraft.ProgressBarDisplay;
 import com.mojang.minecraft.level.Level;

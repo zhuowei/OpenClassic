@@ -22,7 +22,7 @@ public class TexturePackScreen extends GuiScreen {
 	public void onOpen() {
 		this.clearWidgets();
 		this.attachWidget(new ButtonList(0, this.getWidth(), this.getHeight(), this));
-		this.attachWidget(new Button(1, this.getWidth() / 2 - 75, this.getHeight() / 6 + 156, 150, 20, this, "Back to Menu"));
+		this.attachWidget(new Button(1, this.getWidth() / 2 - 75, this.getHeight() / 6 + 156, 150, 20, this, OpenClassic.getGame().getTranslator().translate("gui.back")));
 	
 		StringBuilder textures = new StringBuilder("Default");
 		for(String file : (new File(OpenClassic.getClient().getDirectory(), "texturepacks").list())) {
@@ -58,8 +58,8 @@ public class TexturePackScreen extends GuiScreen {
 
 	public void render() {
 		RenderHelper.getHelper().drawDirtBG();
-		RenderHelper.getHelper().renderText("Select a texture pack", this.getWidth() / 2, 15, 16777215);
-		RenderHelper.getHelper().renderText("Current texture pack: " + (!GeneralUtils.getMinecraft().settings.texturePack.equals("none") ? GeneralUtils.getMinecraft().settings.texturePack.substring(0, GeneralUtils.getMinecraft().settings.texturePack.indexOf('.')) : "Default"), this.getWidth() / 2, this.getHeight() / 2 + 48, 16777215);
+		RenderHelper.getHelper().renderText(OpenClassic.getGame().getTranslator().translate("gui.texture-packs.select"), this.getWidth() / 2, 15, 16777215);
+		RenderHelper.getHelper().renderText(String.format(OpenClassic.getGame().getTranslator().translate("gui.texture-packs.current"), (!GeneralUtils.getMinecraft().settings.texturePack.equals("none") ? GeneralUtils.getMinecraft().settings.texturePack.substring(0, GeneralUtils.getMinecraft().settings.texturePack.indexOf('.')) : "Default")), this.getWidth() / 2, this.getHeight() / 2 + 48, 16777215);
 		super.render();
 	}
 }

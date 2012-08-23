@@ -80,11 +80,11 @@ public class ClassicClient extends ClassicGame implements Client {
 			handler.setFormatter(new DateOutputFormatter(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss")));
 			OpenClassic.getLogger().addHandler(handler);
 		} catch(IOException e) {
-			OpenClassic.getLogger().severe("Failed to create log file handler!");
+			OpenClassic.getLogger().severe(this.getTranslator().translate("log.create-fail"));
 			e.printStackTrace();
 		}
 
-		OpenClassic.getLogger().info("Starting OpenClassic Client v" + Constants.CLIENT_VERSION + "...");
+		OpenClassic.getLogger().info(String.format(this.getTranslator().translate("client.startup"), Constants.CLIENT_VERSION));
 		
 		this.registerExecutor(null, new ClientCommands());
 		this.registerGenerator("normal", new LevelGenerator());
