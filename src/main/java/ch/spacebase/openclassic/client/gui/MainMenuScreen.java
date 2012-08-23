@@ -18,12 +18,12 @@ public class MainMenuScreen extends GuiScreen {
 	
 	public void onOpen() {
 		this.clearWidgets();
-		this.attachWidget(new Button(0, this.getWidth() / 2 - 100, this.getHeight() / 4 + 24, this, "Singleplayer"));
-		this.attachWidget(new Button(1, this.getWidth() / 2 - 100, this.getHeight() / 4 + 48, this, "Multiplayer"));
-		this.attachWidget(new Button(2, this.getWidth() / 2 - 100, this.getHeight() / 4 + 72, this, "Options"));
-		this.attachWidget(new Button(3, this.getWidth() / 2 - 100, this.getHeight() / 4 + 96, this, "Texture Packs"));
-		this.attachWidget(new Button(4, this.getWidth() / 2 - 102, this.getHeight() / 4 + 144, 100, 20, this, "About"));
-		this.attachWidget(new Button(5, this.getWidth() / 2 + 2, this.getHeight() / 4 + 144, 100, 20, this, "Quit"));
+		this.attachWidget(new Button(0, this.getWidth() / 2 - 100, this.getHeight() / 4 + 24, this, OpenClassic.getGame().getTranslator().translate("gui.main-menu.singleplayer")));
+		this.attachWidget(new Button(1, this.getWidth() / 2 - 100, this.getHeight() / 4 + 48, this, OpenClassic.getGame().getTranslator().translate("gui.main-menu.multiplayer")));
+		this.attachWidget(new Button(2, this.getWidth() / 2 - 100, this.getHeight() / 4 + 72, this, OpenClassic.getGame().getTranslator().translate("gui.main-menu.options")));
+		this.attachWidget(new Button(3, this.getWidth() / 2 - 100, this.getHeight() / 4 + 96, this, OpenClassic.getGame().getTranslator().translate("gui.main-menu.texture-packs")));
+		this.attachWidget(new Button(4, this.getWidth() / 2 - 102, this.getHeight() / 4 + 144, 100, 20, this, OpenClassic.getGame().getTranslator().translate("gui.main-menu.about")));
+		this.attachWidget(new Button(5, this.getWidth() / 2 + 2, this.getHeight() / 4 + 144, 100, 20, this, OpenClassic.getGame().getTranslator().translate("gui.main-menu.quit")));
 	
 		if(!OpenClassic.getClient().getAudioManager().isPlaying("menu")) OpenClassic.getClient().getAudioManager().playMusic("menu", true);
 	}

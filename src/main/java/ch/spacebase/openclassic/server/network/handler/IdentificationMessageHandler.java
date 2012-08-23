@@ -50,25 +50,25 @@ public class IdentificationMessageHandler extends MessageHandler<IdentificationM
 		
 		for (char nameChar : nameChars) {
 			if (nameChar < ' ' || nameChar > '\177') {
-				session.disconnect("Invalid username.");
+				session.disconnect(OpenClassic.getGame().getTranslator().translate("disconnect.invalid-user"));
 				return;
 			}
 		}
 		
 		if(message.getUsernameOrServerName().length() < 2 || message.getUsernameOrServerName().length() > 16) {
-			session.disconnect("Username too long or too short!");
+			session.disconnect(OpenClassic.getGame().getTranslator().translate("disconnect.user-length"));
 			return;
 		}
 
 		for (Player p : OpenClassic.getServer().getPlayers()) {
 			if (p.getName().equalsIgnoreCase(message.getUsernameOrServerName())) {
-				p.getSession().disconnect("Logged in from another location.");
+				p.getSession().disconnect(OpenClassic.getGame().getTranslator().translate("disconnect.login-location"));
 				break;
 			}
 		}
 		
 		if(message.getProtocolVersion() != Constants.PROTOCOL_VERSION) {
-			session.disconnect("Client version doesn't match server version.");
+			session.disconnect(OpenClassic.getGame().getTranslator().translate("disconnect.version-mismatch"));
 			return;
 		}
 		
@@ -79,12 +79,12 @@ public class IdentificationMessageHandler extends MessageHandler<IdentificationM
 				String hash = ((ClassicServer) OpenClassic.getGame()).getURLSalt() + message.getUsernameOrServerName();
 				
 				if (!message.getVerificationKeyOrMotd().equals(this.md5(hash))) {
-					session.disconnect("Failed to verify user as logged in on minecraft.net!");
+					session.disconnect(OpenClassic.getGame().getTranslator().translate("disconnect.verify-failed"));
 					return;
 				}
 			} catch (NoSuchAlgorithmException e) {
-				session.disconnect("An error occured while verifying your username! Please try again later.");
-				OpenClassic.getLogger().severe("Exception while verifying player username: MD5 algorithm not supported?");
+				session.disconnect(OpenClassic.getGame().getTranslator().translate("disconnect.verify-error"));
+				OpenClassic.getLogger().severe("Authentication error: MD5 algorithm not supported?");
 				return;
 			}
 		}
@@ -95,7 +95,7 @@ public class IdentificationMessageHandler extends MessageHandler<IdentificationM
 		String msg = "";
 		if(!OpenClassic.getServer().isWhitelisted(message.getUsernameOrServerName()) && OpenClassic.getServer().doesUseWhitelist()) {
 			result = PlayerLoginEvent.Result.KICK_WHITELIST;
-			msg = "You aren't on the whitelist!";
+			msg = OpenClassic.getGame().getTranslator().translate("disconnect.not-whitelisted");
 		}
 		
 		if(OpenClassic.getServer().isIpBanned(ip)) {
@@ -111,7 +111,7 @@ public class IdentificationMessageHandler extends MessageHandler<IdentificationM
 		boolean ignore = OpenClassic.getServer().getPermissionManager().getPlayerGroup(message.getUsernameOrServerName()).hasPermission("openclassic.ignore-max-players");
 		if(OpenClassic.getServer().getPlayers().size() >= OpenClassic.getServer().getMaxPlayers() && !ignore) {
 			result = PlayerLoginEvent.Result.KICK_FULL;
-			msg = "The server is full!";
+			msg = OpenClassic.getGame().getTranslator().translate("disconnect.server-full");
 		}
 
 		final ServerPlayer player = new ServerPlayer(message.getUsernameOrServerName(), OpenClassic.getServer().getDefaultLevel().getSpawn().clone(), session);
@@ -156,24 +156,24 @@ public class IdentificationMessageHandler extends MessageHandler<IdentificationM
 		session.send(new PlayerSetBlockMessage((short) 0, (short) 0, (short) 0, true, (byte) 0));
 		
 		session.setState(State.GAME);
-		OpenClassic.getServer().broadcastMessage(EventFactory.callEvent(new PlayerJoinEvent(player, player.getDisplayName() + Color.AQUA + " has logged in.")).getMessage());
+		OpenClassic.getServer().broadcastMessage(EventFactory.callEvent(new PlayerJoinEvent(player, String.format(OpenClassic.getGame().getTranslator().translate("player.login"), player.getDisplayName() + Color.AQUA))).getMessage());
 	}
 
 	private void kickFromLoginResult(String user, String ip, Session session, PlayerLoginEvent.Result result) {
 		switch(result) {
-		case KICK_FULL: session.disconnect("The server is full!");
+		case KICK_FULL: session.disconnect(OpenClassic.getGame().getTranslator().translate("disconnect.server-full"));
 		case KICK_BANNED: session.disconnect(OpenClassic.getServer().getIpBanReason(ip) != null ? OpenClassic.getServer().getIpBanReason(ip) : OpenClassic.getServer().getIpBanReason(user));
-		case KICK_WHITELIST: session.disconnect("You aren't on the whitelist!");
-		default: session.disconnect("Login disallowed.");
+		case KICK_WHITELIST: session.disconnect(OpenClassic.getGame().getTranslator().translate("disconnect.not-whitelisted"));
+		default: session.disconnect(OpenClassic.getGame().getTranslator().translate("disconnect.disallowed"));
 		}
 	}
 	
 	private void kickFromResult(String user, String ip, Session session, PlayerConnectEvent.Result result) {
 		switch(result) {
-		case KICK_FULL: session.disconnect("The server is full!");
+		case KICK_FULL: session.disconnect(OpenClassic.getGame().getTranslator().translate("disconnect.server-full"));
 		case KICK_BANNED: session.disconnect(OpenClassic.getServer().getIpBanReason(ip) != null ? OpenClassic.getServer().getIpBanReason(ip) : OpenClassic.getServer().getIpBanReason(user));
-		case KICK_WHITELIST: session.disconnect("You aren't on the whitelist!");
-		default: session.disconnect("Login disallowed.");
+		case KICK_WHITELIST: session.disconnect(OpenClassic.getGame().getTranslator().translate("disconnect.not-whitelisted"));
+		default: session.disconnect(OpenClassic.getGame().getTranslator().translate("disconnect.disallowed"));
 		}
 	}
 

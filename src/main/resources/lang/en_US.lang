@@ -1,0 +1,96 @@
+config:
+    fail-load: Failed to load config!
+command:
+    wrong-sender:
+        single: You must be a %s to use this command.
+        multi: You must be one of the following (%s) to use this command.
+    no-perm: You don't have permission to use this command!
+    usage: Usage
+    fail-invoke: Failed to invoke command %s!
+    unknown: Unknown command.
+    multiple-players: Multiple players found. Try being more specific.
+    player-not-found: Player not found.
+    player-only: You must be a player to do that.
+    second-not-found: Second player not found.
+    deny-higher-group: You cannot do that to a player in a higher group!
+help:
+    invalid-page: Invalid page number.
+    page-not-found: Page not found.
+    pages: Available commands (page %s of %s)
+pkg:
+    invalid-operation: Invalid operation. Valid operations are %s.
+reload:
+    reloading: Reloading OpenClassic...
+    complete: Reload complete.
+spawn:
+    set: Spawn set to %s, %s, %s!
+solid:
+    enable: Bedrock mode enabled.
+    disable: Bedrock mode disabled.
+water:
+    enable: Water mode enabled.
+    disable: Water mode disabled.
+stillwater:
+    enable: Still Water mode enabled.
+    disable: Still Water mode disabled.
+lava:
+    enable: Lava mode enabled.
+    disable: Lava mode disabled.
+stilllava:
+    enable: Still Lava mode enabled.
+    disable: Still Lava mode disabled.
+stop: Stopping the server...
+ban:
+    banned: "%s has been banned!"
+    unbanned: "%s has been unbanned!"
+kick:
+    kicked: "%s has been kicked!"
+whitelist:
+    whitelisted: "%s has been whitelisted!"
+    unwhitelisted: "%s has been unwhitelisted!"
+group:
+    invalid: Invalid group!
+    cant-set: You cannot set that group!
+    set-notify: You are now in group %s!
+    set: "%s is now in group %s!"
+teleport:
+    teleport-to: Teleported to %s!
+    teleported-to: "%s teleported you to %s!"
+    teleported-to-notify: Teleported %s to %s!
+    teleported-to-you: Teleported %s to you!
+    invalid-coords: Invalid coordinates.
+level:
+    level-not-found: Level not found.
+    loaded: Loaded levels
+    load-success: Level "%s" has been loaded!
+    load-fail: Failed to load level "%s"!
+    unload-success: Level "%s" has been unloaded!
+    unload-main: Cannot unload the main world!
+    create-success: The level has been successfully created!
+    invalid-dim: Invalid width, depth, or height.
+    invalid-type: Invalid world type.
+    exists: The level already exists.
+    not-loaded: Level not loaded.
+    goto: "%s went to %s!"
+player:
+    login: "%s has logged in."
+    logout: "%s has logged out."
+disconnect:
+    invalid-user: Invalid username.
+    user-length: Username too long or too short!
+    login-location: Logged in from another location.
+    version-mismatch: Client and server protocol version do not match.
+    verify-failed: Failed to verify user as logged in on minecraft.net!
+    verify-error: An error occured while verifying your username! Please try again later.
+    not-whitelisted: You aren't on the whitelist!
+    server-full: The server is full!
+    disallowed: Login disallowed.
+gui:
+    main-menu:
+        singleplayer: Singleplayer
+        multiplayer: Multiplayer
+        options: Options
+        texture-packs: Texture Packs
+        about: About
+        quit: Quit
+

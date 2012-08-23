@@ -26,17 +26,20 @@ import ch.spacebase.openclassic.api.pkg.PackageManager;
 import ch.spacebase.openclassic.api.plugin.Plugin;
 import ch.spacebase.openclassic.api.plugin.PluginManager;
 import ch.spacebase.openclassic.api.scheduler.Scheduler;
+import ch.spacebase.openclassic.api.translate.Language;
+import ch.spacebase.openclassic.api.translate.Translator;
 import ch.spacebase.openclassic.game.scheduler.ClassicScheduler;
 
 public abstract class ClassicGame implements Game {
 
 	private final File directory;
 	
-	private Configuration config;
+	private final Configuration config;
 	private final ClassicScheduler scheduler = new ClassicScheduler(this instanceof Client ? "Client" : "Server");
 	
 	private final PluginManager pluginManager = new PluginManager();
-	private PackageManager pkgManager;
+	private final PackageManager pkgManager;
+	private final Translator translator = new Translator();
 	
 	private final Map<Command, Plugin> commands = new HashMap<Command, Plugin>();
 	private final Map<CommandExecutor, Plugin> executors = new HashMap<CommandExecutor, Plugin>();
@@ -44,12 +47,15 @@ public abstract class ClassicGame implements Game {
 	
 	public ClassicGame(File directory) {
 		this.directory = directory;
+		this.translator.register(new Language("en_US", Main.class.getResourceAsStream("/lang/en_US.lang")));
+		this.translator.setDefault("en_US");
+		
 		File file = new File(this.getDirectory(), "config.yml");
 		if (!file.exists()) {
 			try {
 				file.createNewFile();
 			} catch (IOException e) {
-				OpenClassic.getLogger().severe("Failed to load config file!");
+				OpenClassic.getLogger().severe(this.translator.translate("config.fail-load"));
 				e.printStackTrace();
 			}
 		}
@@ -132,9 +138,9 @@ public abstract class ClassicGame implements Game {
 						
 						if(!match) {
 							if(annotation.senders().length == 1) {
-								sender.sendMessage(Color.RED + "You must be a " + annotation.senders()[0].getSimpleName().toLowerCase() + " to use this command.");
+								sender.sendMessage(Color.RED + String.format(this.translator.translate("command.wrong-sender.single"), annotation.senders()[0].getSimpleName().toLowerCase()));
 							} else {
-								sender.sendMessage(Color.RED + "You must be one of the following: " + Arrays.toString(annotation.senders()).toLowerCase() + " to use this command.");
+								sender.sendMessage(Color.RED + String.format(this.translator.translate("command.wrong-sender.multi"), Arrays.toString(annotation.senders()).toLowerCase()));
 							}
 							
 							return;
@@ -142,18 +148,18 @@ public abstract class ClassicGame implements Game {
 					}
 					
 					if(!sender.hasPermission(annotation.permission())) {
-						sender.sendMessage(Color.RED + "You don't have permission to use this command!");
+						sender.sendMessage(Color.RED + this.translator.translate("command.no-perm"));
 						return;
 					}
 					
 					if(split.length - 1 < annotation.min() || split.length - 1 > annotation.max()) {
-						sender.sendMessage(Color.RED + "Usage: " + sender.getCommandPrefix() + split[0] + " " + annotation.usage());
+						sender.sendMessage(Color.RED + this.translator.translate("command.usage") + ": " + sender.getCommandPrefix() + split[0] + " " + annotation.usage());
 						return;
 					}
 					
 					method.invoke(executor, sender, split[0], Arrays.copyOfRange(split, 1, split.length));
 				} catch (Exception e) {
-					OpenClassic.getLogger().severe("Failed to invoke command \"" + split[0] + "\" on a command executor!");
+					OpenClassic.getLogger().severe(String.format(this.translator.translate("command.fail-invoke"), split[0]));
 					e.printStackTrace();
 				}
 				
@@ -174,21 +180,21 @@ public abstract class ClassicGame implements Game {
 					
 					if(!match) {
 						if(cmd.getSenders().length == 1) {
-							sender.sendMessage(Color.RED + "You must be a " + cmd.getSenders()[0].getName().toLowerCase() + " to use this command.");
+							sender.sendMessage(Color.RED + String.format(this.translator.translate("command.wrong-sender.single"), cmd.getSenders()[0].getSimpleName().toLowerCase()));
 						} else {
-							sender.sendMessage(Color.RED + "You must be one of the following: " + Arrays.toString(cmd.getSenders()).toLowerCase() + " to use this command.");
+							sender.sendMessage(Color.RED + String.format(this.translator.translate("command.wrong-sender.multi"), Arrays.toString(cmd.getSenders()).toLowerCase()));
 						}
 						return;
 					}
 				}
 				
 				if(!sender.hasPermission(cmd.getPermission())) {
-					sender.sendMessage(Color.RED + "You don't have permission to use this command!");
+					sender.sendMessage(Color.RED + this.translator.translate("command.no-perm"));
 					return;
 				}
 				
 				if((split.length - 1) < cmd.getMinArgs() || (split.length - 1) > cmd.getMaxArgs()) {
-					sender.sendMessage(Color.RED + "Usage: " + sender.getCommandPrefix() + split[0] + " " + cmd.getUsage());
+					sender.sendMessage(Color.RED + this.translator.translate("command.usage") + ": " + sender.getCommandPrefix() + split[0] + " " + cmd.getUsage());
 					return;
 				}
 				
@@ -201,7 +207,7 @@ public abstract class ClassicGame implements Game {
 		
 		CommandNotFoundEvent e = EventFactory.callEvent(new CommandNotFoundEvent(sender, command));
 		if(e.showMessage()) {
-			sender.sendMessage(Color.RED + "Unknown command.");
+			sender.sendMessage(Color.RED + this.translator.translate("command.unknown"));
 		}
 	}
 
@@ -249,6 +255,11 @@ public abstract class ClassicGame implements Game {
 		for(Plugin plugin : this.pluginManager.getPlugins()) {
 			plugin.reload();
 		}
+	}
+	
+	@Override
+	public Translator getTranslator() {
+		return this.translator;
 	}
 
 }

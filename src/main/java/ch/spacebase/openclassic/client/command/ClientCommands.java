@@ -15,7 +15,7 @@ import ch.spacebase.openclassic.api.player.Player;
 import ch.spacebase.openclassic.api.util.Constants;
 import ch.spacebase.openclassic.client.util.GeneralUtils;
 
-
+// TODO: Translate descriptions
 public class ClientCommands extends CommandExecutor {
 
 	@Command(aliases = {"help"}, desc = "Shows a list of commands and what they do.", permission = "openclassic.commands.help")
@@ -25,13 +25,13 @@ public class ClientCommands extends CommandExecutor {
 			try {
 				page = Integer.parseInt(args[0]);
 			} catch(NumberFormatException e) {
-				sender.sendMessage(Color.RED + "Invalid page number.");
+				sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("help.invalid-page"));
 				return;
 			}
 		}
 		
 		if(page < 1) {
-			sender.sendMessage(Color.RED + "Invalid page number.");
+			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("help.invalid-page"));
 			return;
 		}
 		
@@ -40,7 +40,6 @@ public class ClientCommands extends CommandExecutor {
 			Command cmd = method.getAnnotation(Command.class);
 			
 			boolean match = false;
-			
 			if(cmd.senders().length > 0) {	
 				for(Class<? extends Sender> allowed : cmd.senders()) {
 					if(allowed.isAssignableFrom(sender.getClass())) {
@@ -58,11 +57,11 @@ public class ClientCommands extends CommandExecutor {
 		
 		int pages = (int) Math.ceil((double) available.size() / 17);
 		if(page > pages) {
-			sender.sendMessage(Color.RED + "Page not found.");
+			sender.sendMessage(OpenClassic.getGame().getTranslator().translate("help.page-not-found"));
 			return;
 		}
 		
-		sender.sendMessage(Color.BLUE + "Available commands (page " + page + " of " + pages + "): ");
+		sender.sendMessage(Color.BLUE + String.format(OpenClassic.getGame().getTranslator().translate("help.pages"), page, pages) + " ");
 		
 		for(int index = (page - 1) * 17; index < ((page - 1) * 17) + 17; index++) {
 			if(index >= available.size()) break;
@@ -81,35 +80,35 @@ public class ClientCommands extends CommandExecutor {
 	public void pkg(Sender sender, String command, String args[]) {
 		if(args[0].equalsIgnoreCase("install")) {
 			if(args.length < 2) {
-				sender.sendMessage(Color.RED + "Usage: /pkg install <name>");
+				sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.usage") + ": /pkg install <name>");
 				return;
 			}
 			
 			OpenClassic.getGame().getPackageManager().install(args[1], sender);
 		} else if(args[0].equalsIgnoreCase("remove")) {
 			if(args.length < 2) {
-				sender.sendMessage(Color.RED + "Usage: /pkg remove <name>");
+				sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.usage") + ": /pkg remove <name>");
 				return;
 			}
 			
 			OpenClassic.getGame().getPackageManager().remove(args[1], sender);
 		} else if(args[0].equalsIgnoreCase("update")) {
 			if(args.length < 2) {
-				sender.sendMessage(Color.RED + "Usage: /pkg update <name>");
+				sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.usage") + ": /pkg update <name>");
 				return;
 			}
 			
 			OpenClassic.getGame().getPackageManager().update(args[1], sender);
 		} else if(args[0].equalsIgnoreCase("add-source")) {
 			if(args.length < 3) {
-				sender.sendMessage(Color.RED + "Usage: /pkg add-source <id> <url>");
+				sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.usage") + ": /pkg add-source <id> <url>");
 				return;
 			}
 			
 			OpenClassic.getGame().getPackageManager().addSource(args[1], args[2], sender);
 		} else if(args[0].equalsIgnoreCase("remove-source")) {
 			if(args.length < 2) {
-				sender.sendMessage(Color.RED + "Usage: /pkg remove-source <id>");
+				sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.usage") + ": /pkg remove-source <id>");
 				return;
 			}
 			
@@ -117,15 +116,15 @@ public class ClientCommands extends CommandExecutor {
 		} else if(args[0].equalsIgnoreCase("update-sources")) {
 			OpenClassic.getGame().getPackageManager().updateSources(sender);
 		} else {
-			sender.sendMessage(Color.RED + "Invalid operation. Valid operations are: install, remove, update, add-source, remove-source, update-sources.");
+			sender.sendMessage(Color.RED + String.format(OpenClassic.getGame().getTranslator().translate("pkg.invalid-operation"), "install, remove, update, add-source, remove-source, update-sources"));
 		}
 	}
 	
 	@Command(aliases = {"reload"}, desc = "Reloads OpenClassic.", permission = "openclassic.commands.reload")
 	public void reload(Sender sender, String command, String args[]) {
-		sender.sendMessage(Color.AQUA + "Reloading OpenClassic...");
+		sender.sendMessage(Color.AQUA + OpenClassic.getGame().getTranslator().translate("reload.reloading"));
 		OpenClassic.getGame().reload();
-		sender.sendMessage(Color.GREEN + "Reload complete.");
+		sender.sendMessage(Color.GREEN + OpenClassic.getGame().getTranslator().translate("reload.complete"));
 	}
 	
 	@Command(aliases = {"setspawn"}, desc = "Sets the spawn to your location", permission = "openclassic.commands.setspawn", senders = {Player.class})
@@ -133,7 +132,7 @@ public class ClientCommands extends CommandExecutor {
 		Player player = (Player) sender;
 			
 		player.getPosition().getLevel().setSpawn(player.getPosition());
-		player.sendMessage(Color.GREEN + "Spawn set to " + player.getPosition().getX() + ", " + player.getPosition().getY() + ", " + player.getPosition().getZ() + "!");
+		player.sendMessage(Color.GREEN + String.format(OpenClassic.getGame().getTranslator().translate("spawn.set"), player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ()));
 	}
 	
 	@Command(aliases = {"solid", "bedrock"}, desc = "Toggles bedrock placement mode.", permission = "openclassic.commands.solid", senders = {Player.class})
@@ -142,11 +141,11 @@ public class ClientCommands extends CommandExecutor {
 		if(player.getPlaceMode() != VanillaBlock.BEDROCK.getId()) {
 			player.setPlaceMode(VanillaBlock.BEDROCK.getId());
 			GeneralUtils.getMinecraft().player.userType = Constants.OP;
-			player.sendMessage(Color.GREEN + "Bedrock mode enabled.");
+			player.sendMessage(Color.GREEN + OpenClassic.getGame().getTranslator().translate("solid.enable"));
 		} else {
 			player.setPlaceMode(0);
 			GeneralUtils.getMinecraft().player.userType = Constants.NOT_OP;
-			player.sendMessage(Color.RED + "Bedrock mode disabled.");
+			player.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("solid.disable"));
 		}
 	}
 	
@@ -155,10 +154,10 @@ public class ClientCommands extends CommandExecutor {
 		Player player = (Player) sender;
 		if(player.getPlaceMode() != VanillaBlock.WATER.getId()) {
 			player.setPlaceMode(VanillaBlock.WATER.getId());
-			player.sendMessage(Color.GREEN + "Water mode enabled.");
+			player.sendMessage(Color.GREEN + OpenClassic.getGame().getTranslator().translate("water.enable"));
 		} else {
 			player.setPlaceMode(0);
-			player.sendMessage(Color.RED + "Water mode disabled.");
+			player.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("water.disable"));
 		}
 	}
 	
@@ -167,10 +166,10 @@ public class ClientCommands extends CommandExecutor {
 		Player player = (Player) sender;
 		if(player.getPlaceMode() != VanillaBlock.STATIONARY_WATER.getId()) {
 			player.setPlaceMode(VanillaBlock.STATIONARY_WATER.getId());
-			player.sendMessage(Color.GREEN + "Still Water mode enabled.");
+			player.sendMessage(Color.GREEN + OpenClassic.getGame().getTranslator().translate("stillwater.enable"));
 		} else {
 			player.setPlaceMode(0);
-			player.sendMessage(Color.RED + "Still Water mode disabled.");
+			player.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("stillwater.disable"));
 		}
 	}
 	
@@ -179,10 +178,10 @@ public class ClientCommands extends CommandExecutor {
 		Player player = (Player) sender;
 		if(player.getPlaceMode() != VanillaBlock.LAVA.getId()) {
 			player.setPlaceMode(VanillaBlock.LAVA.getId());
-			player.sendMessage(Color.GREEN + "Lava mode enabled.");
+			player.sendMessage(Color.GREEN + OpenClassic.getGame().getTranslator().translate("lava.enable"));
 		} else {
 			player.setPlaceMode(0);
-			player.sendMessage(Color.RED + "Lava mode disabled.");
+			player.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("lava.disable"));
 		}
 	}
 	
@@ -191,10 +190,10 @@ public class ClientCommands extends CommandExecutor {
 		Player player = (Player) sender;
 		if(player.getPlaceMode() != VanillaBlock.STATIONARY_LAVA.getId()) {
 			player.setPlaceMode(VanillaBlock.STATIONARY_LAVA.getId());
-			player.sendMessage(Color.GREEN + "Still Lava mode enabled.");
+			player.sendMessage(Color.GREEN + OpenClassic.getGame().getTranslator().translate("stilllava.enable"));
 		} else {
 			player.setPlaceMode(0);
-			player.sendMessage(Color.RED + "Still Lava mode disabled.");
+			player.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("stilllava.disable"));
 		}
 	}
 	
