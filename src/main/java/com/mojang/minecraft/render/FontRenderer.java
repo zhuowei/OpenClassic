@@ -1,5 +1,6 @@
 package com.mojang.minecraft.render;
 
+import ch.spacebase.openclassic.api.OpenClassic;
 import ch.spacebase.openclassic.api.render.RenderHelper;
 
 import com.mojang.minecraft.GameSettings;
@@ -21,7 +22,7 @@ public final class FontRenderer {
 		try {
 			font = ImageIO.read(TextureManager.class.getResourceAsStream(fontImage));
 		} catch (IOException e) {
-			throw new RuntimeException("Failed to load font image!", e);
+			throw new RuntimeException(OpenClassic.getGame().getTranslator().translate("core.fail-font"), e);
 		}
 
 		int width = font.getWidth();

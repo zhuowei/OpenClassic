@@ -1,5 +1,6 @@
 package com.mojang.minecraft.gui;
 
+import ch.spacebase.openclassic.api.OpenClassic;
 import ch.spacebase.openclassic.api.gui.GuiScreen;
 import ch.spacebase.openclassic.api.gui.widget.Button;
 import ch.spacebase.openclassic.api.gui.widget.TextBox;
@@ -28,10 +29,10 @@ public final class LevelDumpScreen extends GuiScreen {
 		
 		this.clearWidgets();
 		this.attachWidget(this.widget);
-		this.attachWidget(new StateButton(1, this.getWidth() / 2 - 100, this.getHeight() / 4 + 96, this, "Format"));
+		this.attachWidget(new StateButton(1, this.getWidth() / 2 - 100, this.getHeight() / 4 + 96, this, OpenClassic.getGame().getTranslator().translate("gui.level-dump.format")));
 		this.getWidget(1, StateButton.class).setState("OpenClassic");
-		this.attachWidget(new Button(2, this.getWidth() / 2 - 100, this.getHeight() / 4 + 120, this, "Dump"));
-		this.attachWidget(new Button(3, this.getWidth() / 2 - 100, this.getHeight() / 4 + 144, this, "Cancel"));
+		this.attachWidget(new Button(2, this.getWidth() / 2 - 100, this.getHeight() / 4 + 120, this, OpenClassic.getGame().getTranslator().translate("gui.level-dump.dump")));
+		this.attachWidget(new Button(3, this.getWidth() / 2 - 100, this.getHeight() / 4 + 144, this, OpenClassic.getGame().getTranslator().translate("gui.cancel")));
 		
 		this.getWidget(2, Button.class).setActive(false);
 	}
@@ -72,7 +73,7 @@ public final class LevelDumpScreen extends GuiScreen {
 
 	public final void render() {
 		RenderHelper.getHelper().drawDirtBG();
-		RenderHelper.getHelper().renderText("Enter level name:", this.getWidth() / 2, 40);
+		RenderHelper.getHelper().renderText(OpenClassic.getGame().getTranslator().translate("gui.level-dump.name"), this.getWidth() / 2, 40);
 
 		super.render();
 	}

@@ -39,7 +39,7 @@ public final class LevelIO {
 			return true;
 		} catch (IOException e) {
 			if (this.progress != null) {
-				this.progress.setText("Failed!");
+				this.progress.setText(String.format(OpenClassic.getGame().getTranslator().translate("level.save-fail"), level.name));
 			}
 			
 			e.printStackTrace();
@@ -55,8 +55,8 @@ public final class LevelIO {
 
 	public final Level load(String name) {		
 		if (this.progress != null) {
-			this.progress.setTitle("Loading level");
-			this.progress.setText("Reading..");
+			this.progress.setTitle(OpenClassic.getGame().getTranslator().translate("level.loading"));
+			this.progress.setText(OpenClassic.getGame().getTranslator().translate("level.reading"));
 		}
 		
 		try {
@@ -67,7 +67,7 @@ public final class LevelIO {
 			return level;
 		} catch (IOException e) {
 			if (this.progress != null) {
-				this.progress.setText("Failed!");
+				this.progress.setText(String.format(OpenClassic.getGame().getTranslator().translate("level.load-fail"), name));
 			}
 			
 			e.printStackTrace();

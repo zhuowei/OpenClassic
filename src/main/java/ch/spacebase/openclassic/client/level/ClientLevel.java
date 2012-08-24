@@ -37,12 +37,10 @@ public class ClientLevel implements Level {
 	
 	@Override
 	public void addPlayer(Player player) {
-		throw new UnsupportedOperationException("Not avaliable on the client API!");
 	}
 
 	@Override
 	public void removePlayer(String player) {
-		throw new UnsupportedOperationException("Not avaliable on the client API!");
 	}
 
 	@Override

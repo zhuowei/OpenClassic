@@ -73,7 +73,7 @@ public class TextureManager {
 				this.jarTexture.put(file, jar);
 				return textureId;
 			} catch (IOException e) {
-				throw new RuntimeException("Failed to bind texture!", e);
+				throw new RuntimeException(OpenClassic.getGame().getTranslator().translate("core.fail-texture"), e);
 			}
 		}
 	}

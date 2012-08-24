@@ -30,7 +30,7 @@ public class GeneralUtils {
 	    	try {
 	    		result.mkdirs();
 	    	} catch(SecurityException e) {
-	    		throw new RuntimeException("Failed to create the working directory!", e);
+	    		throw new RuntimeException(OpenClassic.getGame().getTranslator().translate("core.fail-working-dir"), e);
 	    	}
 	    }
 	    

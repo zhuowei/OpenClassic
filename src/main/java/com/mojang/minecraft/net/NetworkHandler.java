@@ -1,5 +1,6 @@
 package com.mojang.minecraft.net;
 
+import ch.spacebase.openclassic.api.OpenClassic;
 import ch.spacebase.openclassic.api.block.BlockType;
 import ch.spacebase.openclassic.api.block.Blocks;
 import ch.spacebase.openclassic.api.block.custom.CustomBlock;
@@ -30,7 +31,7 @@ public final class NetworkHandler {
 			this.channel.configureBlocking(false);
 			this.sock = this.channel.socket();
 		} catch(IOException e) {
-			throw new RuntimeException("Failed to connect!", e);
+			throw new RuntimeException(OpenClassic.getGame().getTranslator().translate("connecting.fail-connect"), e);
 		}
 		
 		this.connected = true;
@@ -45,7 +46,7 @@ public final class NetworkHandler {
 				this.sock.setReuseAddress(false);
 				this.sock.setSoTimeout(100);
 			} catch(IOException e) {
-				throw new RuntimeException("Failed to connect!", e);
+				throw new RuntimeException(OpenClassic.getGame().getTranslator().translate("connecting.fail-connect"), e);
 			}
 		}
 	}

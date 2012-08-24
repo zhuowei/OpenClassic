@@ -2,6 +2,7 @@ package com.mojang.minecraft.gui;
 
 import org.lwjgl.input.Keyboard;
 
+import ch.spacebase.openclassic.api.OpenClassic;
 import ch.spacebase.openclassic.api.gui.GuiScreen;
 import ch.spacebase.openclassic.api.gui.widget.Button;
 import ch.spacebase.openclassic.api.render.RenderHelper;
@@ -19,7 +20,7 @@ public final class ErrorScreen extends GuiScreen {
 
 	public final void onOpen() {
 		this.clearWidgets();
-		this.attachWidget(new Button(0, this.getWidth() / 2 - 100, this.getHeight() / 6 + 120 + 12, this, "Main Menu"));
+		this.attachWidget(new Button(0, this.getWidth() / 2 - 100, this.getHeight() / 6 + 120 + 12, this, OpenClassic.getGame().getTranslator().translate("gui.error.main-menu")));
 	}
 
 	public final void onButtonClick(Button button) {

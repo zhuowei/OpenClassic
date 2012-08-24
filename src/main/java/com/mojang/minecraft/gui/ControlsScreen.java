@@ -1,5 +1,6 @@
 package com.mojang.minecraft.gui;
 
+import ch.spacebase.openclassic.api.OpenClassic;
 import ch.spacebase.openclassic.api.gui.GuiScreen;
 import ch.spacebase.openclassic.api.gui.widget.Button;
 import ch.spacebase.openclassic.api.gui.widget.StateButton;
@@ -27,7 +28,7 @@ public final class ControlsScreen extends GuiScreen {
 			this.getWidget(binding, StateButton.class).setState(this.settings.getBindingValue(binding));
 		}
 
-		this.attachWidget(new Button(200, this.getWidth() / 2 - 100, this.getHeight() / 6 + 168, this, "Done"));
+		this.attachWidget(new Button(200, this.getWidth() / 2 - 100, this.getHeight() / 6 + 168, this, OpenClassic.getGame().getTranslator().translate("gui.done")));
 	}
 
 	public final void onButtonClick(Button button) {

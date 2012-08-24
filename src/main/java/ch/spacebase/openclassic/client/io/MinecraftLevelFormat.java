@@ -25,11 +25,11 @@ public class MinecraftLevelFormat {
 		byte version = data.readByte();
 		
 		if(magic != 0x271bb788) {
-			throw new IOException("Unsupported map format!");
+			OpenClassic.getLogger().severe(OpenClassic.getGame().getTranslator().translate("level.unsupported-format"));
 		}
 		
 		if(version != 2) {
-			throw new IOException("Unsupported map version!");
+			OpenClassic.getLogger().severe(OpenClassic.getGame().getTranslator().translate("level.unsupported-version"));
 		}
 		
 		LevelObjectStream obj = new LevelObjectStream(data);
@@ -38,8 +38,8 @@ public class MinecraftLevelFormat {
 		try {
 			level = (com.mojang.minecraft.level.Level) obj.readObject();
 		} catch (ClassNotFoundException e) {
-			OpenClassic.getLogger().severe("Failed to load map!");
-			OpenClassic.getClient().setCurrentScreen(new ErrorScreen("Failed to load map!", ""));
+			OpenClassic.getLogger().severe(OpenClassic.getGame().getTranslator().translate("level.load-fail"));
+			OpenClassic.getClient().setCurrentScreen(new ErrorScreen(OpenClassic.getGame().getTranslator().translate("level.load-fail"), ""));
 			e.printStackTrace();
 			return null;
 		}

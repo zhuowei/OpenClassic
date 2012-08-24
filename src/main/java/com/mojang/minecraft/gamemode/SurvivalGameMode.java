@@ -129,7 +129,6 @@ public final class SurvivalGameMode extends GameMode {
 
 	public final void prepareLevel(Level level) {
 		this.spawner = new MobSpawner(level);
-		this.mc.progressBar.setText("Spawning..");
 		int area = level.width * level.height * level.depth / 800;
 		this.spawner.spawn(area, null, this.mc.progressBar);
 	}

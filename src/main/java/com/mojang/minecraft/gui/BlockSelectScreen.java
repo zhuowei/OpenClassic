@@ -1,5 +1,6 @@
 package com.mojang.minecraft.gui;
 
+import ch.spacebase.openclassic.api.OpenClassic;
 import ch.spacebase.openclassic.api.block.BlockType;
 import ch.spacebase.openclassic.api.block.Blocks;
 import ch.spacebase.openclassic.api.gui.GuiScreen;
@@ -45,7 +46,7 @@ public final class BlockSelectScreen extends GuiScreen {
 			RenderHelper.getHelper().color(selectX - 3, selectY - 8, selectX + 23, selectY + 24 - 6, -1862270977, -1056964609);
 		}
 
-		RenderHelper.getHelper().renderText("Select block", this.getWidth() / 2, 40);
+		RenderHelper.getHelper().renderText(OpenClassic.getGame().getTranslator().translate("gui.blocks.select"), this.getWidth() / 2, 40);
 
 		int count = 0;
 		for (BlockType b : Blocks.getBlocks()) {

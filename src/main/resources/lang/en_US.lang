@@ -1,3 +1,15 @@
+core:
+    fail-working-dir: Failed to create working directory!
+    no-lwjgl: Your system does not support LWJGL.
+    fail-unpack: Failed to unpack native "%s"!
+    fail-options-load: Failed to load options.
+    fail-options-save: Failed to save options.
+    fail-resources: "The resource directory could not be created: %s"
+    fail-font: Failed to load font image!
+    fail-texture: Failed to bind texture!
+    fail-start: Failed to start Minecraft!
+    client-error: Client error
+    game-broke: The game broke! [%s]
 config:
     fail-load: Failed to load config!
 command:
@@ -64,6 +76,7 @@ level:
     loaded: Loaded levels
     load-success: Level "%s" has been loaded!
     load-fail: Failed to load level "%s"!
+    save-fail: Failed to save level "%s"!
     unload-success: Level "%s" has been unloaded!
     unload-main: Cannot unload the main world!
     create-success: The level has been successfully created!
@@ -72,6 +85,25 @@ level:
     exists: The level already exists.
     not-loaded: Level not loaded.
     goto: "%s went to %s!"
+    format-mismatch: Only %s levels are supported!
+    try-mcforge: Trying MCForge 6...
+    unknown-version: Unknown map version!
+    unsupported-version: Unsupported map version!
+    unsupported-format: Unsupported map format!
+    detected-format: "%s map detected! Reading..."
+    auto-create: Level "%s" was not found. Creating with default settings...
+    loading: Loading level
+    reading: Reading...
+    generating: Generating level...
+    raising: Raising...
+    soiling: Soiling...
+    eroding: Eroding...
+    carving: Carving...
+    watering: Watering...
+    melting: Melting...
+    growing: Growing...
+    planting: Planting...
+    saving: Saving level...
 player:
     login: "%s has logged in."
     logout: "%s has logged out."
@@ -85,10 +117,13 @@ disconnect:
     not-whitelisted: You aren't on the whitelist!
     server-full: The server is full!
     disallowed: Login disallowed.
+    plugin-disallow: Connect disallowed by plugin!
+    generic: Disconnected!
+    by-server: Disconnected by server!
 gui:
+    "yes": "Yes"
+    "no": "No"
     cancel: Cancel
-    yes: Yes
-    no: No
     back: Back
     done: Done
     hacks: Hacks
@@ -109,6 +144,7 @@ gui:
         texture-packs: Texture Packs
         about: About
         quit: Quit
+        language: Language
     add-favorite:
         add: Add Favorite
         remove: Remove Favorite
@@ -132,7 +168,44 @@ gui:
         connect: Connect
     texture-packs:
         select: Select a texture pack.
-        current: Current texture pack - %s
+        current: "Current Texture Pack: %s"
+    blocks:
+        select: Select a block.
+    error:
+        main-menu: Main Menu
+    game-over:
+        respawn: Respawn
+        main-menu: Main Menu
+        game-over: Game over!
+        score: "Score: %s"
+    options:
+        hacks: Hacks...
+        controls: Controls...
+        title: Options
+    menu:
+        options: Options...
+        title: Game Menu
+        dump: Dump Level
+        main-menu: Main Menu
+        back: Back to game
+    level-dump:
+        format: Format
+        dump: Dump
+        name: "Enter level name:"
+    level-create:
+        type: Type
+        small: Small
+        normal: Normal
+        huge: Huge
+        name: "Enter level name:"
+    load-level:
+        new: New Level
+        delete: Delete Level
+        title: Load Level
+        title-delete: Select a level to delete
+    language:
+        select: Select a language
+        current: "Current Language: %s"
 log:
     create-fail: Failed to create log file handler!
 client:
@@ -140,6 +213,39 @@ client:
 connecting:
     connect: Connecting...
     getting-info: Getting server info...
-    failed: Failed to connect!
     check: Make sure the URL is correct and hasn't expired.
-
+    probably-down: You failed to connect to the server. It's probably down!
+    fail-connect: Failed to connect!
+http:
+    downloading: Downloading %s...
+    downloaded: Downloaded %s.
+    downloading-resources: Downloading Resources...
+options:
+    "on": "ON"
+    "off": "OFF"
+    music: Music
+    sound: Sound
+    invert-mouse: Invert Mouse
+    show-info: Show Info
+    render-distance: Render Distance
+    view-bobbing: View Bobbing
+    3d-anaglyph: 3D Anaglyph
+    limit-frames: Limit Framerate
+    survival: Survival Mode
+    smoothing: Smoothing
+    keys:
+        forward: Forward
+        left: Left
+        back: Back
+        right: Right
+        jump: Jump
+        blocks: Show Blocks
+        chat: Chat
+        toggle-fog: Toggle Fog
+        save-loc: Save Location
+        load-loc: Load Location
+    hacks:
+        speed: Speedhack
+screenshot:
+    saved: Saved screenshot "%s"!
+    error: "Error saving screenshot: %s"

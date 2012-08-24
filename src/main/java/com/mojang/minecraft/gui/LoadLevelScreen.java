@@ -1,6 +1,7 @@
 package com.mojang.minecraft.gui;
 
 import ch.spacebase.openclassic.api.Color;
+import ch.spacebase.openclassic.api.OpenClassic;
 import ch.spacebase.openclassic.api.gui.GuiScreen;
 import ch.spacebase.openclassic.api.gui.widget.Button;
 import ch.spacebase.openclassic.api.gui.widget.ButtonList;
@@ -27,9 +28,9 @@ public class LoadLevelScreen extends GuiScreen {
 	public void onOpen() {
 		this.clearWidgets();
 		this.attachWidget(new ButtonList(0, this.getWidth(), this.getHeight(), this));
-		this.attachWidget(new Button(1, this.getWidth() / 2 - 156, this.getHeight() / 6 + 144, 100, 20, this, "New Level"));
-		this.attachWidget(new Button(2, this.getWidth() / 2 - 52, this.getHeight() / 6 + 144, 100, 20, this, "Delete Level"));
-		this.attachWidget(new Button(3, this.getWidth() / 2 + 52, this.getHeight() / 6 + 144, 100, 20, this, "Back to Menu"));
+		this.attachWidget(new Button(1, this.getWidth() / 2 - 156, this.getHeight() / 6 + 144, 100, 20, this, OpenClassic.getGame().getTranslator().translate("gui.load-level.new")));
+		this.attachWidget(new Button(2, this.getWidth() / 2 - 52, this.getHeight() / 6 + 144, 100, 20, this, OpenClassic.getGame().getTranslator().translate("gui.load-level.delete")));
+		this.attachWidget(new Button(3, this.getWidth() / 2 + 52, this.getHeight() / 6 + 144, 100, 20, this, OpenClassic.getGame().getTranslator().translate("gui.back")));
 
 		StringBuilder levels = new StringBuilder();
 		for(String file : (new File(GeneralUtils.getMinecraft().dir, "levels").list())) {
@@ -45,15 +46,15 @@ public class LoadLevelScreen extends GuiScreen {
 	public final void onButtonClick(Button button) {
 		if (button.isActive()) {
 			if(button.getId() == 1) {
-				GeneralUtils.getMinecraft().setCurrentScreen(new LevelNameScreen(this));
+				GeneralUtils.getMinecraft().setCurrentScreen(new LevelCreateScreen(this));
 			}
 
 			if(button.getId() == 2) {
 				if(this.delete) {
-					this.title = "Load level";
+					this.title = OpenClassic.getGame().getTranslator().translate("gui.load-level.title");
 					this.delete = false;
 				} else {
-					this.title = Color.RED + "Select a level to delete.";
+					this.title = Color.RED + OpenClassic.getGame().getTranslator().translate("gui.load-level.title-delete");
 					this.delete = true;
 				}
 			}
@@ -80,7 +81,7 @@ public class LoadLevelScreen extends GuiScreen {
 
 				GeneralUtils.getMinecraft().setCurrentScreen(new ConfirmDeleteScreen(this, file));
 				this.delete = false;
-				this.title = "Load level";
+				this.title = OpenClassic.getGame().getTranslator().translate("gui.load-level.title");
 			} else {
 				this.loadLevel(button.getId());
 			}

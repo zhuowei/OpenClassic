@@ -1,5 +1,6 @@
 package com.mojang.minecraft.gui;
 
+import ch.spacebase.openclassic.api.OpenClassic;
 import ch.spacebase.openclassic.api.gui.GuiScreen;
 import ch.spacebase.openclassic.api.gui.widget.Button;
 import ch.spacebase.openclassic.api.gui.widget.StateButton;
@@ -13,7 +14,6 @@ import com.mojang.minecraft.gui.ControlsScreen;
 public final class OptionsScreen extends GuiScreen {
 
 	private GuiScreen parent;
-	private String title = "Options";
 	private GameSettings settings;
 
 	public OptionsScreen(GuiScreen parent, GameSettings settings) {
@@ -28,9 +28,9 @@ public final class OptionsScreen extends GuiScreen {
 			this.getWidget(count, StateButton.class).setState(this.settings.getSettingValue(count));
 		}
 		
-		this.attachWidget(new Button(75, this.getWidth() / 2 - 100, this.getHeight() / 6 + 124, this, "Hacks..."));
-		this.attachWidget(new Button(100, this.getWidth() / 2 - 100, this.getHeight() / 6 + 148, this, "Controls..."));
-		this.attachWidget(new Button(200, this.getWidth() / 2 - 100, this.getHeight() / 6 + 172, this, "Done"));
+		this.attachWidget(new Button(75, this.getWidth() / 2 - 100, this.getHeight() / 6 + 124, this, OpenClassic.getGame().getTranslator().translate("gui.options.hacks")));
+		this.attachWidget(new Button(100, this.getWidth() / 2 - 100, this.getHeight() / 6 + 148, this, OpenClassic.getGame().getTranslator().translate("gui.options.controls")));
+		this.attachWidget(new Button(200, this.getWidth() / 2 - 100, this.getHeight() / 6 + 172, this, OpenClassic.getGame().getTranslator().translate("gui.done")));
 		
 		if(GeneralUtils.getMinecraft().netManager != null) {
 			this.getWidget(8, Button.class).setActive(false);
@@ -86,7 +86,7 @@ public final class OptionsScreen extends GuiScreen {
 			RenderHelper.getHelper().drawDirtBG();
 		}
 		
-		RenderHelper.getHelper().renderText(this.title, this.getWidth() / 2, 20);
+		RenderHelper.getHelper().renderText(OpenClassic.getGame().getTranslator().translate("gui.options.title"), this.getWidth() / 2, 20);
 		super.render();
 	}
 }

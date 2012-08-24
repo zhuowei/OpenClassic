@@ -1,5 +1,6 @@
 package com.mojang.minecraft.level.generator;
 
+import ch.spacebase.openclassic.api.OpenClassic;
 import ch.spacebase.openclassic.api.Position;
 import ch.spacebase.openclassic.api.block.VanillaBlock;
 import ch.spacebase.openclassic.api.level.generator.Generator;
@@ -48,10 +49,10 @@ public final class LevelGenerator extends Generator {
 	public void generate(ch.spacebase.openclassic.api.level.Level level, byte data[]) {
 		level.setGenerating(true);
 		
-		this.progress.setTitle("Generating level");
+		this.progress.setTitle(OpenClassic.getGame().getTranslator().translate("level.generating"));
 		this.d = 64;
 		this.g = 32;
-		this.progress.setText("Raising..");
+		this.progress.setText(OpenClassic.getGame().getTranslator().translate("level.raising"));
 		CombinedNoise alg1 = new CombinedNoise(new OctaveNoise(this.rand, 8), new OctaveNoise(this.rand, 8));
 		CombinedNoise alg2 = new CombinedNoise(new OctaveNoise(this.rand, 8), new OctaveNoise(this.rand, 8));
 		OctaveNoise var8 = new OctaveNoise(this.rand, 6);
@@ -79,7 +80,7 @@ public final class LevelGenerator extends Generator {
 			}
 		}
 
-		this.progress.setText("Eroding..");
+		this.progress.setText(OpenClassic.getGame().getTranslator().translate("level.eroding"));
 		int[] var42 = var9;
 		alg2 = new CombinedNoise(new OctaveNoise(this.rand, 8), new OctaveNoise(this.rand, 8));
 		CombinedNoise var49 = new CombinedNoise(new OctaveNoise(this.rand, 8), new OctaveNoise(this.rand, 8));
@@ -100,7 +101,7 @@ public final class LevelGenerator extends Generator {
 			}
 		}
 
-		this.progress.setText("Soiling..");
+		this.progress.setText(OpenClassic.getGame().getTranslator().translate("level.soiling"));
 		var42 = var9;
 		int var46 = this.width;
 		int var48 = this.depth;
@@ -147,7 +148,7 @@ public final class LevelGenerator extends Generator {
 			}
 		}
 
-		this.progress.setText("Carving..");
+		this.progress.setText(OpenClassic.getGame().getTranslator().translate("level.carving"));
 		var48 = this.width;
 		var51 = this.depth;
 		var54 = this.d;
@@ -203,7 +204,7 @@ public final class LevelGenerator extends Generator {
 		this.populateOre(VanillaBlock.COAL_ORE.getId(), 90, 1, 4, data);
 		this.populateOre(VanillaBlock.IRON_ORE.getId(), 70, 2, 4, data);
 		this.populateOre(VanillaBlock.GOLD_ORE.getId(), 50, 3, 4, data);
-		this.progress.setText("Watering..");
+		this.progress.setText(OpenClassic.getGame().getTranslator().translate("level.watering"));
 		var51 = VanillaBlock.WATER.getId();
 		this.setProgress(0);
 
@@ -233,7 +234,7 @@ public final class LevelGenerator extends Generator {
 		}
 
 		this.setProgress(100);
-		this.progress.setText("Melting..");
+		this.progress.setText(OpenClassic.getGame().getTranslator().translate("level.melting"));
 		var46 = this.width * this.depth * this.d / 20000;
 
 		for (var48 = 0; var48 < var46; ++var48) {
@@ -250,7 +251,7 @@ public final class LevelGenerator extends Generator {
 		}
 
 		this.setProgress(100);
-		this.progress.setText("Growing..");
+		this.progress.setText(OpenClassic.getGame().getTranslator().translate("level.growing"));
 		var42 = var9;
 		var46 = this.width;
 		var48 = this.depth;
@@ -281,7 +282,7 @@ public final class LevelGenerator extends Generator {
 			}
 		}
 
-		this.progress.setText("Planting..");
+		this.progress.setText(OpenClassic.getGame().getTranslator().translate("level.planting"));
 		var42 = var9;
 		var46 = this.width;
 		var48 = this.width * this.depth / 3000;

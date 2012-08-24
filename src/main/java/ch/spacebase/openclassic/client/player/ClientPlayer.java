@@ -70,12 +70,11 @@ public class ClientPlayer implements Player {
 
 	@Override
 	public String getDisplayName() {
-		throw new UnsupportedOperationException("Not avaliable on the client API!");
+		return this.getName();
 	}
 
 	@Override
 	public void setDisplayName(String name) {
-		throw new UnsupportedOperationException("Not avaliable on the client API!");
 	}
 
 	@Override
@@ -125,12 +124,11 @@ public class ClientPlayer implements Player {
 
 	@Override
 	public Group getGroup() {
-		throw new UnsupportedOperationException("Not avaliable on the client API!");
+		return null;
 	}
 
 	@Override
 	public void setGroup(Group group) {
-		throw new UnsupportedOperationException("Not avaliable on the client API!");
 	}
 
 	@Override

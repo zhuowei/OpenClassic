@@ -47,8 +47,8 @@ public abstract class ClassicGame implements Game {
 	
 	public ClassicGame(File directory) {
 		this.directory = directory;
-		this.translator.register(new Language("en_US", Main.class.getResourceAsStream("/lang/en_US.lang")));
-		this.translator.setDefault("en_US");
+		this.translator.register(new Language("English", Main.class.getResourceAsStream("/lang/en_US.lang")));
+		this.translator.setDefault("English"); 
 		
 		File file = new File(this.getDirectory(), "config.yml");
 		if (!file.exists()) {

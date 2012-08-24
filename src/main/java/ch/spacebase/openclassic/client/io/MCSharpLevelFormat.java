@@ -24,8 +24,8 @@ public class MCSharpLevelFormat {
 		int magic = convert(data.readShort());
 
 		if (magic != 1874) {
-			OpenClassic.getLogger().severe("Only version 1 MCSharp maps are supported.");
-			OpenClassic.getLogger().severe("Trying MCForge 6..");
+			OpenClassic.getLogger().severe(String.format(OpenClassic.getGame().getTranslator().translate("level.format-mismatch"), "MCSharp v1"));
+			OpenClassic.getLogger().severe(OpenClassic.getGame().getTranslator().translate("level.try-mcforge"));
 			return MCForgeLevelFormat.load(file);
 		}
 

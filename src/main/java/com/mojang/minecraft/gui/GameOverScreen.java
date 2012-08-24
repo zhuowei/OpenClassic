@@ -15,8 +15,8 @@ public final class GameOverScreen extends GuiScreen {
 
 	public final void onOpen() {
 		this.clearWidgets();
-		this.attachWidget(new Button(0, this.getWidth() / 2 - 100, this.getHeight() / 4 + 72, this, "Respawn"));
-		this.attachWidget(new Button(1, this.getWidth() / 2 - 100, this.getHeight() / 4 + 96, this, "Main Menu"));
+		this.attachWidget(new Button(0, this.getWidth() / 2 - 100, this.getHeight() / 4 + 72, this, OpenClassic.getGame().getTranslator().translate("gui.game-over.respawn")));
+		this.attachWidget(new Button(1, this.getWidth() / 2 - 100, this.getHeight() / 4 + 96, this, OpenClassic.getGame().getTranslator().translate("gui.game-over.main-menu")));
 	}
 
 	public final void onButtonClick(Button button) {
@@ -47,9 +47,9 @@ public final class GameOverScreen extends GuiScreen {
 		
 		GL11.glPushMatrix();
 		GL11.glScalef(2.0F, 2.0F, 2.0F);
-		RenderHelper.getHelper().renderText("Game over!", this.getWidth() / 2 / 2, 30);
+		RenderHelper.getHelper().renderText(OpenClassic.getGame().getTranslator().translate("gui.game-over.game-over"), this.getWidth() / 2 / 2, 30);
 		GL11.glPopMatrix();
-		RenderHelper.getHelper().renderText("Score: &e" + GeneralUtils.getMinecraft().player.getScore(), this.getWidth() / 2, 100);
+		RenderHelper.getHelper().renderText(String.format(OpenClassic.getGame().getTranslator().translate("gui.game-over.score"), GeneralUtils.getMinecraft().player.getScore()), this.getWidth() / 2, 100);
 		super.render();
 	}
 }

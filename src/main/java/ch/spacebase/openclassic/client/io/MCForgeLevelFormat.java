@@ -22,14 +22,14 @@ public class MCForgeLevelFormat {
 		
 		long magic = data.readLong();
 		if (magic != 7882256401675281664L) {
-			OpenClassic.getLogger().severe("Only MCForge 6 levels are supported!");
+			OpenClassic.getLogger().severe(String.format(OpenClassic.getGame().getTranslator().translate("level.format-mismatch"), "MCForge 6"));
 			System.out.println(magic);
 			return null;
 		}
 		
 		byte version = data.readByte();
 		if (version != 1) {
-			OpenClassic.getLogger().severe("Unknown MCForge map version!");
+			OpenClassic.getLogger().severe(OpenClassic.getGame().getTranslator().translate("level.unknown-version"));
 			return null;
 		}
 		

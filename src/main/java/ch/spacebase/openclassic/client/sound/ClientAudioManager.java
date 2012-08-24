@@ -112,7 +112,7 @@ public class ClientAudioManager implements AudioManager {
 				e.printStackTrace();
 			}
 
-			System.out.println("Downloading " + file.getName());
+			System.out.println(String.format(OpenClassic.getGame().getTranslator().translate("http.downloading"), file.getName()));
 
 			byte[] data = new byte[4096];
 			DataInputStream in = null;
@@ -141,7 +141,7 @@ public class ClientAudioManager implements AudioManager {
 				}
 			}
 
-			System.out.println("Downloaded " + file.getName());
+			System.out.println(String.format(OpenClassic.getGame().getTranslator().translate("http.downloaded"), file.getName()));
 		}
 	}
 	

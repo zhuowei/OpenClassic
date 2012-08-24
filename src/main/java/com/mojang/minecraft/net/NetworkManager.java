@@ -1,5 +1,7 @@
 package com.mojang.minecraft.net;
 
+import ch.spacebase.openclassic.api.OpenClassic;
+
 import com.mojang.minecraft.Minecraft;
 import com.mojang.minecraft.gui.ErrorScreen;
 import com.mojang.minecraft.net.NetworkPlayer;
@@ -33,7 +35,7 @@ public final class NetworkManager {
 
 	public void error(Exception e) {
 		this.netHandler.close();
-		this.mc.setCurrentScreen(new ErrorScreen("Disconnected!", e.getMessage()));
+		this.mc.setCurrentScreen(new ErrorScreen(OpenClassic.getGame().getTranslator().translate("disconnect.generic"), e.getMessage()));
 		e.printStackTrace();
 	}
 

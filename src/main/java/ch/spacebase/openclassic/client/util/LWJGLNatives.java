@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import ch.spacebase.openclassic.api.OpenClassic;
+
 import com.mojang.minecraft.Minecraft;
 
 public class LWJGLNatives {
@@ -38,7 +40,7 @@ public class LWJGLNatives {
 			load(dir.getPath(), "liblwjgl.jnilib", "both");
 			load(dir.getPath(), "libjinput-osx.jnilib", "both");
 		} else {
-			throw new RuntimeException("Your system does not support LWJGL.");
+			throw new RuntimeException(OpenClassic.getGame().getTranslator().translate("core.no-lwjgl"));
 		}
 		
 		System.setProperty("java.library.path", System.getProperty("java.library.path") + ":" + dir.getPath());
@@ -62,7 +64,7 @@ public class LWJGLNatives {
 			in.close();
 			if(System.getProperty("os.arch").contains(arch) || arch.equals("both")) System.load(file.getPath());
 		} catch (Exception e) {
-			System.out.println("Failed to unpack native " + lib + "!");
+			System.out.println(String.format(OpenClassic.getGame().getTranslator().translate("core.fail-unpack"), lib));
 			e.printStackTrace();
 			System.exit(0);
 		}

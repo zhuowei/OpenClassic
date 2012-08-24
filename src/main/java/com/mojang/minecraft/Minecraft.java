@@ -319,7 +319,7 @@ public final class Minecraft implements Runnable {
 			this.setLevel(level);
 		} else {
 			if (this.level == null) {
-				this.progressBar.setTitle("Generating...");
+				this.progressBar.setTitle(OpenClassic.getGame().getTranslator().translate("level.generating"));
 				this.progressBar.setText("");
 				this.progressBar.setProgress(0);
 				OpenClassic.getClient().createLevel(new LevelInfo(!this.levelName.equals("") ? this.levelName : "A Nice World", null, (short) (128 << this.levelSize), (short) 128, (short) (128 << this.levelSize)), gen);
@@ -364,10 +364,10 @@ public final class Minecraft implements Runnable {
 				this.running = false;
 				this.shutdown();
 			} else {
-				setCurrentScreen(new ErrorScreen("Client error", "The game broke! [" + e + "]"));
+				setCurrentScreen(new ErrorScreen(OpenClassic.getGame().getTranslator().translate("core.client-error"), String.format(OpenClassic.getGame().getTranslator().translate("core.game-broke"), e)));
 			}
 		} else {
-			JOptionPane.showMessageDialog(null, e.toString(), "Failed to start Minecraft", 0);
+			JOptionPane.showMessageDialog(null, e.toString(), OpenClassic.getGame().getTranslator().translate("core.fail-start"), 0);
 			this.running = false;
 			this.shutdown();
 		}
@@ -473,17 +473,12 @@ public final class Minecraft implements Runnable {
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
 		if (GLContext.getCapabilities().OpenGL30) {
-			System.out.println("Using OpenGL 3.0 for mipmap generation.");
 			this.mipmapMode = 1;
 		} else if (GLContext.getCapabilities().GL_EXT_framebuffer_object) {
-			System.out.println("Using GL_EXT_framebuffer_object extension for mipmap generation.");
 			this.mipmapMode = 2;
 		} else if (GLContext.getCapabilities().OpenGL14) {
-			System.out.println("Using GL_GENERATE_MIPMAP for mipmap generation. This might slow down with large textures.");
 			this.mipmapMode = 3;
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL14.GL_GENERATE_MIPMAP, GL11.GL_TRUE);
-		} else {
-			System.out.println("Mipmaps unsupported.");
 		}
 
 		checkGLError("Startup");
@@ -506,7 +501,7 @@ public final class Minecraft implements Runnable {
 		this.resourceThread = new ResourceDownloadThread(dir, this, this.progressBar);
 		this.resourceThread.start();
 
-		this.progressBar.setTitle("Downloading Resources...");
+		this.progressBar.setTitle(OpenClassic.getGame().getTranslator().translate("http.downloading-resources"));
 		this.progressBar.setProgress(0);
 
 		ShaderManager.setup();
@@ -1375,7 +1370,7 @@ public final class Minecraft implements Runnable {
 
 		if (this.netManager != null && !(this.currentScreen instanceof ErrorScreen)) {
 			if (!this.netManager.isConnected()) {
-				this.progressBar.setTitle("Connecting...");
+				this.progressBar.setTitle(OpenClassic.getGame().getTranslator().translate("connecting.connect"));
 				this.progressBar.setProgress(0);
 			} else {
 				if (this.netManager.successful) {
@@ -1391,7 +1386,8 @@ public final class Minecraft implements Runnable {
 
 								if (type == null) {
 									System.out.println("Bad packet: " + packetId);
-									continue;
+									this.netManager.netHandler.close();
+									break;
 								}
 
 								if (this.netManager.netHandler.in.remaining() < type.length + 1) {
@@ -1412,7 +1408,7 @@ public final class Minecraft implements Runnable {
 											PlayerLoginEvent event = EventFactory.callEvent(new PlayerLoginEvent(OpenClassic.getClient().getPlayer(), InetSocketAddress.createUnresolved(this.server, this.port)));
 											if(event.getResult() != Result.ALLOWED) {
 												this.stopGame(false);
-												this.setCurrentScreen(new ErrorScreen("Login disallowed by plugin!", event.getKickMessage()));
+												this.setCurrentScreen(new ErrorScreen(OpenClassic.getGame().getTranslator().translate("disconnect.plugin-disallow"), event.getKickMessage()));
 											}
 										}
 
@@ -1561,9 +1557,9 @@ public final class Minecraft implements Runnable {
 											this.hud.addChat(message);
 										}
 									} else if (type == PacketType.DISCONNECT) {
-										EventFactory.callEvent(new PlayerKickEvent(OpenClassic.getClient().getPlayer(), (String) params[0], " disconnected"));
+										EventFactory.callEvent(new PlayerKickEvent(OpenClassic.getClient().getPlayer(), (String) params[0], ""));
 										this.netManager.netHandler.close();
-										this.setCurrentScreen((new ErrorScreen("Disconnected by server!", (String) params[0])));
+										this.setCurrentScreen((new ErrorScreen(OpenClassic.getGame().getTranslator().translate("disconnect.by-server"), (String) params[0])));
 									} else if (type == PacketType.UPDATE_PLAYER_TYPE) {
 										this.player.userType = (Byte) params[0];
 										// Custom begins
@@ -1585,8 +1581,6 @@ public final class Minecraft implements Runnable {
 										block.setFallback(fallback);
 										block.setSolid(solid);
 										Blocks.register(block);
-
-										System.out.println("Got custom block!");
 									} else if (type == PacketType.BLOCK_MODEL) {
 										byte block = (Byte) params[0];
 										String modelType = (String) params[1];
@@ -1610,7 +1604,6 @@ public final class Minecraft implements Runnable {
 										model.setSelectionBox(new BoundingBox(sx1, sy1, sz1, sx2, sy2, sz2));
 
 										((CustomBlock) Blocks.fromId(block)).setModel(model);
-										System.out.println("Got custom model!");
 									} else if (type == PacketType.QUAD) {
 										byte block = (Byte) params[0];
 										int id = (Integer) params[1];
@@ -1621,7 +1614,6 @@ public final class Minecraft implements Runnable {
 											float y = (Float) params[3 + vCount * 3];
 											float z = (Float) params[4 + vCount * 3];
 
-											System.out.println("Vertex: " + x + ", " + y + ", " + z);
 											vertices[vCount] = new Vertex(x, y, z);
 										}
 
@@ -1649,7 +1641,7 @@ public final class Minecraft implements Runnable {
 													e.printStackTrace();
 												}
 
-												System.out.println("Downloading " + file.getName());
+												System.out.println(String.format(OpenClassic.getGame().getTranslator().translate("http.downloading"), file.getName()));
 
 												byte[] data = new byte[4096];
 												DataInputStream in = null;
@@ -1678,7 +1670,7 @@ public final class Minecraft implements Runnable {
 													}
 												}
 
-												System.out.println("Downloaded " + file.getName());
+												System.out.println(String.format(OpenClassic.getGame().getTranslator().translate("http.downloaded"), file.getName()));
 											}
 
 											texture = file.getPath();
@@ -1688,7 +1680,6 @@ public final class Minecraft implements Runnable {
 										Quad quad = new Quad(id, t.getSubTexture((Integer) params[20]), vertices[0], vertices[1], vertices[2], vertices[3]);
 
 										Blocks.fromId(block).getModel().addQuad(quad);
-										System.out.println("Got quad!");
 									} else if (type == PacketType.LEVEL_COLOR) {
 										if (params[0].equals("sky")) {
 											this.level.skyColor = (Integer) params[1];
@@ -1716,7 +1707,7 @@ public final class Minecraft implements Runnable {
 											this.audio.stop((String) params[0]);
 										}
 									} else if (type == PacketType.PLUGIN) {
-										this.serverPlugins .add(new RemotePluginInfo((String) params[0], (String) params[1]));
+										this.serverPlugins.add(new RemotePluginInfo((String) params[0], (String) params[1]));
 									} else if (type == PacketType.CUSTOM) {
 										EventFactory.callEvent(new CustomMessageEvent(this.player.openclassic, new CustomMessage((String) params[0], (byte[]) params[1])));
 									}
@@ -1739,7 +1730,7 @@ public final class Minecraft implements Runnable {
 								this.netManager.netHandler.out.compact();
 							}
 						} catch (IOException e) {
-							this.setCurrentScreen(new ErrorScreen("Disconnected!", e.toString()));
+							this.setCurrentScreen(new ErrorScreen(OpenClassic.getGame().getTranslator().translate("disconnect.generic"), e.toString()));
 							e.printStackTrace();
 							this.online = false;
 							this.netManager.netHandler.close();
@@ -1829,10 +1820,10 @@ public final class Minecraft implements Runnable {
 
 						try {
 							ImageIO.write(image, "PNG", file);
-							if(this.hud != null) this.hud.addChat(Color.GREEN + "Saved screenshot \"" + file.getName() + "\"!");
+							if(this.hud != null) this.hud.addChat(Color.GREEN + String.format(OpenClassic.getGame().getTranslator().translate("screenshot.saved"), file.getName()));
 						} catch (IOException e) {
 							e.printStackTrace();
-							if(this.hud != null) this.hud.addChat(Color.RED + "Error saving screenshot: " + e.getMessage() + "!");
+							if(this.hud != null) this.hud.addChat(Color.RED + String.format(OpenClassic.getGame().getTranslator().translate("screenshot.error"), file.getName()));
 						}
 					}
 

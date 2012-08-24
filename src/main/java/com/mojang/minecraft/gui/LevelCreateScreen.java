@@ -12,13 +12,13 @@ import com.mojang.minecraft.Minecraft;
 
 import org.lwjgl.input.Keyboard;
 
-public final class LevelNameScreen extends GuiScreen {
+public final class LevelCreateScreen extends GuiScreen {
 
 	private GuiScreen parent;
 	private TextBox widget;
 	private int type = 0;
 
-	public LevelNameScreen(GuiScreen parent) {
+	public LevelCreateScreen(GuiScreen parent) {
 		this.parent = parent;
 	}
 
@@ -28,12 +28,12 @@ public final class LevelNameScreen extends GuiScreen {
 		this.widget = new TextBox(0, this.getWidth() / 2 - 100, this.getHeight() / 2 - 45, this, 30);
 		
 		this.clearWidgets();
-		this.attachWidget(new StateButton(0, this.getWidth() / 2 - 100, this.getHeight() / 4 + 48, this, "Type"));
+		this.attachWidget(new StateButton(0, this.getWidth() / 2 - 100, this.getHeight() / 4 + 48, this, OpenClassic.getGame().getTranslator().translate("gui.level-create.type")));
 		this.getWidget(0, StateButton.class).setState("normal");
-		this.attachWidget(new Button(1, this.getWidth() / 2 - 100, this.getHeight() / 4 + 72, this, "Small"));
-		this.attachWidget(new Button(2, this.getWidth() / 2 - 100, this.getHeight() / 4 + 96, this, "Normal"));
-		this.attachWidget(new Button(3, this.getWidth() / 2 - 100, this.getHeight() / 4 + 120, this, "Huge"));
-		this.attachWidget(new Button(4, this.getWidth() / 2 - 100, this.getHeight() / 4 + 144, this, "Cancel"));
+		this.attachWidget(new Button(1, this.getWidth() / 2 - 100, this.getHeight() / 4 + 72, this, OpenClassic.getGame().getTranslator().translate("gui.level-create.small")));
+		this.attachWidget(new Button(2, this.getWidth() / 2 - 100, this.getHeight() / 4 + 96, this, OpenClassic.getGame().getTranslator().translate("gui.level-create.normal")));
+		this.attachWidget(new Button(3, this.getWidth() / 2 - 100, this.getHeight() / 4 + 120, this, OpenClassic.getGame().getTranslator().translate("gui.level-create.huge")));
+		this.attachWidget(new Button(4, this.getWidth() / 2 - 100, this.getHeight() / 4 + 144, this, OpenClassic.getGame().getTranslator().translate("gui.cancel")));
 		this.attachWidget(this.widget);
 		
 		this.getWidget(1, Button.class).setActive(false);
@@ -82,7 +82,7 @@ public final class LevelNameScreen extends GuiScreen {
 
 	public final void render() {
 		RenderHelper.getHelper().drawDirtBG();
-		RenderHelper.getHelper().renderText("Enter level name:", this.getWidth() / 2, 40);
+		RenderHelper.getHelper().renderText(OpenClassic.getGame().getTranslator().translate("gui.level-create.name"), this.getWidth() / 2, 40);
 
 		super.render();
 	}

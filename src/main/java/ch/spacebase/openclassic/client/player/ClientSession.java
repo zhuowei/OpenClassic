@@ -5,7 +5,6 @@ import java.net.SocketAddress;
 
 import com.mojang.minecraft.net.PacketType;
 
-import ch.spacebase.openclassic.api.OpenClassic;
 import ch.spacebase.openclassic.api.network.msg.Message;
 import ch.spacebase.openclassic.api.player.Player;
 import ch.spacebase.openclassic.api.player.Session;
@@ -39,8 +38,6 @@ public class ClientSession implements Session {
 			GeneralUtils.getMinecraft().netManager.netHandler.send(type, message.getParams()); 
 			return;
 		}
-		
-		OpenClassic.getLogger().warning("Unknown Message: " + message.toString());
 	}
 
 	@Override

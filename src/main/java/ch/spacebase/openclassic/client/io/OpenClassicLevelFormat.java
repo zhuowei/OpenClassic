@@ -30,35 +30,35 @@ public class OpenClassicLevelFormat {
 	public static Level load(String name, boolean create) throws IOException {
 		if(!(new File(OpenClassic.getGame().getDirectory(), "levels/" + name + ".map").exists())) {
 			if(new File(OpenClassic.getGame().getDirectory(), "levels/" + name + ".mclevel").exists()) {
-				OpenClassic.getLogger().info("Minecraft Indev map detected! Reading...");
+				OpenClassic.getLogger().info(String.format(OpenClassic.getGame().getTranslator().translate("level.detected-format"), "Minecraft Indev"));
 				Level level = IndevLevelFormat.read("levels/" + name + ".mclevel");
 				save(level);
 				return level;
 			}
 			
 			if(new File(OpenClassic.getGame().getDirectory(), "levels/" + name + ".mine").exists()) {
-				OpenClassic.getLogger().info("Minecraft Classic map detected! Reading...");
+				OpenClassic.getLogger().info(String.format(OpenClassic.getGame().getTranslator().translate("level.detected-format"), "Minecraft Classic"));
 				Level level = MinecraftLevelFormat.read("levels/" + name + ".mine");
 				save(level);
 				return level;
 			}
 			
 			if(new File(OpenClassic.getGame().getDirectory(), "levels/" + name + ".dat").exists()) {
-				OpenClassic.getLogger().info("Minecraft Classic map detected! Reading...");
+				OpenClassic.getLogger().info(String.format(OpenClassic.getGame().getTranslator().translate("level.detected-format"), "Minecraft Classic"));
 				Level level = MinecraftLevelFormat.read("levels/" + name + ".dat");
 				save(level);
 				return level;
 			}
 			
 			if(new File(OpenClassic.getGame().getDirectory(), "levels/" + name + ".lvl").exists()) {
-				OpenClassic.getLogger().info("MCSharp map detected! Reading...");
+				OpenClassic.getLogger().info(String.format(OpenClassic.getGame().getTranslator().translate("level.detected-format"), "MCSharp"));
 				Level level = MCSharpLevelFormat.load("levels/" + name + ".lvl");
 				save(level);
 				return level;
 			}
 			
 			if(new File(OpenClassic.getGame().getDirectory(), "levels/" + name + ".oclvl").exists()) {
-				OpenClassic.getLogger().info("Old OpenClassic map detected! Reading...");
+				OpenClassic.getLogger().info(String.format(OpenClassic.getGame().getTranslator().translate("level.detected-format"), "Old OpenClassic"));
 				Level level = readOld("levels/" + name + ".oclvl");
 				save(level);
 				return level;
@@ -70,7 +70,7 @@ public class OpenClassicLevelFormat {
 		File levelFile = new File(OpenClassic.getGame().getDirectory(), "levels/" + name + ".map");
 		if(!levelFile.exists()) {
 			if(create) {
-				OpenClassic.getLogger().info("Level \"" + name + "\" was not found. Creating with default settings...");
+				OpenClassic.getLogger().info(String.format(OpenClassic.getGame().getTranslator().translate("level.auto-create"), name));
 				return OpenClassic.getGame().createLevel(new LevelInfo(name, new Position(null, 0, 65, 0), (short) 256, (short) 64, (short) 256), new FlatLandGenerator());
 			} else {
 				return null;

@@ -1,5 +1,7 @@
 package com.mojang.minecraft;
 
+import ch.spacebase.openclassic.api.OpenClassic;
+
 import com.mojang.minecraft.KeyBinding;
 import com.mojang.minecraft.Minecraft;
 import com.mojang.minecraft.gamemode.CreativeGameMode;
@@ -27,16 +29,16 @@ public final class GameSettings {
 	public boolean smoothing = false;
 	public boolean speed = false;
 	public String texturePack = "none";
-	public KeyBinding forwardKey = new KeyBinding("Forward", Keyboard.KEY_W);
-	public KeyBinding leftKey = new KeyBinding("Left", Keyboard.KEY_A);
-	public KeyBinding backKey = new KeyBinding("Back", Keyboard.KEY_S);
-	public KeyBinding rightKey = new KeyBinding("Right", Keyboard.KEY_D);
-	public KeyBinding jumpKey = new KeyBinding("Jump", Keyboard.KEY_SPACE);
-	public KeyBinding buildKey = new KeyBinding("Build", Keyboard.KEY_B);
-	public KeyBinding chatKey = new KeyBinding("Chat", Keyboard.KEY_T);
-	public KeyBinding fogKey = new KeyBinding("Toggle fog", Keyboard.KEY_F);
-	public KeyBinding saveLocKey = new KeyBinding("Save location", Keyboard.KEY_RETURN);
-	public KeyBinding loadLocKey = new KeyBinding("Load location", Keyboard.KEY_R);
+	public KeyBinding forwardKey = new KeyBinding("options.keys.forward", Keyboard.KEY_W);
+	public KeyBinding leftKey = new KeyBinding("options.keys.left", Keyboard.KEY_A);
+	public KeyBinding backKey = new KeyBinding("options.keys.back", Keyboard.KEY_S);
+	public KeyBinding rightKey = new KeyBinding("options.keys.right", Keyboard.KEY_D);
+	public KeyBinding jumpKey = new KeyBinding("options.keys.jump", Keyboard.KEY_SPACE);
+	public KeyBinding buildKey = new KeyBinding("options.keys.blocks", Keyboard.KEY_B);
+	public KeyBinding chatKey = new KeyBinding("options.keys.chat", Keyboard.KEY_T);
+	public KeyBinding fogKey = new KeyBinding("options.keys.toggle-fog", Keyboard.KEY_F);
+	public KeyBinding saveLocKey = new KeyBinding("options.keys.save-loc", Keyboard.KEY_RETURN);
+	public KeyBinding loadLocKey = new KeyBinding("options.keys.load-loc", Keyboard.KEY_R);
 	public KeyBinding[] bindings;
 	private Minecraft mc;
 	private File file;
@@ -53,11 +55,11 @@ public final class GameSettings {
 	}
 
 	public final String getBinding(int key) {
-		return this.bindings[key].name + ": " + Keyboard.getKeyName(this.bindings[key].key);
+		return this.getBindingName(key) + ": " + this.getBindingValue(key);
 	}
 	
 	public final String getBindingName(int key) {
-		return this.bindings[key].name;
+		return OpenClassic.getGame().getTranslator().translate(this.bindings[key].name);
 	}
 	
 	public final String getBindingValue(int key) {
@@ -126,20 +128,20 @@ public final class GameSettings {
 	}
 
 	public final String getSetting(int id) {
-		return id == 0 ? "Music: " + (this.music ? "ON" : "OFF") : (id == 1 ? "Sound: " + (this.sound ? "ON" : "OFF") : (id == 2 ? "Invert mouse: " + (this.invertMouse ? "ON" : "OFF") : (id == 3 ? "Show Info: " + (this.showInfo ? "ON" : "OFF") : (id == 4 ? "Render distance: " + fog[this.viewDistance] : (id == 5 ? "View bobbing: " + (this.viewBobbing ? "ON" : "OFF") : (id == 6 ? "3d anaglyph: " + (this.anaglyph ? "ON" : "OFF") : (id == 7 ? "Limit framerate: " + (this.limitFPS ? "ON" : "OFF") : (id == 8 ? "Survival Mode: " + (this.survival ? "ON" : "OFF") : id == 9 ? "Smoothing: " + (this.smoothing ? "ON" : "OFF") : ""))))))));
+		return this.getSettingName(id) + ": " + this.getSettingValue(id);
 	}
 	
 	public final String getSettingName(int id) {
-		return id == 0 ? "Music" : (id == 1 ? "Sound" : (id == 2 ? "Invert mouse" : (id == 3 ? "Show Info" : (id == 4 ? "Render distance" : (id == 5 ? "View bobbing" : (id == 6 ? "3d anaglyph" : (id == 7 ? "Limit framerate" : (id == 8 ? "Survival Mode" : id == 9 ? "Smoothing" : ""))))))));
+		return id == 0 ? OpenClassic.getGame().getTranslator().translate("options.music") : (id == 1 ? OpenClassic.getGame().getTranslator().translate("options.sound") : (id == 2 ? OpenClassic.getGame().getTranslator().translate("options.invert-mouse") : (id == 3 ? OpenClassic.getGame().getTranslator().translate("options.show-info") : (id == 4 ? OpenClassic.getGame().getTranslator().translate("options.render-distance") : (id == 5 ? OpenClassic.getGame().getTranslator().translate("options.view-bobbing") : (id == 6 ? OpenClassic.getGame().getTranslator().translate("options.3d-anaglyph") : (id == 7 ? OpenClassic.getGame().getTranslator().translate("options.limit-frames") : (id == 8 ? OpenClassic.getGame().getTranslator().translate("options.survival") : id == 9 ? OpenClassic.getGame().getTranslator().translate("options.smoothing") : ""))))))));
 	}
 	
 	public final String getSettingValue(int id) {
-		return id == 0 ? (this.music ? "ON" : "OFF") : (id == 1 ? (this.sound ? "ON" : "OFF") : (id == 2 ? (this.invertMouse ? "ON" : "OFF") : (id == 3 ? (this.showInfo ? "ON" : "OFF") : (id == 4 ? fog[this.viewDistance] : (id == 5 ? (this.viewBobbing ? "ON" : "OFF") : (id == 6 ? (this.anaglyph ? "ON" : "OFF") : (id == 7 ? (this.limitFPS ? "ON" : "OFF") : (id == 8 ? (this.survival ? "ON" : "OFF") : id == 9 ? (this.smoothing ? "ON" : "OFF") : ""))))))));
+		return id == 0 ? (this.music ? OpenClassic.getGame().getTranslator().translate("options.on") : OpenClassic.getGame().getTranslator().translate("options.off")) : (id == 1 ? (this.sound ? OpenClassic.getGame().getTranslator().translate("options.on") : OpenClassic.getGame().getTranslator().translate("options.off")) : (id == 2 ? (this.invertMouse ? OpenClassic.getGame().getTranslator().translate("options.on") : OpenClassic.getGame().getTranslator().translate("options.off")) : (id == 3 ? (this.showInfo ? OpenClassic.getGame().getTranslator().translate("options.on") : OpenClassic.getGame().getTranslator().translate("options.off")) : (id == 4 ? fog[this.viewDistance] : (id == 5 ? (this.viewBobbing ? OpenClassic.getGame().getTranslator().translate("options.on") : OpenClassic.getGame().getTranslator().translate("options.off")) : (id == 6 ? (this.anaglyph ? OpenClassic.getGame().getTranslator().translate("options.on") : OpenClassic.getGame().getTranslator().translate("options.off")) : (id == 7 ? (this.limitFPS ? OpenClassic.getGame().getTranslator().translate("options.on") : OpenClassic.getGame().getTranslator().translate("options.off")) : (id == 8 ? (this.survival ? OpenClassic.getGame().getTranslator().translate("options.on") : OpenClassic.getGame().getTranslator().translate("options.off")) : id == 9 ? (this.smoothing ? OpenClassic.getGame().getTranslator().translate("options.on") : OpenClassic.getGame().getTranslator().translate("options.off")) : ""))))))));
 	}
 	
 	public final String getHack(int id) {
 		switch(id) {
-			case 0: return "Speedhack: " + (this.speed ? "ON" : "OFF");
+			case 0: return OpenClassic.getGame().getTranslator().translate("options.hacks.speed") + ": " + (this.speed ? OpenClassic.getGame().getTranslator().translate("options.on") : OpenClassic.getGame().getTranslator().translate("options.off"));
 			default: return "";
 		}
 	}
@@ -215,7 +217,7 @@ public final class GameSettings {
 				reader.close();
 			}
 		} catch (IOException e) {
-			System.out.println("Failed to load options");
+			System.out.println(OpenClassic.getGame().getTranslator().translate("core.fail-options-load"));
 			e.printStackTrace();
 		}
 	}
@@ -241,7 +243,7 @@ public final class GameSettings {
 
 			writer.close();
 		} catch (Exception e) {
-			System.out.println("Failed to save options");
+			System.out.println(OpenClassic.getGame().getTranslator().translate("core.fail-options-save"));
 			e.printStackTrace();
 		}
 	}
