@@ -146,7 +146,7 @@ public class ClassicServer extends ClassicGame implements Server {
 		this.running = true;
 		
 		OpenClassic.setServer(this);
-		OpenClassic.getLogger().info("Starting OpenClassic v" + Constants.SERVER_VERSION + "...");
+		OpenClassic.getLogger().info(String.format(this.getTranslator().translate("core.startup.server"), Constants.SERVER_VERSION));
 		
 		ChannelFactory factory = new NioServerSocketChannelFactory(executor, executor);
 		this.bootstrap.setFactory(factory);
@@ -202,7 +202,7 @@ public class ClassicServer extends ClassicGame implements Server {
                 try {
                     tick();
                 } catch (Exception e) {
-                    OpenClassic.getLogger().log(java.util.logging.Level.SEVERE, "Error while ticking: {0}", e);
+                    OpenClassic.getLogger().severe(String.format(getTranslator().translate("core.tick-error"), e));
                     e.printStackTrace();
                 }
             }
@@ -219,7 +219,7 @@ public class ClassicServer extends ClassicGame implements Server {
 		this.getScheduler().scheduleAsyncRepeatingTask(this, new Runnable() {
 			@Override
 			public void run() {
-				OpenClassic.getLogger().info("Saving levels...");
+				OpenClassic.getLogger().info(getTranslator().translate("level.save-all"));
 				saveLevels();
 			}
 		}, 3000, 3000);

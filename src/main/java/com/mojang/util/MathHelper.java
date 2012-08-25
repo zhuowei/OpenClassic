@@ -20,6 +20,5 @@ public final class MathHelper {
 		for (int count = 0; count < Character.MAX_VALUE; ++count) {
 			values[count] = (float) Math.sin(count * Math.PI * 2 / Character.MAX_VALUE);
 		}
-
 	}
 }

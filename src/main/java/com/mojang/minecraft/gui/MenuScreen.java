@@ -10,6 +10,7 @@ import ch.spacebase.openclassic.client.util.GeneralUtils;
 
 import com.mojang.minecraft.Minecraft;
 import com.mojang.minecraft.gui.OptionsScreen;
+import com.mojang.minecraft.level.LevelIO;
 
 public final class MenuScreen extends GuiScreen {
 
@@ -45,7 +46,7 @@ public final class MenuScreen extends GuiScreen {
 				mc.progressBar.setTitle(OpenClassic.getGame().getTranslator().translate("level.saving"));
 				mc.progressBar.setText("");
 				mc.progressBar.setProgress(0);
-				mc.levelIo.save(mc.level);
+				LevelIO.save(mc.level);
 			}
 			
 			mc.stopGame(true);

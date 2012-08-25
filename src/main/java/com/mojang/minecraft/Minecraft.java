@@ -142,7 +142,6 @@ public final class Minecraft implements Runnable {
 	public GuiScreen currentScreen = null;
 	public ProgressBarDisplay progressBar = new ProgressBarDisplay(this);
 	public Renderer renderer = new Renderer(this);
-	public LevelIO levelIo;
 	public ClientAudioManager audio;
 	public ResourceDownloadThread resourceThread;
 	private int ticks;
@@ -182,7 +181,6 @@ public final class Minecraft implements Runnable {
 	}
 
 	public Minecraft(Canvas canvas, int width, int height) {
-		this.levelIo = new LevelIO(this.progressBar);
 		this.ticks = 0;
 		this.blockHitTime = 0;
 		this.online = false;
@@ -2072,12 +2070,11 @@ public final class Minecraft implements Runnable {
 
 		if (this.levelRenderer != null) {
 			if (this.levelRenderer.level != null) {
-				this.levelRenderer.level.removeListener(this.levelRenderer);
+				this.levelRenderer.level.rendererContext = null;
 			}
 
 			this.levelRenderer.level = level;
 			if (level != null) {
-				level.addListener(this.levelRenderer);
 				this.levelRenderer.refresh();
 			}
 		}

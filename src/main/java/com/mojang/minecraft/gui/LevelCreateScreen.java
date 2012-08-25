@@ -9,6 +9,7 @@ import ch.spacebase.openclassic.api.render.RenderHelper;
 import ch.spacebase.openclassic.client.util.GeneralUtils;
 
 import com.mojang.minecraft.Minecraft;
+import com.mojang.minecraft.level.LevelIO;
 
 import org.lwjgl.input.Keyboard;
 
@@ -62,7 +63,7 @@ public final class LevelCreateScreen extends GuiScreen {
 				mc.levelName = this.widget.getText();
 				mc.levelSize = button.getId() - 1;
 				mc.initGame(OpenClassic.getGame().getGenerator(this.getWidget(0, StateButton.class).getState()));
-				mc.levelIo.save(mc.level);
+				LevelIO.save(mc.level);
 				mc.setCurrentScreen(null);
 				mc.grabMouse();
 			}

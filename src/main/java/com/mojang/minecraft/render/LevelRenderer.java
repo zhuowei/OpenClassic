@@ -164,7 +164,7 @@ public final class LevelRenderer {
 		ShapeRenderer.instance.end();
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glEndList();
-		this.addChunks(0, 0, 0, this.level.width, this.level.depth, this.level.height);
+		this.queueChunks(0, 0, 0, this.level.width, this.level.depth, this.level.height);
 	}
 
 	public final int sortChunks(Player player, int var2) {
@@ -200,7 +200,7 @@ public final class LevelRenderer {
 		return this.buffer.remaining();
 	}
 
-	public final void addChunks(int x1, int z1, int y1, int x2, int z2, int y2) {
+	public final void queueChunks(int x1, int z1, int y1, int x2, int z2, int y2) {
 		x1 /= 16;
 		z1 /= 16;
 		y1 /= 16;

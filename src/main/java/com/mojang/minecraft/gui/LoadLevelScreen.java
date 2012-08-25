@@ -10,6 +10,8 @@ import ch.spacebase.openclassic.client.gui.ConfirmDeleteScreen;
 import ch.spacebase.openclassic.client.util.GeneralUtils;
 
 import com.mojang.minecraft.level.Level;
+import com.mojang.minecraft.level.LevelIO;
+
 import java.io.File;
 import java.util.Arrays;
 
@@ -89,7 +91,7 @@ public class LoadLevelScreen extends GuiScreen {
 	}
 
 	protected void loadLevel(int id) {
-		Level level = GeneralUtils.getMinecraft().levelIo.load(this.getWidget(0, ButtonList.class).getButton(id).getText());
+		Level level = LevelIO.load(this.getWidget(0, ButtonList.class).getButton(id).getText());
 		if (level != null) {
 			GeneralUtils.getMinecraft().setLevel(level);
 			GeneralUtils.getMinecraft().initGame();

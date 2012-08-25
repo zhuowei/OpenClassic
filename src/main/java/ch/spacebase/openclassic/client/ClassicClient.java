@@ -12,6 +12,7 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import com.mojang.minecraft.Minecraft;
+import com.mojang.minecraft.level.LevelIO;
 import com.mojang.minecraft.level.generator.LevelGenerator;
 
 import ch.spacebase.openclassic.api.Client;
@@ -84,7 +85,7 @@ public class ClassicClient extends ClassicGame implements Client {
 			e.printStackTrace();
 		}
 
-		OpenClassic.getLogger().info(String.format(this.getTranslator().translate("client.startup"), Constants.CLIENT_VERSION));
+		OpenClassic.getLogger().info(String.format(this.getTranslator().translate("core.startup.client"), Constants.CLIENT_VERSION));
 		
 		this.registerExecutor(null, new ClientCommands());
 		this.registerGenerator("normal", new LevelGenerator());
@@ -163,13 +164,13 @@ public class ClassicClient extends ClassicGame implements Client {
 	@Override
 	public Level openLevel(String name) {
 		if(this.mc.level != null && this.mc.level.name.equals(name)) return this.mc.level.openclassic;
-		return this.mc.levelIo.load(name).openclassic;
+		return LevelIO.load(name).openclassic;
 	}
 
 	@Override
 	public void saveLevel() {
 		if(this.mc.level == null) return;
-		this.mc.levelIo.save(this.mc.level);
+		LevelIO.save(this.mc.level);
 	}
 	
 	@Override

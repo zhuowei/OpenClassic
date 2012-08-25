@@ -7,8 +7,8 @@ import ch.spacebase.openclassic.api.event.level.LevelLoadEvent;
 import ch.spacebase.openclassic.api.event.level.LevelSaveEvent;
 import ch.spacebase.openclassic.client.io.OpenClassicLevelFormat;
 import ch.spacebase.openclassic.client.level.ClientLevel;
+import ch.spacebase.openclassic.client.util.GeneralUtils;
 
-import com.mojang.minecraft.ProgressBarDisplay;
 import com.mojang.minecraft.level.Level;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -22,13 +22,7 @@ import java.util.zip.GZIPOutputStream;
 
 public final class LevelIO {
 
-	private ProgressBarDisplay progress;
-
-	public LevelIO(ProgressBarDisplay progress) {
-		this.progress = progress;
-	}
-
-	public final boolean save(Level level) {	
+	public static boolean save(Level level) {	
 		if(EventFactory.callEvent(new LevelSaveEvent(level.openclassic)).isCancelled()) {
 			return true;
 		}
@@ -38,8 +32,8 @@ public final class LevelIO {
 			if(level.openclassic.getData() != null) level.openclassic.getData().save(OpenClassic.getGame().getDirectory().getPath() + "/levels/" + level.name + ".nbt");
 			return true;
 		} catch (IOException e) {
-			if (this.progress != null) {
-				this.progress.setText(String.format(OpenClassic.getGame().getTranslator().translate("level.save-fail"), level.name));
+			if (GeneralUtils.getMinecraft() != null) {
+				GeneralUtils.getMinecraft().progressBar.setText(String.format(OpenClassic.getGame().getTranslator().translate("level.save-fail"), level.name));
 			}
 			
 			e.printStackTrace();
@@ -53,10 +47,10 @@ public final class LevelIO {
 		}
 	}
 
-	public final Level load(String name) {		
-		if (this.progress != null) {
-			this.progress.setTitle(OpenClassic.getGame().getTranslator().translate("level.loading"));
-			this.progress.setText(OpenClassic.getGame().getTranslator().translate("level.reading"));
+	public static Level load(String name) {		
+		if (GeneralUtils.getMinecraft() != null) {
+			GeneralUtils.getMinecraft().progressBar.setTitle(OpenClassic.getGame().getTranslator().translate("level.loading"));
+			GeneralUtils.getMinecraft().progressBar.setText(OpenClassic.getGame().getTranslator().translate("level.reading"));
 		}
 		
 		try {
@@ -66,8 +60,8 @@ public final class LevelIO {
 			EventFactory.callEvent(new LevelLoadEvent(level.openclassic));
 			return level;
 		} catch (IOException e) {
-			if (this.progress != null) {
-				this.progress.setText(String.format(OpenClassic.getGame().getTranslator().translate("level.load-fail"), name));
+			if (GeneralUtils.getMinecraft() != null) {
+				GeneralUtils.getMinecraft().progressBar.setText(String.format(OpenClassic.getGame().getTranslator().translate("level.load-fail"), name));
 			}
 			
 			e.printStackTrace();

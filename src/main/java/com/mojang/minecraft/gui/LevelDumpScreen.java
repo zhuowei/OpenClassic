@@ -54,7 +54,7 @@ public final class LevelDumpScreen extends GuiScreen {
 				if(this.getWidget(1, StateButton.class).getState().equals("Minecraft")) {
 					LevelIO.saveOld(mc.level);
 				} else {
-					mc.levelIo.save(mc.level);
+					LevelIO.save(mc.level);
 				}
 				
 				mc.setCurrentScreen(this.parent);

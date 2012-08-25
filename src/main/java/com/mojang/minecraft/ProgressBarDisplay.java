@@ -20,10 +20,8 @@ public final class ProgressBarDisplay implements ProgressBar {
 		this.mc = mc;
 	}
 
-	public final void setTitle(String title) {
-		if (!this.mc.running) {
-			return;
-		} else {
+	public void setTitle(String title) {
+		if (this.mc.running) {
 			this.title = title;
 			int x = this.mc.width * 240 / this.mc.height;
 			int y = this.mc.height * 240 / this.mc.height;
@@ -31,27 +29,25 @@ public final class ProgressBarDisplay implements ProgressBar {
 			GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
 			GL11.glMatrixMode(GL11.GL_PROJECTION);
 			GL11.glLoadIdentity();
-			GL11.glOrtho(0.0D, x, y, 0.0D, 100.0D, 300.0D);
+			GL11.glOrtho(0, x, y, 0, 100, 300);
 			GL11.glMatrixMode(GL11.GL_MODELVIEW);
 			GL11.glLoadIdentity();
-			GL11.glTranslatef(0.0F, 0.0F, -200.0F);
+			GL11.glTranslatef(0, 0, -200);
 		}
 	}
 
-	public final void setText(String text) {
+	public void setText(String text) {
 		this.setText(text, true);
 	}
 	
-	public final void setText(String text, boolean update) {
-		if (!this.mc.running) {
-			return;
-		} else {
+	public void setText(String text, boolean update) {
+		if (this.mc.running) {
 			this.text = text;
 			if(update) this.setProgress(-1);
 		}
 	}
 
-	public final void setProgress(int progress) {
+	public void setProgress(int progress) {
 		if (!this.mc.running) {
 			return;
 		} else {
@@ -59,35 +55,29 @@ public final class ProgressBarDisplay implements ProgressBar {
 				this.start = System.currentTimeMillis();
 				int x = this.mc.width * 240 / this.mc.height;
 				int y = this.mc.height * 240 / this.mc.height;
-				ShapeRenderer render = com.mojang.minecraft.render.ShapeRenderer.instance;
 				ClientRenderHelper.getHelper().drawDirtBG();
 				if (progress >= 0) {
 					int barX = x / 2 - 50;
 					int barY = y / 2 + 16;
 					GL11.glDisable(GL11.GL_TEXTURE_2D);
-					render.begin();
-					render.color(8421504);
-					render.vertex(barX, barY, 0.0F);
-					render.vertex(barX, (barY + 2), 0.0F);
-					render.vertex((barX + 100), (barY + 2), 0.0F);
-					render.vertex((barX + 100), barY, 0.0F);
-					render.color(8454016);
-					render.vertex(barX, barY, 0.0F);
-					render.vertex(barX, (barY + 2), 0.0F);
-					render.vertex((barX + progress), (barY + 2), 0.0F);
-					render.vertex((barX + progress), barY, 0.0F);
-					render.end();
+					ShapeRenderer.instance.begin();
+					ShapeRenderer.instance.color(8421504);
+					ShapeRenderer.instance.vertex(barX, barY, 0.0F);
+					ShapeRenderer.instance.vertex(barX, (barY + 2), 0.0F);
+					ShapeRenderer.instance.vertex((barX + 100), (barY + 2), 0.0F);
+					ShapeRenderer.instance.vertex((barX + 100), barY, 0.0F);
+					ShapeRenderer.instance.color(8454016);
+					ShapeRenderer.instance.vertex(barX, barY, 0.0F);
+					ShapeRenderer.instance.vertex(barX, (barY + 2), 0.0F);
+					ShapeRenderer.instance.vertex((barX + progress), (barY + 2), 0.0F);
+					ShapeRenderer.instance.vertex((barX + progress), barY, 0.0F);
+					ShapeRenderer.instance.end();
 					GL11.glEnable(GL11.GL_TEXTURE_2D);
 				}
 
 				this.mc.fontRenderer.renderWithShadow(this.title, (x - this.mc.fontRenderer.getWidth(this.title)) / 2, y / 2 - 4 - 16, 16777215);
 				this.mc.fontRenderer.renderWithShadow(this.text, (x - this.mc.fontRenderer.getWidth(this.text)) / 2, y / 2 - 4 + 8, 16777215);
 				Display.update();
-
-				try {
-					Thread.yield();
-				} catch (Exception e) {
-				}
 			}
 			
 			this.progress = progress;
