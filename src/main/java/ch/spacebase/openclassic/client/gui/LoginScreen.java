@@ -10,8 +10,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.CookieHandler;
 import java.net.URLEncoder;
 
-import javax.swing.JOptionPane;
-
+import ch.spacebase.openclassic.api.Color;
 import ch.spacebase.openclassic.api.OpenClassic;
 import ch.spacebase.openclassic.api.gui.GuiScreen;
 import ch.spacebase.openclassic.api.gui.widget.Button;
@@ -34,11 +33,14 @@ import com.mojang.minecraft.SessionData;
  */
 public class LoginScreen extends GuiScreen {
 
+	private String title = OpenClassic.getGame().getTranslator().translate("gui.login.enter");
+	
 	public void onOpen() {
 		Keyboard.enableRepeatEvents(true);
 		
 		this.clearWidgets();
-		this.attachWidget(new Button(0, this.getWidth() / 2 - 100, this.getHeight() / 4 + 120, this, OpenClassic.getGame().getTranslator().translate("gui.login.login")));
+		this.attachWidget(new Button(0, this.getWidth() / 2 - 100, this.getHeight() / 4 + 120, 98, 20, this, OpenClassic.getGame().getTranslator().translate("gui.login.login")));
+		this.attachWidget(new Button(4, this.getWidth() / 2 + 2, this.getHeight() / 4 + 120, 98, 20, this, OpenClassic.getGame().getTranslator().translate("gui.login.play-offline")));
 		this.attachWidget(new StateButton(1, this.getWidth() / 2 - 100, this.getHeight() / 4 + 144, this, OpenClassic.getGame().getTranslator().translate("gui.login.remember")));
 		this.attachWidget(new TextBox(2, this.getWidth() / 2 - 100, this.getHeight() / 2 - 10, this, 64));
 		this.attachWidget(new PasswordTextBox(3, this.getWidth() / 2 - 100, this.getHeight() / 2 + 16, this, 64));
@@ -113,7 +115,8 @@ public class LoginScreen extends GuiScreen {
 			OpenClassic.getClient().getProgressBar().setTitle(OpenClassic.getGame().getTranslator().translate("gui.login.logging-in"));
 			OpenClassic.getClient().getProgressBar().setProgress(0);
 			if (!auth(user, pass)) {
-				JOptionPane.showMessageDialog(null, OpenClassic.getGame().getTranslator().translate("gui.login.failed"));
+				this.title = Color.RED + OpenClassic.getGame().getTranslator().translate("gui.login.failed");
+				return;
 			}
 			
 			GeneralUtils.getMinecraft().setCurrentScreen(new MainMenuScreen());
@@ -121,6 +124,10 @@ public class LoginScreen extends GuiScreen {
 		
 		if(button.getId() == 1) {
 			this.getWidget(1, StateButton.class).setState(this.getWidget(1, StateButton.class).getState() == OpenClassic.getGame().getTranslator().translate("gui.yes") ? OpenClassic.getGame().getTranslator().translate("gui.no") : OpenClassic.getGame().getTranslator().translate("gui.yes"));
+		}
+		
+		if(button.getId() == 4) {
+			GeneralUtils.getMinecraft().setCurrentScreen(new MainMenuScreen());
 		}
 	}
 
@@ -132,7 +139,7 @@ public class LoginScreen extends GuiScreen {
 	public void render() {
 		RenderHelper.getHelper().drawDirtBG();
 		
-		RenderHelper.getHelper().renderText(OpenClassic.getGame().getTranslator().translate("gui.login.enter"), this.getWidth() / 2, 40);
+		RenderHelper.getHelper().renderText(this.title, this.getWidth() / 2, 40);
 		RenderHelper.getHelper().renderText(OpenClassic.getGame().getTranslator().translate("gui.login.user"), (this.getWidth() / 2 - 104) - RenderHelper.getHelper().getStringWidth("Username"), this.getHeight() / 2 - 6);
 		RenderHelper.getHelper().renderText(OpenClassic.getGame().getTranslator().translate("gui.login.pass"), (this.getWidth() / 2 - 104) - RenderHelper.getHelper().getStringWidth("Password"), this.getHeight() / 2 + 20);
 		super.render();

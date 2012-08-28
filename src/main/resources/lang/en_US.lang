@@ -137,11 +137,12 @@ gui:
         user: Username
         pass: Password
         login: Login
+        play-offline: Play Offline
         remember: Remember Password
         logging-in: Logging in...
         fail-check: Failed to check login file.
         fail-create: Failed to create login file.
-        failed: Login failed! You will not be able to play multiplayer.
+        failed: Incorrect username or password.
     main-menu:
         singleplayer: Singleplayer
         multiplayer: Multiplayer
