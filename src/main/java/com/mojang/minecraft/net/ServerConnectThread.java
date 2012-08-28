@@ -6,6 +6,7 @@ import ch.spacebase.openclassic.api.OpenClassic;
 import ch.spacebase.openclassic.api.event.EventFactory;
 import ch.spacebase.openclassic.api.event.player.PlayerConnectEvent;
 import ch.spacebase.openclassic.api.event.player.PlayerConnectEvent.Result;
+import ch.spacebase.openclassic.api.util.Constants;
 
 import com.mojang.minecraft.Minecraft;
 import com.mojang.minecraft.gui.ErrorScreen;
@@ -43,7 +44,7 @@ public final class ServerConnectThread extends Thread {
 				return;
 			}
 			
-			this.netManager.netHandler.send(PacketType.IDENTIFICATION, new Object[] { (byte) 7, this.username, this.key, (byte) 0 });
+			this.netManager.netHandler.send(PacketType.IDENTIFICATION, new Object[] { Constants.PROTOCOL_VERSION, this.username, this.key, Constants.OPENCLASSIC_PROTOCOL_VERSION });
 			this.netManager.successful = true;
 		} catch (Exception e) {
 			this.mc.online = false;

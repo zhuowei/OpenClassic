@@ -22,7 +22,7 @@ public class IdentificationCodec extends MessageCodec<IdentificationMessage> {
 		buffer.writeByte(message.getProtocolVersion());
 		ChannelBufferUtils.writeString(buffer, message.getUsernameOrServerName());
 		ChannelBufferUtils.writeString(buffer, message.getVerificationKeyOrMotd());
-		buffer.writeByte(message.getOp());
+		buffer.writeByte(message.getOpOrCustomClient());
 		
 		return buffer;
 	}

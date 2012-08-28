@@ -1463,13 +1463,6 @@ public final class Minecraft implements Runnable {
 										this.setLevel(level);
 										this.online = false;
 										this.netManager.levelLoaded = true;
-									} else if (type == PacketType.CLIENT_SET_BLOCK) {
-										// Server is OpenClassic
-										this.openclassicServer = (Byte) params[4] == 1;
-										this.netManager.netHandler.send(PacketType.GAME_INFO, Constants.CLIENT_VERSION, OpenClassic.getGame().getLanguage());
-										for(Plugin plugin : OpenClassic.getClient().getPluginManager().getPlugins()) {
-											this.netManager.netHandler.send(PacketType.PLUGIN, plugin.getDescription().getName(), plugin.getDescription().getVersion());
-										}
 									} else if (type == PacketType.SET_BLOCK) {
 										if (this.level != null) {
 											this.level.netSetTile((Short) params[0], (Short) params[1], (Short) params[2], (Byte) params[3]);
@@ -1562,7 +1555,12 @@ public final class Minecraft implements Runnable {
 										// Custom begins
 									} else if (type == PacketType.GAME_INFO) {
 										OpenClassic.getLogger().info("Connected to OpenClassic v" + (String) params[0] + "!");
+										this.openclassicServer = true;
 										this.openclassicVersion = (String) params[0];
+										this.netManager.netHandler.send(PacketType.GAME_INFO, Constants.CLIENT_VERSION, OpenClassic.getGame().getLanguage());
+										for(Plugin plugin : OpenClassic.getClient().getPluginManager().getPlugins()) {
+											this.netManager.netHandler.send(PacketType.PLUGIN, plugin.getDescription().getName(), plugin.getDescription().getVersion());
+										}
 									} else if (type == PacketType.CUSTOM_BLOCK) {
 										byte id = (Byte) params[0];
 										boolean opaque = (Byte) params[1] == 1;
