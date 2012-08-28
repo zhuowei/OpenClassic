@@ -1876,7 +1876,7 @@ public final class Minecraft implements Runnable {
 			
 			EventFactory.callEvent(new PlayerKeyChangeEvent(OpenClassic.getClient().getPlayer(), Keyboard.getEventKey(), Keyboard.getEventKeyState()));
 			if(this.netManager != null && this.netManager.isConnected() && this.openclassicServer) {
-				this.netManager.netHandler.send(PacketType.KEY_CHANGE, Keyboard.getEventKey(), Keyboard.getEventKeyState());
+				this.netManager.netHandler.send(PacketType.KEY_CHANGE, Keyboard.getEventKey(), Keyboard.getEventKeyState() ? (byte) 1 : (byte) 0);
 			}
 		}
 
