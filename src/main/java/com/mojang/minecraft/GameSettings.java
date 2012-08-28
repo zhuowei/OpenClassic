@@ -139,9 +139,16 @@ public final class GameSettings {
 		return id == 0 ? (this.music ? OpenClassic.getGame().getTranslator().translate("options.on") : OpenClassic.getGame().getTranslator().translate("options.off")) : (id == 1 ? (this.sound ? OpenClassic.getGame().getTranslator().translate("options.on") : OpenClassic.getGame().getTranslator().translate("options.off")) : (id == 2 ? (this.invertMouse ? OpenClassic.getGame().getTranslator().translate("options.on") : OpenClassic.getGame().getTranslator().translate("options.off")) : (id == 3 ? (this.showInfo ? OpenClassic.getGame().getTranslator().translate("options.on") : OpenClassic.getGame().getTranslator().translate("options.off")) : (id == 4 ? fog[this.viewDistance] : (id == 5 ? (this.viewBobbing ? OpenClassic.getGame().getTranslator().translate("options.on") : OpenClassic.getGame().getTranslator().translate("options.off")) : (id == 6 ? (this.anaglyph ? OpenClassic.getGame().getTranslator().translate("options.on") : OpenClassic.getGame().getTranslator().translate("options.off")) : (id == 7 ? (this.limitFPS ? OpenClassic.getGame().getTranslator().translate("options.on") : OpenClassic.getGame().getTranslator().translate("options.off")) : (id == 8 ? (this.survival ? OpenClassic.getGame().getTranslator().translate("options.on") : OpenClassic.getGame().getTranslator().translate("options.off")) : id == 9 ? (this.smoothing ? OpenClassic.getGame().getTranslator().translate("options.on") : OpenClassic.getGame().getTranslator().translate("options.off")) : ""))))))));
 	}
 	
-	public final String getHack(int id) {
+	public final String getHackName(int id) {
 		switch(id) {
-			case 0: return OpenClassic.getGame().getTranslator().translate("options.hacks.speed") + ": " + (this.speed ? OpenClassic.getGame().getTranslator().translate("options.on") : OpenClassic.getGame().getTranslator().translate("options.off"));
+			case 0: return OpenClassic.getGame().getTranslator().translate("options.hacks.speed");
+			default: return "";
+		}
+	}
+	
+	public final String getHackValue(int id) {
+		switch(id) {
+			case 0: return this.speed ? OpenClassic.getGame().getTranslator().translate("options.on") : OpenClassic.getGame().getTranslator().translate("options.off");
 			default: return "";
 		}
 	}

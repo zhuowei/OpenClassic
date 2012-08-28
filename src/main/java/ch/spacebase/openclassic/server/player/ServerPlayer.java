@@ -318,5 +318,10 @@ public class ServerPlayer implements Player {
 	public boolean canSee(Player player) {
 		return this.hidden.contains(player.getName());
 	}
+
+	@Override
+	public String getLanguage() {
+		return this.client.getLanguage().equals("") ? OpenClassic.getGame().getLanguage() : this.client.getLanguage();
+	}
 	
 }

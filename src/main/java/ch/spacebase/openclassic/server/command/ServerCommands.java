@@ -27,13 +27,13 @@ public class ServerCommands extends CommandExecutor {
 			try {
 				page = Integer.parseInt(args[0]);
 			} catch(NumberFormatException e) {
-				sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("help.invalid-page"));
+				sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("help.invalid-page", sender.getLanguage()));
 				return;
 			}
 		}
 		
 		if(page < 1) {
-			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("help.invalid-page"));
+			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("help.invalid-page", sender.getLanguage()));
 			return;
 		}
 		
@@ -59,11 +59,11 @@ public class ServerCommands extends CommandExecutor {
 		
 		int pages = (int) Math.ceil((double) available.size() / 17);
 		if(page > pages) {
-			sender.sendMessage(OpenClassic.getGame().getTranslator().translate("help.page-not-found"));
+			sender.sendMessage(OpenClassic.getGame().getTranslator().translate("help.page-not-found", sender.getLanguage()));
 			return;
 		}
 		
-		sender.sendMessage(Color.BLUE + String.format(OpenClassic.getGame().getTranslator().translate("help.pages"), page, pages) + " ");
+		sender.sendMessage(Color.BLUE + String.format(OpenClassic.getGame().getTranslator().translate("help.pages", sender.getLanguage()), page, pages) + " ");
 		
 		for(int index = (page - 1) * 17; index < ((page - 1) * 17) + 17; index++) {
 			if(index >= available.size()) break;
@@ -82,35 +82,35 @@ public class ServerCommands extends CommandExecutor {
 	public void pkg(Sender sender, String command, String args[]) {
 		if(args[0].equalsIgnoreCase("install")) {
 			if(args.length < 2) {
-				sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.usage") + ": /pkg install <name>");
+				sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.usage", sender.getLanguage()) + ": /pkg install <name>");
 				return;
 			}
 			
 			OpenClassic.getGame().getPackageManager().install(args[1], sender);
 		} else if(args[0].equalsIgnoreCase("remove")) {
 			if(args.length < 2) {
-				sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.usage") + ": /pkg remove <name>");
+				sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.usage", sender.getLanguage()) + ": /pkg remove <name>");
 				return;
 			}
 			
 			OpenClassic.getGame().getPackageManager().remove(args[1], sender);
 		} else if(args[0].equalsIgnoreCase("update")) {
 			if(args.length < 2) {
-				sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.usage") + ": /pkg update <name>");
+				sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.usage", sender.getLanguage()) + ": /pkg update <name>");
 				return;
 			}
 			
 			OpenClassic.getGame().getPackageManager().update(args[1], sender);
 		} else if(args[0].equalsIgnoreCase("add-source")) {
 			if(args.length < 3) {
-				sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.usage") + ": /pkg add-source <id> <url>");
+				sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.usage", sender.getLanguage()) + ": /pkg add-source <id> <url>");
 				return;
 			}
 			
 			OpenClassic.getGame().getPackageManager().addSource(args[1], args[2], sender);
 		} else if(args[0].equalsIgnoreCase("remove-source")) {
 			if(args.length < 2) {
-				sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.usage") + ": /pkg remove-source <id>");
+				sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.usage", sender.getLanguage()) + ": /pkg remove-source <id>");
 				return;
 			}
 			
@@ -118,15 +118,15 @@ public class ServerCommands extends CommandExecutor {
 		} else if(args[0].equalsIgnoreCase("update-sources")) {
 			OpenClassic.getGame().getPackageManager().updateSources(sender);
 		} else {
-			sender.sendMessage(Color.RED + String.format(OpenClassic.getGame().getTranslator().translate("pkg.invalid-operation"), "install, remove, update, add-source, remove-source, update-sources"));
+			sender.sendMessage(Color.RED + String.format(OpenClassic.getGame().getTranslator().translate("pkg.invalid-operation", sender.getLanguage()), "install, remove, update, add-source, remove-source, update-sources"));
 		}
 	}
 	
 	@Command(aliases = {"reload"}, desc = "Reloads OpenClassic.", permission = "openclassic.commands.reload")
 	public void reload(Sender sender, String command, String args[]) {
-		sender.sendMessage(Color.AQUA + OpenClassic.getGame().getTranslator().translate("reload.reloading"));
+		sender.sendMessage(Color.AQUA + OpenClassic.getGame().getTranslator().translate("reload.reloading", sender.getLanguage()));
 		OpenClassic.getGame().reload();
-		sender.sendMessage(Color.GREEN + OpenClassic.getGame().getTranslator().translate("reload.complete"));
+		sender.sendMessage(Color.GREEN + OpenClassic.getGame().getTranslator().translate("reload.complete", sender.getLanguage()));
 	}
 	
 	@Command(aliases = {"stop"}, desc = "Stops the server", permission = "openclassic.commands.stop")
@@ -140,7 +140,7 @@ public class ServerCommands extends CommandExecutor {
 		Player player = (Player) sender;
 		
 		player.getPosition().getLevel().setSpawn(player.getPosition());
-		player.sendMessage(Color.GREEN + String.format(OpenClassic.getGame().getTranslator().translate("spawn.set"), player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ()));
+		player.sendMessage(Color.GREEN + String.format(OpenClassic.getGame().getTranslator().translate("spawn.set", sender.getLanguage()), player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ()));
 	}
 	
 	@Command(aliases = {"ban"}, desc = "Bans a player.", permission = "openclassic.commands.ban", min = 1, usage = "<player> [reason]")
@@ -150,7 +150,7 @@ public class ServerCommands extends CommandExecutor {
 		List<Player> players = OpenClassic.getServer().matchPlayer(args[0]);
 		if(players.size() > 0) {
 			if(players.size() > 1) {
-				sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.multiple-players"));
+				sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.multiple-players", sender.getLanguage()));
 				return;
 			}
 			
@@ -159,7 +159,7 @@ public class ServerCommands extends CommandExecutor {
 		
 		Group group = OpenClassic.getServer().getPermissionManager().getPlayerGroup(player != null ? player.getName() : args[0]);
 		if(sender instanceof Player && group != null && !OpenClassic.getServer().getPermissionManager().getPlayerGroup(sender.getName()).isSubGroup(group)) {
-			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.deny-higher-group"));
+			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.deny-higher-group", sender.getLanguage()));
 			return;
 		}
 		
@@ -176,13 +176,13 @@ public class ServerCommands extends CommandExecutor {
 			if(player != null) player.getSession().disconnect(build.toString().trim());
 		}
 		
-		sender.sendMessage(Color.GREEN + String.format(OpenClassic.getGame().getTranslator().translate("ban.banned"), (player != null ? player.getName() : args[0]) + Color.GREEN));
+		sender.sendMessage(Color.GREEN + String.format(OpenClassic.getGame().getTranslator().translate("ban.banned", sender.getLanguage()), (player != null ? player.getName() : args[0]) + Color.GREEN));
 	}
 	
 	@Command(aliases = {"unban"}, desc = "Unbans a player.", permission = "openclassic.commands.unban", min = 1, usage = "<player>")
 	public void unban(Sender sender, String command, String args[]) {
 		OpenClassic.getServer().unbanPlayer(args[0]);
-		sender.sendMessage(Color.GREEN + String.format(OpenClassic.getGame().getTranslator().translate("ban.unbanned"), args[0] + Color.GREEN));
+		sender.sendMessage(Color.GREEN + String.format(OpenClassic.getGame().getTranslator().translate("ban.unbanned", sender.getLanguage()), args[0] + Color.GREEN));
 	}
 	
 	@Command(aliases = {"banip"}, desc = "Bans a player's IP.", permission = "openclassic.commands.banip", min = 1, usage = "<address> [reason]")
@@ -206,13 +206,13 @@ public class ServerCommands extends CommandExecutor {
 			}
 		}
 		
-		sender.sendMessage(Color.GREEN + String.format(OpenClassic.getGame().getTranslator().translate("ban.banned"), args[0] + Color.GREEN));
+		sender.sendMessage(Color.GREEN + String.format(OpenClassic.getGame().getTranslator().translate("ban.banned", sender.getLanguage()), args[0] + Color.GREEN));
 	}
 	
 	@Command(aliases = {"unbanip"}, desc = "Unbans a player's IP.", permission = "openclassic.commands.unbanip", min = 1, usage = "<address>")
 	public void unbanip(Sender sender, String command, String args[]) {
 		OpenClassic.getServer().unbanIp(args[0]);
-		sender.sendMessage(Color.GREEN + String.format(OpenClassic.getGame().getTranslator().translate("ban.unbanned"), args[0] + Color.GREEN));
+		sender.sendMessage(Color.GREEN + String.format(OpenClassic.getGame().getTranslator().translate("ban.unbanned", sender.getLanguage()), args[0] + Color.GREEN));
 	}
 	
 	@Command(aliases = {"kick"}, desc = "Kicks a player.", permission = "openclassic.commands.kick", min = 1, usage = "<player> [reason]")
@@ -221,14 +221,14 @@ public class ServerCommands extends CommandExecutor {
 		
 		if(players.size() > 0) {
 			if(players.size() > 1) {
-				sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.multiple-players"));
+				sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.multiple-players", sender.getLanguage()));
 				return;
 			}
 			
 			Player player = players.get(0);
 			Group group = OpenClassic.getServer().getPermissionManager().getPlayerGroup(player.getName());
 			if(sender instanceof Player && group != null && !OpenClassic.getServer().getPermissionManager().getPlayerGroup(sender.getName()).isSubGroup(group)) {
-				sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.deny-higher-group"));
+				sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.deny-higher-group", sender.getLanguage()));
 				return;
 			}
 			
@@ -243,40 +243,40 @@ public class ServerCommands extends CommandExecutor {
 				player.disconnect("Kicked by " + sender.getName() + ", Reason: " + build.toString().trim());
 			}
 			
-			sender.sendMessage(Color.GREEN + String.format(OpenClassic.getGame().getTranslator().translate("kick.kicked"), player.getName() + Color.GREEN));
+			sender.sendMessage(Color.GREEN + String.format(OpenClassic.getGame().getTranslator().translate("kick.kicked", sender.getLanguage()), player.getName() + Color.GREEN));
 		} else {
-			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.player-not-found"));
+			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.player-not-found", sender.getLanguage()));
 		}
 	}
 	
 	@Command(aliases = {"whitelist"}, desc = "Whitelists a player.", permission = "openclassic.commands.whitelist", min = 1, usage = "<player>")
 	public void whitelist(Sender sender, String command, String args[]) {
 		OpenClassic.getServer().whitelist(args[0]);
-		sender.sendMessage(Color.GREEN + String.format(OpenClassic.getGame().getTranslator().translate("whitelist.whitelisted"), args[0] + Color.GREEN));
+		sender.sendMessage(Color.GREEN + String.format(OpenClassic.getGame().getTranslator().translate("whitelist.whitelisted", sender.getLanguage()), args[0] + Color.GREEN));
 	}
 	
 	@Command(aliases = {"unwhitelist"}, desc = "Unwhitelists a player.", permission = "openclassic.commands.unwhitelist", min = 1, usage = "<player>")
 	public void unwhitelist(Sender sender, String command, String args[]) {
 		Group group = OpenClassic.getServer().getPermissionManager().getPlayerGroup(args[0]);
 		if(sender instanceof Player && group != null && !OpenClassic.getServer().getPermissionManager().getPlayerGroup(sender.getName()).isSubGroup(group)) {
-			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.deny-higher-group"));
+			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.deny-higher-group", sender.getLanguage()));
 			return;
 		}
 		
 		OpenClassic.getServer().unwhitelist(args[0]);
-		sender.sendMessage(Color.GREEN + String.format(OpenClassic.getGame().getTranslator().translate("whitelist.unwhitelisted"), args[0] + Color.GREEN));
+		sender.sendMessage(Color.GREEN + String.format(OpenClassic.getGame().getTranslator().translate("whitelist.unwhitelisted", sender.getLanguage()), args[0] + Color.GREEN));
 	}
 	
 	@Command(aliases = {"setgroup"}, desc = "Sets the player's group.", permission = "openclassic.commands.setgroup", min = 2, usage = "<player> <group>")
 	public void setgroup(Sender sender, String command, String args[]) {
 		Group group = OpenClassic.getServer().getPermissionManager().getGroup(args[1]);
 		if(group == null) {
-			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("group.invalid"));
+			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("group.invalid", sender.getLanguage()));
 			return;
 		}
 		
 		if(sender instanceof Player && !OpenClassic.getServer().getPermissionManager().getPlayerGroup(sender.getName()).isSubGroup(group)) {
-			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("group.cant-set"));
+			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("group.cant-set", sender.getLanguage()));
 			return;
 		}
 		
@@ -284,18 +284,18 @@ public class ServerCommands extends CommandExecutor {
 		
 		if(players.size() > 0) {
 			if(players.size() > 1) {
-				sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.multiple-players"));
+				sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.multiple-players", sender.getLanguage()));
 				return;
 			}
 			
 			Player player = players.get(0);
 			
 			player.setGroup(group);
-			player.sendMessage(Color.GREEN + String.format(OpenClassic.getGame().getTranslator().translate("group.set-notify"), args[1]));
+			player.sendMessage(Color.GREEN + String.format(OpenClassic.getGame().getTranslator().translate("group.set-notify", sender.getLanguage()), args[1]));
 			
-			sender.sendMessage(Color.GREEN + String.format(OpenClassic.getGame().getTranslator().translate("group.set"), player.getDisplayName() + Color.GREEN, args[1]));
+			sender.sendMessage(Color.GREEN + String.format(OpenClassic.getGame().getTranslator().translate("group.set", sender.getLanguage()), player.getDisplayName() + Color.GREEN, args[1]));
 		} else {
-			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.player-not-found"));
+			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.player-not-found", sender.getLanguage()));
 		}
 	}
 	
@@ -305,7 +305,7 @@ public class ServerCommands extends CommandExecutor {
 			
 		if(players.size() > 0) {
 			if(players.size() > 1) {
-				sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.multiple-players"));
+				sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.multiple-players", sender.getLanguage()));
 				return;
 			}
 				
@@ -314,29 +314,29 @@ public class ServerCommands extends CommandExecutor {
 			if(args.length < 2) {
 				if(sender instanceof Player) {
 					((Player) sender).moveTo(player.getPosition());
-					sender.sendMessage(Color.GREEN + String.format(OpenClassic.getGame().getTranslator().translate("teleport.teleport-to"), args[0]));
+					sender.sendMessage(Color.GREEN + String.format(OpenClassic.getGame().getTranslator().translate("teleport.teleport-to", sender.getLanguage()), args[0]));
 				} else {
-					sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.player-only"));
+					sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.player-only", sender.getLanguage()));
 				}
 			} else {
 				players = OpenClassic.getServer().matchPlayer(args[0]);
 				
 				if(players.size() > 0) {
 					if(players.size() > 1) {
-							sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.multiple-players"));
+							sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.multiple-players", sender.getLanguage()));
 						return;
 					}
 						
 					Player player2 = players.get(0);
 					player2.moveTo(player.getPosition());
-					player2.sendMessage(String.format(OpenClassic.getGame().getTranslator().translate("teleport.teleported-to"), sender.getDisplayName() + Color.GREEN, player.getDisplayName()));
-					sender.sendMessage(String.format(OpenClassic.getGame().getTranslator().translate("teleport.teleported-to-notify"), player2.getDisplayName(), player.getDisplayName()));
+					player2.sendMessage(String.format(OpenClassic.getGame().getTranslator().translate("teleport.teleported-to", sender.getLanguage()), sender.getDisplayName() + Color.GREEN, player.getDisplayName()));
+					sender.sendMessage(String.format(OpenClassic.getGame().getTranslator().translate("teleport.teleported-to-notify", sender.getLanguage()), player2.getDisplayName(), player.getDisplayName()));
 				} else {
-					sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.second-not-found"));
+					sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.second-not-found", sender.getLanguage()));
 				}
 			}
 		} else {
-			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.player-not-found"));
+			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.player-not-found", sender.getLanguage()));
 		}
 	}
 	
@@ -346,15 +346,15 @@ public class ServerCommands extends CommandExecutor {
 				
 		if(players.size() > 0) {
 			if(players.size() > 1) {
-				sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.multiple-players"));
+				sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.multiple-players", sender.getLanguage()));
 				return;
 			}
 					
 			Player player = players.get(0);
 			player.moveTo(((Player) sender).getPosition());
-			sender.sendMessage(Color.GREEN + String.format(OpenClassic.getGame().getTranslator().translate("teleport.teleported-to-you"), player.getDisplayName() + Color.GREEN));
+			sender.sendMessage(Color.GREEN + String.format(OpenClassic.getGame().getTranslator().translate("teleport.teleported-to-you", sender.getLanguage()), player.getDisplayName() + Color.GREEN));
 		} else {
-			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.player-not-found"));
+			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("command.player-not-found", sender.getLanguage()));
 		}
 	}
 	
@@ -370,7 +370,7 @@ public class ServerCommands extends CommandExecutor {
 			y = Integer.parseInt(args[1]);
 			z = Integer.parseInt(args[2]);
 		} catch(NumberFormatException e) {
-			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("teleport.invalid-coords"));
+			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("teleport.invalid-coords", sender.getLanguage()));
 			return;
 		}
 		
@@ -381,7 +381,7 @@ public class ServerCommands extends CommandExecutor {
 		}
 		
 		if(level == null) {
-			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("level.level-not-found"));
+			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("level.level-not-found", sender.getLanguage()));
 			return;
 		}
 		
@@ -396,7 +396,7 @@ public class ServerCommands extends CommandExecutor {
 		if(level == null) {
 			level = OpenClassic.getServer().loadLevel(args[0], false);
 			if(level == null) {
-				sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("level.level-not-found"));
+				sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("level.level-not-found", sender.getLanguage()));
 				return;
 			}
 		}
@@ -407,7 +407,7 @@ public class ServerCommands extends CommandExecutor {
 	
 	@Command(aliases = {"levels"}, desc = "Lists all loaded levels.", permission = "openclassic.commands.levels")
 	public void levels(Sender sender, String command, String args[]) {
-		sender.sendMessage(Color.AQUA + OpenClassic.getGame().getTranslator().translate("level.loaded"));
+		sender.sendMessage(Color.AQUA + OpenClassic.getGame().getTranslator().translate("level.loaded", sender.getLanguage()));
 		for(Level level : OpenClassic.getServer().getLevels()) {
 			sender.sendMessage(Color.BLUE + level.getName());
 		}
@@ -417,12 +417,12 @@ public class ServerCommands extends CommandExecutor {
 	public void createlevel(Sender sender, String command, String args[]) {
 		Level level = OpenClassic.getServer().loadLevel(args[0], false);
 		if(level != null) {
-			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("level.exists"));
+			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("level.exists", sender.getLanguage()));
 			return;
 		}
 		
 		if(!OpenClassic.getGame().isGenerator(args[4])) {
-			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("level.invalid-type"));
+			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("level.invalid-type", sender.getLanguage()));
 			return;
 		}
 		
@@ -435,26 +435,26 @@ public class ServerCommands extends CommandExecutor {
 			height = Short.parseShort(args[2]);
 			depth = Short.parseShort(args[3]);
 		} catch(NumberFormatException e) {
-			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("level.invalid-dim"));
+			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("level.invalid-dim", sender.getLanguage()));
 			return;
 		}
 		
 		Level lvl = OpenClassic.getGame().createLevel(new LevelInfo(args[0], null, width, height, depth), OpenClassic.getGame().getGenerator(args[4]));
 		((ServerLevel) lvl).setAuthor(sender.getName());
-		sender.sendMessage(Color.GREEN + OpenClassic.getGame().getTranslator().translate("level.create-success"));
+		sender.sendMessage(Color.GREEN + OpenClassic.getGame().getTranslator().translate("level.create-success", sender.getLanguage()));
 	}
 	
 	@Command(aliases = {"loadlevel"}, desc = "Loads a level", permission = "openclassic.commands.loadlevel", min = 1, usage = "<name>")
 	public void loadlevel(Sender sender, String command, String args[]) {
 		if(OpenClassic.getServer().loadLevel(args[0], false) == null) {
-			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("level.level-not-found"));
+			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("level.level-not-found", sender.getLanguage()));
 		}
 	}
 	
 	@Command(aliases = {"unloadlevel"}, desc = "Unloads a level.", permission = "openclassic.commands.unloadlevel", min = 1, usage = "<name>")
 	public void unloadlevel(Sender sender, String command, String args[]) {
 		if(OpenClassic.getServer().getLevel(args[0]) == null) {
-			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("level.not-loaded"));
+			sender.sendMessage(Color.RED + OpenClassic.getGame().getTranslator().translate("level.not-loaded", sender.getLanguage()));
 			return;
 		}
 		
@@ -466,10 +466,10 @@ public class ServerCommands extends CommandExecutor {
 		Player player = (Player) sender;
 		if(player.getPlaceMode() != VanillaBlock.BEDROCK.getId()) {
 			player.setPlaceMode(VanillaBlock.BEDROCK.getId());
-			player.sendMessage(Color.GREEN + OpenClassic.getGame().getTranslator().translate("solid.enable"));
+			player.sendMessage(Color.GREEN + OpenClassic.getGame().getTranslator().translate("solid.enable", sender.getLanguage()));
 		} else {
 			player.setPlaceMode(0);
-			player.sendMessage(Color.GREEN + OpenClassic.getGame().getTranslator().translate("solid.disable"));
+			player.sendMessage(Color.GREEN + OpenClassic.getGame().getTranslator().translate("solid.disable", sender.getLanguage()));
 		}
 	}
 	
@@ -478,10 +478,10 @@ public class ServerCommands extends CommandExecutor {
 		Player player = (Player) sender;
 		if(player.getPlaceMode() != VanillaBlock.WATER.getId()) {
 			player.setPlaceMode(VanillaBlock.WATER.getId());
-			player.sendMessage(Color.GREEN + OpenClassic.getGame().getTranslator().translate("water.enable"));
+			player.sendMessage(Color.GREEN + OpenClassic.getGame().getTranslator().translate("water.enable", sender.getLanguage()));
 		} else {
 			player.setPlaceMode(0);
-			player.sendMessage(Color.GREEN + OpenClassic.getGame().getTranslator().translate("water.disable"));
+			player.sendMessage(Color.GREEN + OpenClassic.getGame().getTranslator().translate("water.disable", sender.getLanguage()));
 		}
 	}
 	
@@ -490,10 +490,10 @@ public class ServerCommands extends CommandExecutor {
 		Player player = (Player) sender;
 		if(player.getPlaceMode() != VanillaBlock.STATIONARY_WATER.getId()) {
 			player.setPlaceMode(VanillaBlock.STATIONARY_WATER.getId());
-			player.sendMessage(Color.GREEN + OpenClassic.getGame().getTranslator().translate("stillwater.enable"));
+			player.sendMessage(Color.GREEN + OpenClassic.getGame().getTranslator().translate("stillwater.enable", sender.getLanguage()));
 		} else {
 			player.setPlaceMode(0);
-			player.sendMessage(Color.GREEN + OpenClassic.getGame().getTranslator().translate("stillwater.disable"));
+			player.sendMessage(Color.GREEN + OpenClassic.getGame().getTranslator().translate("stillwater.disable", sender.getLanguage()));
 		}
 	}
 	
@@ -502,10 +502,10 @@ public class ServerCommands extends CommandExecutor {
 		Player player = (Player) sender;
 		if(player.getPlaceMode() != VanillaBlock.LAVA.getId()) {
 			player.setPlaceMode(VanillaBlock.LAVA.getId());
-			player.sendMessage(Color.GREEN + OpenClassic.getGame().getTranslator().translate("lava.enable"));
+			player.sendMessage(Color.GREEN + OpenClassic.getGame().getTranslator().translate("lava.enable", sender.getLanguage()));
 		} else {
 			player.setPlaceMode(0);
-			player.sendMessage(Color.GREEN + OpenClassic.getGame().getTranslator().translate("lava.disable"));
+			player.sendMessage(Color.GREEN + OpenClassic.getGame().getTranslator().translate("lava.disable", sender.getLanguage()));
 		}
 	}
 	
@@ -514,10 +514,10 @@ public class ServerCommands extends CommandExecutor {
 		Player player = (Player) sender;
 		if(player.getPlaceMode() != VanillaBlock.STATIONARY_LAVA.getId()) {
 			player.setPlaceMode(VanillaBlock.STATIONARY_LAVA.getId());
-			player.sendMessage(Color.GREEN + OpenClassic.getGame().getTranslator().translate("stilllava.enable"));
+			player.sendMessage(Color.GREEN + OpenClassic.getGame().getTranslator().translate("stilllava.enable", sender.getLanguage()));
 		} else {
 			player.setPlaceMode(0);
-			player.sendMessage(Color.GREEN + OpenClassic.getGame().getTranslator().translate("stilllava.disable"));
+			player.sendMessage(Color.GREEN + OpenClassic.getGame().getTranslator().translate("stilllava.disable", sender.getLanguage()));
 		}
 	}
 	

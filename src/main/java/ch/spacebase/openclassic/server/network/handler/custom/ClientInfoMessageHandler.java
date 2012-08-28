@@ -24,12 +24,13 @@ public class ClientInfoMessageHandler extends MessageHandler<GameInfoMessage> {
 		
 		player.getClientInfo().setCustom(true);
 		player.getClientInfo().setVersion(message.getVersion());
+		player.getClientInfo().setLanguage(message.getLanguage());
 		StringBuilder build = new StringBuilder();
 		for(Plugin plugin : OpenClassic.getServer().getPluginManager().getPlugins()) {
 			build.append(plugin.getDescription().getName()).append(",");
 		}
 		
-		session.send(new GameInfoMessage(Constants.SERVER_VERSION));
+		session.send(new GameInfoMessage(Constants.SERVER_VERSION, ""));
 		for(Plugin plugin : OpenClassic.getServer().getPluginManager().getPlugins()) {
 			session.send(new PluginMessage(plugin.getDescription().getName(), plugin.getDescription().getVersion()));
 		}

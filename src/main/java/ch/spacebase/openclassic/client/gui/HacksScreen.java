@@ -22,7 +22,8 @@ public final class HacksScreen extends GuiScreen {
 	public final void onOpen() {
 		this.clearWidgets();
 		for (int count = 0; count < this.settings.hacks; count++) {
-			this.attachWidget(new StateButton(count, this.getWidth() / 2 - 155 + count % 2 * 160, this.getHeight() / 6 + 24 * (count >> 1), 155, 20, this, this.settings.getHack(count)));
+			this.attachWidget(new StateButton(count, this.getWidth() / 2 - 155 + count % 2 * 160, this.getHeight() / 6 + 24 * (count >> 1), 155, 20, this, this.settings.getHackName(count)));
+			this.getWidget(count, StateButton.class).setState(this.settings.getHackValue(count));
 		}
 		
 		this.attachWidget(new Button(100, this.getWidth() / 2 - 100, this.getHeight() / 6 + 168, this, OpenClassic.getGame().getTranslator().translate("gui.done")));
@@ -32,7 +33,7 @@ public final class HacksScreen extends GuiScreen {
 		if (button.isActive()) {
 			if (button.getId() < 100) {
 				this.settings.toggleHack(button.getId());
-				button.setText(this.settings.getHack(button.getId()));
+				((StateButton) button).setState(this.settings.getHackValue(button.getId()));
 			}
 
 			if (button.getId() == 100) {

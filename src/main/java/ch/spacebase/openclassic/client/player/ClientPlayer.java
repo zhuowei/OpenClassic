@@ -188,4 +188,9 @@ public class ClientPlayer implements Player {
 		return true;
 	}
 
+	@Override
+	public String getLanguage() {
+		return OpenClassic.getGame().getLanguage();
+	}
+
 }

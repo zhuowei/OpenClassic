@@ -269,8 +269,6 @@ public class ServerLevel implements Level {
 	}
 
 	public void setWorldData(short width, short height, short depth, byte[] blocks) {
-		if(this.width != 0 && this.height != 0 && this.depth != 0 && this.blocks != null && this.blocks.length != 0) return;
-		
 		this.width = width;
 		this.height = height;
 		this.depth = depth;

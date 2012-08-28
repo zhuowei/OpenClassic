@@ -3,3 +3,4 @@ bans:
 ipbans:
     example-ip-ban: reasonhere
 whitelist:
+- playergoeshere

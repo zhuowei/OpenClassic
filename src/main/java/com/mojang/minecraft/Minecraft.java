@@ -454,7 +454,6 @@ public final class Minecraft implements Runnable {
 		try {
 			Controllers.create();
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 
 		checkGLError("Pre startup");
@@ -1467,7 +1466,7 @@ public final class Minecraft implements Runnable {
 									} else if (type == PacketType.CLIENT_SET_BLOCK) {
 										// Server is OpenClassic
 										this.openclassicServer = (Byte) params[4] == 1;
-										this.netManager.netHandler.send(PacketType.GAME_INFO, Constants.CLIENT_VERSION);
+										this.netManager.netHandler.send(PacketType.GAME_INFO, Constants.CLIENT_VERSION, OpenClassic.getGame().getLanguage());
 										for(Plugin plugin : OpenClassic.getClient().getPluginManager().getPlugins()) {
 											this.netManager.netHandler.send(PacketType.PLUGIN, plugin.getDescription().getName(), plugin.getDescription().getVersion());
 										}
