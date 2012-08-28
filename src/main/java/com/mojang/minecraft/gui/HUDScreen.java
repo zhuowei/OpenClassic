@@ -17,7 +17,7 @@ import java.util.Random;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-public final class HUDScreen implements MainScreen {
+public class HUDScreen extends MainScreen {
 
 	public List<ChatLine> chatHistory = new ArrayList<ChatLine>();
 	private Random rand = new Random();
@@ -33,7 +33,7 @@ public final class HUDScreen implements MainScreen {
 		this.height = height * 240 / height;
 	}
 
-	public final void render(float renderPartialTicks, boolean focus, int mouseX, int mouseY) {
+	public void render(float renderPartialTicks, boolean focus, int mouseX, int mouseY) {
 		this.mc.renderer.reset();
 		RenderHelper.getHelper().bindTexture("/gui/gui.png", true);
 		GL11.glColor4f(1, 1, 1, 1);
@@ -186,9 +186,11 @@ public final class HUDScreen implements MainScreen {
 				}
 			}
 		}
+		
+		super.render();
 	}
 
-	public final void addChat(String message) {
+	public void addChat(String message) {
 		this.chatHistory.add(0, new ChatLine(message));
 
 		while (this.chatHistory.size() > 50) {
