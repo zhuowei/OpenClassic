@@ -100,6 +100,9 @@ public final class GameSettings {
 		if (setting == 6) {
 			this.anaglyph = !this.anaglyph;
 			this.mc.textureManager.clear();
+			if(this.mc.ingame) {
+				this.mc.levelRenderer.refresh();
+			}
 		}
 
 		if (setting == 7) {
@@ -122,6 +125,9 @@ public final class GameSettings {
 		if (setting == 9) {
 			this.smoothing = !this.smoothing;
 			this.mc.textureManager.clear();
+			if(this.mc.ingame) {
+				this.mc.levelRenderer.refresh();
+			}
 		}
 
 		this.save();

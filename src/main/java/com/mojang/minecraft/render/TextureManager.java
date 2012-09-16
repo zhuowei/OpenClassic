@@ -148,5 +148,7 @@ public class TextureManager {
 
 	public void clear() {
 		this.textures.clear();
+		this.jarTexture.clear();
+		this.textureImgs.clear();
 	}
 }
