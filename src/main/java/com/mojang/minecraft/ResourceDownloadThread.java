@@ -31,7 +31,8 @@ public final class ResourceDownloadThread extends Thread {
 		
 		this.resource = new File(location, "resources/");
 		if (!this.resource.exists() && !this.resource.mkdirs()) {
-			throw new RuntimeException(String.format(OpenClassic.getGame().getTranslator().translate("core.fail-resources"), this.resource));
+			throw new RuntimeException("The resource directory could not be created: " + this.resource);
+			//throw new RuntimeException(String.format(OpenClassic.getGame().getTranslator().translate("core.fail-resources"), this.resource));
 		}
 	}
 
@@ -100,7 +101,9 @@ public final class ResourceDownloadThread extends Thread {
 	}
 	
 	private void download(URL url, File file, int size) {
-		System.out.println(String.format(OpenClassic.getGame().getTranslator().translate("http.downloading"), file.getName()));
+		System.out.println("Downloading resource " + file.getName());
+		//For some reason, getGame and translate both throw NullPointerExceptions. Removing localization for now.
+		//System.out.println(String.format(OpenClassic.getGame().getTranslator().translate("http.downloading"), file.getName()));
 		this.mc.progressBar.setText(file.getName(), false);
 		
 		byte[] data = new byte[4096];
@@ -115,7 +118,7 @@ public final class ResourceDownloadThread extends Thread {
 			int done = 0;
 			while (this.running) {
 				length = in.read(data);
-				if (length < 0) return;
+				if (length < 0) break;
 
 				out.write(data, 0, length);
 				done += length;
@@ -137,7 +140,8 @@ public final class ResourceDownloadThread extends Thread {
 		this.mc.progressBar.setText("", false);
 		this.progress = 0;
 		
-		System.out.println(String.format(OpenClassic.getGame().getTranslator().translate("http.downloaded"), file.getName()));
+		System.out.println("Downloaded resource " + file.getName());
+		//System.out.println(String.format(OpenClassic.getGame().getTranslator().translate("http.downloaded"), file.getName()));
 	}
 	
 	public int getProgress() {
